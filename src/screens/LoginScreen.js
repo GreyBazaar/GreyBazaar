@@ -4,9 +4,41 @@ import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Ri
 import {
     StyleSheet, ScrollView, View, Text, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, Dimensions,
 } from 'react-native';
+import firebase from 'firebase'
 import colors from '../../assets/colors'
 
 export default class LoginScreen extends Component {
+    constructor(props){
+        super(props)
+        this.state ={
+            email : '' ,
+            password : ''
+        }
+    }
+    componentDidMount(){
+        this.FirebaseIntialize()
+    }
+    FirebaseIntialize = () =>{
+        const firebaseConfig = {
+            apiKey: "AIzaSyD86qcj_Y7TebCE0ItFx3rbWk7Jt6hpOnk",
+            authDomain: "greybazaar-99830.firebaseapp.com",
+            databaseURL: "https://greybazaar-99830.firebaseio.com",
+            projectId: "greybazaar-99830",
+            storageBucket: "greybazaar-99830.appspot.com",
+            messagingSenderId: "633758325063",
+            appId: "1:633758325063:web:2c65acfd12dc333a04d462",
+            measurementId: "G-LG0H64QJ41"
+          };
+          if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+    }
+    login = () => {
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+          .then(
+            () => this.props.navigation.navigate('HomeScreenRoute')
+          ).catch((e) => console.log(e))
+      }
     render() {
         return (
             <Container style={styles.container}>
@@ -40,7 +72,7 @@ export default class LoginScreen extends Component {
                         onChangeText={(text) => this.setState({ password: text })}
                     />
 
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('HomeScreenRoute')}
+                    <TouchableOpacity onPress={() => this.login()}
                         style={styles.button}>
                         <Text style={styles.buttonText}>Log In</Text>
                     </TouchableOpacity>

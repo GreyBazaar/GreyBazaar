@@ -9,10 +9,8 @@ import colors from '../../assets/colors'
 class SignUpScreen extends Component {
 
   render() {
-    return (
-
+        return (
       <Container style={styles.container}>
-
         <Header style={{ backgroundColor: colors.colorBlack }}>
           <Body style={{ marginLeft: 40, }}>
             <Title>Login </Title>
@@ -21,17 +19,8 @@ class SignUpScreen extends Component {
         </Header>
 
         <View style={styles.innerContainer}>
-
-
           <Text style={styles.heading}>Sign Up</Text>
 
-          <TextInput
-            style={styles.inputBox}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            underLineColorAndroid='#000000'
-            placeholder="Name"
-            onChangeText={(text) => this.setState({ name: text })}
-          />
           <TextInput
             style={styles.inputBox}
             underLineColorAndroid='#000000'
@@ -45,24 +34,34 @@ class SignUpScreen extends Component {
           <TextInput
             style={styles.inputBox}
             underLineColorAndroid='#000000'
-            placeholder="password"
+            placeholder="enter your password"
             placeholderTextColor='rgba(0,0,0,0.4)'
             secureTextEntry={true}
             autoCapitalize="none"
             onChangeText={(text) => this.setState({ password: text })}
           />
-
+          <TextInput
+            style={styles.inputBox}
+            underLineColorAndroid='#000000'
+            placeholder="re enter your password"
+            placeholderTextColor='rgba(0,0,0,0.4)'
+            secureTextEntry={true}
+            autoCapitalize="none"
+            onChangeText={(text) => this.setState({ password: text })}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress ={() => this.props.navigation.navigate('CompanyDetailsRoute')}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+          
           <View style={{ flexDirection: "row", margin: 10, }}>
             <View style={styles.horizontalLine} />
             <Text> OR </Text>
             <View style={styles.horizontalLine} />
           </View>
 
-          <TouchableOpacity
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
 
           <Text style={styles.lastText}>
             Already have an account? {"\t\t"}

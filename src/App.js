@@ -9,7 +9,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import SideBar from "./util/sidebar";
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
-
+import CompanyDetails from './screens/CompanyDetails'
 import HomeScreen from './screens/HomeScreen'
 import MyWalletScreen from './screens/MyWalletScreen'
 import ShareAppScreen from './screens/ShareAppScreen'
@@ -50,7 +50,8 @@ const AppNavigator = createSwitchNavigator(
   {
     Drawer: { screen: Drawer },
     LoginRoute :{ screen: LoginScreen},
-    SignUpRoute : {screen: SignUpScreen}
+    SignUpRoute : {screen: SignUpScreen},
+    CompanyDetailsRoute : { screen : CompanyDetails}
   },
   {
     initialRouteName: "LoginRoute", //TODO :change to signup screen

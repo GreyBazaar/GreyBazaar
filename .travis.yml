@@ -64,3 +64,6 @@ before_script:
 script:
   - cd android && sudo chmod +x gradlew && sudo ./gradlew clean && sudo ./gradlew assembleRelease
   - cd ..
+
+notifications:
+  slack: rnprojects:R1aj1fKhgfFQpE1os20HCDGU

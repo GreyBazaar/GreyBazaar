@@ -16,7 +16,10 @@ import ShareAppScreen from './screens/ShareAppScreen'
 import AboutUsScreen from './screens/AboutUsScreen'
 import LogoutScreen from './screens/LogoutScreen'
 import HelpAndSupportScreen from './screens/HelpAndSupportScreen'
+// import {decode, encode} from 'base-64'
 
+// if (!global.btoa) {  global.btoa = encode }
+// if (!global.atob) { global.atob = decode }
 
 const Drawer = createDrawerNavigator(
   {

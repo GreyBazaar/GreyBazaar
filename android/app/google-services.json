@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "633758325063",
+    "firebase_url": "https://greybazaar-99830.firebaseio.com",
+    "project_id": "greybazaar-99830",
+    "storage_bucket": "greybazaar-99830.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633758325063:android:e57f90a0a78710e004d462",
+        "android_client_info": {
+          "package_name": "com.greybazaar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633758325063-p3559sib84um3tj42o37a446klc3nr6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.greybazaar",
+            "certificate_hash": "0ba9475d23e9e18899dc07f638d62ebb79ab28a8"
+          }
+        },
+        {
+          "client_id": "633758325063-dlcn72b6n81p0942ik4mrqejvcg6ebih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtre9HHWZIml8zIAYLcFiqpFbzmeeV76M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633758325063-dlcn72b6n81p0942ik4mrqejvcg6ebih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

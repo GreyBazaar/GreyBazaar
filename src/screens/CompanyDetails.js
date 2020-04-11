@@ -4,7 +4,7 @@ import {  Body,  Container,  Header, Title, Right,} from 'native-base';
 import {
   StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput,
 } from 'react-native';
-import firebase from 'firebase'
+import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import colors from '../../assets/colors'
 

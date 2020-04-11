@@ -1,9 +1,11 @@
 
 import React, { Component } from 'react';
-import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Right, Left } from 'native-base';
+import {  Body,  Container,  Header, Title, Right,} from 'native-base';
 import {
-  SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,
+  StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput,
 } from 'react-native';
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 import colors from '../../assets/colors'
 
 class CompanyDetails extends Component {
@@ -19,12 +21,15 @@ class CompanyDetails extends Component {
             city : '',
             state : '',
             pincode : '',
+            email : firebase.auth().currentUser.email,
+            db : firebase.firestore()
         }
     }
     fetchApi = async () => {
-        const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
-        const result = await response.json()
-        const info = await result.taxpayerInfo
+        // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
+        // const result = await response.json()
+        const info = {"adadr": [], "ctb": "Proprietorship", "ctj": "RANGE-V", "ctjCd": "VN0305", "cxdt": "", "dty": "Regular", "gstin": "27ADYPA9158L1ZP", "lgnm": "VIJAY GOVINDPRASAD AGARWAL", "lstupdt": "07/09/2019", "nba": ["Wholesale Business"], "panNo": "ADYPA9158L", "pradr": {"addr": {"bnm": "JAI HIND BUILDING", "bno": "3-C", "city": "", "dst": "Mumbai City", "flno": "1ST FLOOR", "lg": "", "loc": "MUMBAI", "lt": "", "pncd": "400002", "st": "BHULESHWAR", "stcd": "Maharashtra"}, "ntr": "Wholesale Business"}, "rgdt": "06/07/2017", "stj": "KALBADEVI_701", "stjCd": "MHCG0378", "sts": "Active", "tradeNam": "KAVERI SAREES"}    
+        // const info = await result.taxpayerInfo
         console.log(info)
           this.setState({
               compname : info.tradeNam,
@@ -35,10 +40,28 @@ class CompanyDetails extends Component {
               state : info.pradr.addr.stcd,
               pincode: info.pradr.addr.pncd  
           })
-          }
-    addCompanyName = () => {
-        this.setState({add_1 : 'manab'})
-    }
+  }
+  addToDb = () => {
+    // let arr = this.handleEventName(this.state.name)
+    console.log('Add to DB')
+    this.state.db.collection("Users").doc(this.state.email).set({
+        name: this.state.name,
+        address1: this.state.add_1,
+        address12: this.state.add_2,
+        email: this.state.email.toLowerCase(),
+        image: '',
+        // keywords: this.state.keywords,
+        company_name : this.state.compname,
+        city : this.state.city,
+        state: this.state.state,
+        pincode : this.state.pincode,
+        gstn : this.state.gstn
+        // OneSignalId : this.state.userId
+    })
+        .then(() => this.props.navigation.navigate('HomeScreenRoute'))
+        .catch((e) => console.log(e))
+
+  }
   render() {
         return (
       <Container style={styles.container}>
@@ -134,7 +157,7 @@ class CompanyDetails extends Component {
           
           <TouchableOpacity
             style={styles.button}
-            onPress = { () => this.props.navigation.navigate('HomeScreenRoute')}
+            onPress = { () => this.addToDb()}
           >
             <Text style={styles.buttonText}>Confirm Company Details</Text>
           </TouchableOpacity>

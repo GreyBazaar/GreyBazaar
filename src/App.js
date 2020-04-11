@@ -17,7 +17,6 @@ import AboutUsScreen from './screens/AboutUsScreen'
 import LogoutScreen from './screens/LogoutScreen'
 import HelpAndSupportScreen from './screens/HelpAndSupportScreen'
 
-
 const Drawer = createDrawerNavigator(
   {
     HomeScreenRoute: { screen: HomeScreen },

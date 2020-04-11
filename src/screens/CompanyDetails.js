@@ -58,7 +58,7 @@ class CompanyDetails extends Component {
         gstn : this.state.gstn
         // OneSignalId : this.state.userId
     })
-        .then(() => this.props.navigation.navigate('HomeScreenRoute'))
+        .then(() => this.props.navigation.navigate('HomeRoute'))
         .catch((e) => console.log(e))
 
   }

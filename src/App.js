@@ -5,7 +5,6 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { createDrawerNavigator } from 'react-navigation-drawer'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-
 import SideBar from "./util/sidebar";
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
@@ -16,11 +15,45 @@ import ShareAppScreen from './screens/ShareAppScreen'
 import AboutUsScreen from './screens/AboutUsScreen'
 import LogoutScreen from './screens/LogoutScreen'
 import HelpAndSupportScreen from './screens/HelpAndSupportScreen'
+import PostMyRequirementScreen1 from './screens/PostMyRequirementScreen1'
+import PostMyRequirementScreen2 from './screens/PostMyRequirementScreen2'
+import ClothSpecificationsScreen from './screens/ClothSpecificationsScreen'
+import SendRequirementToScreen from './screens/SendRequirementToScreen'
+import Favorites from '../src/screens/Favorites.js'
+import Profiles from '../src/screens/Profiles.js'
+import SearchProfiles from '../src/screens/SearchProfiles.js'
+
+
+const RequirementStack = createStackNavigator({
+  PostMyRequirementRoute1 : PostMyRequirementScreen1,
+  PostMyRequirementRoute2: PostMyRequirementScreen2,
+  ClothSpecificationsRoute: ClothSpecificationsScreen,
+  SendRequirementToRoute : SendRequirementToScreen,
+  Favorites : Favorites,
+  Profiles: Profiles,
+  SearchProfiles : SearchProfiles
+},
+{
+  initialRouteName:'PostMyRequirementRoute1',
+  // headerMode: "none"
+})
+
+
+const HomeStack = createSwitchNavigator({
+  HomeScreenRoute: HomeScreen,
+  RequirementsRoute: RequirementStack,
+
+},
+{
+  initialRouteName: "HomeScreenRoute", 
+  headerMode: "none"
+})
+
 
 
 const Drawer = createDrawerNavigator(
   {
-    HomeScreenRoute: { screen: HomeScreen },
+    HomeRoute: HomeStack,
     MyWalletRoute: { screen: MyWalletScreen },
     ShareAppRoute: { screen: ShareAppScreen },
     AboutUsRoute: { screen: AboutUsScreen },
@@ -28,7 +61,7 @@ const Drawer = createDrawerNavigator(
     HelpAndSupportRoute: { screen: HelpAndSupportScreen },
   },
   {
-    initialRouteName: "HomeScreenRoute", //TODO: CHANGE TO HomeScreen
+    initialRouteName: "HomeRoute", //TODO: CHANGE TO HomeScreen
     contentOptions: {
       activeTintColor: "#e91e63"
     },
@@ -45,7 +78,6 @@ const Drawer = createDrawerNavigator(
   }
 );
 
-
 const AppNavigator = createSwitchNavigator(
   {
     Drawer: { screen: Drawer },
@@ -54,7 +86,7 @@ const AppNavigator = createSwitchNavigator(
     CompanyDetailsRoute : { screen : CompanyDetails}
   },
   {
-    initialRouteName: "LoginRoute", //TODO :change to signup screen
+    initialRouteName: "Drawer", 
     headerMode: "none"
   }
 );
@@ -65,16 +97,3 @@ export default () =>
   <Root>
     <AppContainer />
   </Root>;
-
-
-/*export default createAppContainer(createSwitchNavigator(
-  {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  }
-));
-*/

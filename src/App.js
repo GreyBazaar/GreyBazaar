@@ -19,12 +19,19 @@ import PostMyRequirementScreen1 from './screens/PostMyRequirementScreen1'
 import PostMyRequirementScreen2 from './screens/PostMyRequirementScreen2'
 import ClothSpecificationsScreen from './screens/ClothSpecificationsScreen'
 import SendRequirementToScreen from './screens/SendRequirementToScreen'
+import Favorites from '../src/screens/Favorites.js'
+import Profiles from '../src/screens/Profiles.js'
+import SearchProfiles from '../src/screens/SearchProfiles.js'
+
 
 const RequirementStack = createStackNavigator({
   PostMyRequirementRoute1 : PostMyRequirementScreen1,
   PostMyRequirementRoute2: PostMyRequirementScreen2,
   ClothSpecificationsRoute: ClothSpecificationsScreen,
   SendRequirementToRoute : SendRequirementToScreen,
+  Favorites : Favorites,
+  Profiles: Profiles,
+  SearchProfiles : SearchProfiles
 },
 {
   initialRouteName:'PostMyRequirementRoute1',

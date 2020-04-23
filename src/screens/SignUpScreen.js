@@ -4,12 +4,43 @@ import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Ri
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,
 } from 'react-native';
+import firebase from 'firebase'
 import colors from '../../assets/colors'
 
 class SignUpScreen extends Component {
+  
+  constructor (props){
+    super(props)
+    this.state = {
+      pass : '',
+      pass2 : '',
+      visible : true,
+      error:'',
+      email:''
+    }
+  }
+
+
+  signUp = () => {
+    if (this.state.pass == this.state.pass2) {
+      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
+        .then(() => this.props.navigation.navigate('CompanyDetailsRoute'))
+        .catch((e) => this.setState({
+          error: e,
+          visible: true
+        }))
+    }
+    else {
+
+      this.setState({
+        error : 'Password didnt match', 
+        visible: true 
+      })
+    }
+  }
 
   render() {
-        return (
+    return (
       <Container style={styles.container}>
         <Header style={{ backgroundColor: colors.colorBlack }}>
           <Body style={{ marginLeft: 40, }}>
@@ -38,7 +69,7 @@ class SignUpScreen extends Component {
             placeholderTextColor='rgba(0,0,0,0.4)'
             secureTextEntry={true}
             autoCapitalize="none"
-            onChangeText={(text) => this.setState({ password: text })}
+            onChangeText={(text) => this.setState({ pass: text })}
           />
           <TextInput
             style={styles.inputBox}
@@ -47,15 +78,21 @@ class SignUpScreen extends Component {
             placeholderTextColor='rgba(0,0,0,0.4)'
             secureTextEntry={true}
             autoCapitalize="none"
-            onChangeText={(text) => this.setState({ password: text })}
+            onChangeText={(text) => this.setState({ pass2: text })}
           />
+          {
+            this.state.visible ? 
+          <Text>{this.state.error}</Text>
+          :
+          null
+        }
           <TouchableOpacity
             style={styles.button}
-            onPress ={() => this.props.navigation.navigate('CompanyDetailsRoute')}
+            onPress={() => this.signUp()}
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-          
+
           <View style={{ flexDirection: "row", margin: 10, }}>
             <View style={styles.horizontalLine} />
             <Text> OR </Text>

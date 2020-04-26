@@ -22,7 +22,8 @@ class CompanyDetails extends Component {
             state : '',
             pincode : '',
             email : firebase.auth().currentUser.email,
-            db : firebase.firestore()
+            db : firebase.firestore(),
+            type : this.props.navigation.getParam('type' , 'Buyer')
         }
     }
     componentDidMount = () => {

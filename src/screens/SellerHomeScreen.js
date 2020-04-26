@@ -5,7 +5,7 @@ import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
 
 
-export default class HomeScreen extends Component {
+export default class SellerHomeScreen extends Component {
 
 
   componentDidMount() {
@@ -18,24 +18,18 @@ export default class HomeScreen extends Component {
 
         <Header style={{ backgroundColor: colors.colorBlack }}>
           <Body style={{ marginLeft: 40, }}>
-            <Title>Home </Title>
+            <Title>Home</Title>
           </Body>
           <Right />
         </Header>
 
       <Body  style={styles.container}>
-        <Button
-          style={styles.button}
-          onPress={() => this.props.navigation.navigate('RequirementsRoute')}
-        >
-          <Text>Post My Requirement</Text>
-        </Button>
-
+        
         <Button
           style={styles.button}
           onPress={() => this.props.navigation.navigate('RequestsRoute')}
         >
-          <Text>My Requests</Text>
+          <Text>New Requests</Text>
         </Button>
 
         <Button
@@ -56,7 +50,7 @@ export default class HomeScreen extends Component {
           style={styles.button}
           onPress={() => this.props.navigation.navigate('LoginRoute')}
         >
-          <Text>Explore Grey Offers</Text>
+          <Text>Publish Grey Offers</Text>
         </Button>
         </Body>
 

@@ -8,31 +8,31 @@ import firebase from 'firebase'
 import colors from '../../assets/colors'
 
 class SignUpScreen extends Component {
-  
-  constructor (props){
+
+  constructor(props) {
     super(props)
     this.state = {
-      pass : '',
-      pass2 : '',
-      visible : true,
-      error:'',
-      email:''
+      pass: '',
+      pass2: '',
+      visible: true,
+      error: '',
+      email: ''
     }
   }
   handleEventName = (name) => {
-    this.setState ({ event_name: name})
+    this.setState({ event_name: name })
     let arrName = [''];
     let curName = '';
     name.split('').forEach((letter) => {
-        curName += letter;
-        arrName.push(curName);
+      curName += letter;
+      arrName.push(curName);
     })
-    this.setState({keywords: arrName})
+    this.setState({ keywords: arrName })
     return arrName;
-}
-addusertodb = () => {
-  let arr = this.handleEventName(this.state.name)
-  this.state.db.collection("Users").doc(this.state.username).set({
+  }
+  addusertodb = () => {
+    let arr = this.handleEventName(this.state.name)
+    this.state.db.collection("Users").doc(this.state.username).set({
       name: this.state.name,
       address: this.state.address,
       email: this.state.Id.toLowerCase(),
@@ -45,27 +45,33 @@ addusertodb = () => {
       branch: this.state.branch,
       keywords: this.state.keywords
 
-  })
+    })
       .then(() => this.props.navigation.navigate('LoginScreen'))
       .catch((e) => console.log(e))
-}
+  }
 
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
-      .then(() => this.addusertodb())
-        .then(() => this.props.navigation.navigate('CompanyDetailsRoute'))
-        .catch((e) => this.setState({
-          error: e,
-          visible: true
-        }))
+        .then((userCredentials) => {
+          if (userCredentials.user) {
+            userCredentials.user.updateProfile({
+              buyer: true
+            }).then((s) => {
+              this.props.navigation.navigate('CompanyDetailsRoute');
+            })
+          }
+        })
+        .catch(function (error) {
+          alert(error.message);
+        })
     }
     else {
 
       this.setState({
-        error : 'Password didnt match', 
-        visible: true 
+        error: 'Password didnt match',
+        visible: true
       })
     }
   }
@@ -75,7 +81,7 @@ addusertodb = () => {
     return (
       <Container style={styles.container}>
         <Header style={{ backgroundColor: colors.colorBlack }}>
-          <Body style={{ marginLeft: 40}}>
+          <Body style={{ marginLeft: 40 }}>
             <Title>Login </Title>
           </Body>
           <Right />
@@ -113,11 +119,11 @@ addusertodb = () => {
             onChangeText={(text) => this.setState({ pass2: text })}
           />
           {
-            this.state.visible ? 
-          <Text>{this.state.error}</Text>
-          :
-          null
-        }
+            this.state.visible ?
+              <Text>{this.state.error}</Text>
+              :
+              null
+          }
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.signUp()}

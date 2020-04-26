@@ -25,6 +25,10 @@ class CompanyDetails extends Component {
             db : firebase.firestore()
         }
     }
+    componentDidMount = () => {
+      const user = firebase.auth().currentUser
+      console.log(user.buyer) 
+    }
     fetchApi = async () => {
         // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
         // const result = await response.json()

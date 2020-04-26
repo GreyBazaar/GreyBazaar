@@ -36,7 +36,8 @@ export default class LoginScreen extends Component {
     login = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(
-            () => this.props.navigation.navigate('HomeRoute')
+            () => this.props.navigation.navigate('ChoiceRoute'), console.log(this.state.email)
+            //() => this.props.navigation.navigate('HomeRoute'), console.log(this.state.email)
           ).catch((e) => console.log(e))
       }
     render() {

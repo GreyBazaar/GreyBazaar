@@ -4,6 +4,8 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createDrawerNavigator } from 'react-navigation-drawer'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import colors from '../assets/colors'
 
 import SideBar from "./util/sidebar";
 import LoginScreen from './screens/LoginScreen'
@@ -19,6 +21,45 @@ import PostMyRequirementScreen1 from './screens/PostMyRequirementScreen1'
 import PostMyRequirementScreen2 from './screens/PostMyRequirementScreen2'
 import ClothSpecificationsScreen from './screens/ClothSpecificationsScreen'
 import SendRequirementToScreen from './screens/SendRequirementToScreen'
+import MyRequests from './screens/MyRequests'
+import ViewQuotes from './screens/ViewQuotes'
+import AcceptConfirm from './screens/AcceptConfirm'
+import QualitySpecs from './screens/QualitySpecs'
+import PastRequests from './screens/PastRequests'
+import Choice from './screens/Choice'
+import SellerHomeScreen from './screens/SellerHomeScreen'
+
+
+const RequestNavigator = createMaterialTopTabNavigator({
+ 
+  active : {
+    screen : MyRequests,
+    navigationOptions: {title: 'Active',}
+  },
+  past :{
+    screen : PastRequests,
+    navigationOptions: {title: 'Past', }
+  },
+  
+  },
+  {
+  initialRouteName : 'active',
+  tabBarOptions: {activeTintColor: 'white',
+                  inactiveColor: '#9e9e9e', showIcon: 'true',
+                  style: { backgroundColor: colors.colorBlue, marginBottom: 20},
+                  labelStyle: {fontSize:20,textTransform:'capitalize', textAlign:'center',paddingBottom:25},
+                  tabStyle:{height:58, justifyContent:'center', alignItems:'center',alignContent:'center'},
+                  iconStyle: {inactiveColor:'grey'}
+                  ,indicatorStyle: {height:4, backgroundColor: '#f48fb1'}
+//pressColor:'blue'
+
+  
+                },
+  //order : ['home','event_main','notifs','profile'],
+    
+  }
+)
+
 
 const RequirementStack = createStackNavigator({
   PostMyRequirementRoute1 : PostMyRequirementScreen1,
@@ -31,10 +72,66 @@ const RequirementStack = createStackNavigator({
   // headerMode: "none"
 })
 
+const RequestsStack = createStackNavigator({
+  RequestNavigator: {screen :RequestNavigator, 
+                      navigationOptions:{
+                        title: 'MY REQUESTS', 
+                        headerTitleAlign:"center",
+                        headerStyle: {
+                          //backgroundColor: 'blue',
+                          //fontSize: 40,
+                        
+                         
+                        },
+                        headerTitleStyle:{
+                          fontSize: 25,
+                          
+                        }
+                      }},
+  ViewQuotes: {screen : ViewQuotes,
+                navigationOptions: {
+                  title: 'VIEW QUOTES',
+                  headerTitleAlign:'center',
+                  headerTitleStyle:{
+                    fontSize: 25,
+                    
+                  },
+                  
+                  
+                }},
+  AcceptConfirm: {screen : AcceptConfirm,
+    navigationOptions: {
+      title: 'CONFIRMATION',
+      headerTitleAlign:'center',
+      headerTitleStyle:{
+        fontSize: 25,
+        
+      },
+      
+    }},
+  QualitySpecs: {screen : QualitySpecs,
+    navigationOptions: {
+      title: 'Quality Specifications',
+      headerTitleAlign:'center',
+      headerTitleStyle:{
+        fontSize: 25,
+        
+      },
+      
+    }}
+
+},
+{
+  initialRouteName: 'RequestNavigator',
+  //headerMode: 'none'
+})
+
+
 
 const HomeStack = createSwitchNavigator({
   HomeScreenRoute: HomeScreen,
   RequirementsRoute: RequirementStack,
+  RequestsRoute: RequestsStack
 
 },
 {
@@ -42,11 +139,25 @@ const HomeStack = createSwitchNavigator({
   headerMode: "none"
 })
 
+const SellerHomeStack = createSwitchNavigator({
+  SellerHomeScreenRoute: SellerHomeScreen,
+})
+
+const ChoiceStack = createSwitchNavigator({
+  Choice: Choice,
+  HomeRoute: HomeStack,
+  SellerHomeRoute: SellerHomeStack,
+},
+{
+  initialRouteName: 'Choice'
+})
 
 
 const Drawer = createDrawerNavigator(
   {
-    HomeRoute: HomeStack,
+    ChoiceRoute: ChoiceStack,
+    //HomeRoute: HomeStack,
+    //SellerHomeRoute: SellerHomeStack,
     MyWalletRoute: { screen: MyWalletScreen },
     ShareAppRoute: { screen: ShareAppScreen },
     AboutUsRoute: { screen: AboutUsScreen },
@@ -54,7 +165,7 @@ const Drawer = createDrawerNavigator(
     HelpAndSupportRoute: { screen: HelpAndSupportScreen },
   },
   {
-    initialRouteName: "HomeRoute", //TODO: CHANGE TO HomeScreen
+    initialRouteName: "ChoiceRoute", //TODO: CHANGE TO HomeScreen
     contentOptions: {
       activeTintColor: "#e91e63"
     },
@@ -71,6 +182,14 @@ const Drawer = createDrawerNavigator(
   }
 );
 
+
+
+
+
+
+
+
+
 const AppNavigator = createSwitchNavigator(
   {
     Drawer: { screen: Drawer },
@@ -79,7 +198,7 @@ const AppNavigator = createSwitchNavigator(
     CompanyDetailsRoute : { screen : CompanyDetails}
   },
   {
-    initialRouteName: "Drawer", 
+    initialRouteName: "LoginRoute", 
     headerMode: "none"
   }
 );

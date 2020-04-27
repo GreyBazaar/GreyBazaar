@@ -1,7 +1,6 @@
 import React from "react";
 import Setup from "./src/boot/setup";
 import {decode, encode} from 'base-64'
-import firebase from 'firebase'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 

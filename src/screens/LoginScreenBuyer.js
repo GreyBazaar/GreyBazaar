@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {  Body,  Container,  Header,  Title, Right,} from 'native-base';
 import {
     StyleSheet, View, Text,  TextInput, TouchableOpacity,} from 'react-native';
-import * as firebase from 'firebase'
+import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 
 export default class LoginScreenBuyer extends Component {
@@ -16,7 +16,7 @@ export default class LoginScreenBuyer extends Component {
     }
     
     login = () => {
-        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(
             () => this.props.navigation.navigate('ChoiceRoute'), console.log(this.state.email)
             //() => this.props.navigation.navigate('HomeRoute'), console.log(this.state.email)

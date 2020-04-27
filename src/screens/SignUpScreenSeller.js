@@ -4,8 +4,7 @@ import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Ri
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,
 } from 'react-native';
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 
 class SignUpScreenSeller extends Component {
@@ -24,14 +23,15 @@ class SignUpScreenSeller extends Component {
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
+      auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
         .then((userCredentials) => {
           if (userCredentials.user) {
             userCredentials.user.updateProfile({
               buyer: true
             }).then((s) => {
               this.props.navigation.navigate('CompanyDetailsRoute',{
-                type : 'Seller'
+                type : 'Seller',
+                email : this.state.email,
               });
             })
           }

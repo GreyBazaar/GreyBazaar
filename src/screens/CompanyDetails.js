@@ -4,9 +4,12 @@ import {  Body,  Container,  Header, Title, Right,} from 'native-base';
 import {
   StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput,
 } from 'react-native';
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore'
 import colors from '../../assets/colors'
+import {decode, encode} from 'base-64'
+if (!global.btoa) {  global.btoa = encode }
+if (!global.atob) { global.atob = decode }
+
 
 class CompanyDetails extends Component {
     constructor(props){
@@ -21,14 +24,9 @@ class CompanyDetails extends Component {
             city : '',
             state : '',
             pincode : '',
-            email : firebase.auth().currentUser.email,
-            db : firebase.firestore(),
+            email : this.props.navigation.getParam('email' , 'random@gmail.com'),
             type : this.props.navigation.getParam('type' , 'Buyer')
         }
-    }
-    componentDidMount = () => {
-      const user = firebase.auth().currentUser
-      console.log(user.buyer) 
     }
     fetchApi = async () => {
         // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
@@ -46,14 +44,15 @@ class CompanyDetails extends Component {
               pincode: info.pradr.addr.pncd  
           })
   }
-  addToDb = () => {
+  addToDb = async() => {
     // let arr = this.handleEventName(this.state.name)
     console.log('Add to DB')
-    this.state.db.collection("Users").doc(this.state.email).set({
+    console.log(this.state.type , this.state.email)
+    await firestore().collection(this.state.type).doc(this.state.email).set({
         name: this.state.name,
         address1: this.state.add_1,
         address12: this.state.add_2,
-        email: this.state.email.toLowerCase(),
+        email: 'manavj@gmail.com',
         image: '',
         // keywords: this.state.keywords,
         company_name : this.state.compname,
@@ -62,10 +61,9 @@ class CompanyDetails extends Component {
         pincode : this.state.pincode,
         gstn : this.state.gstn
         // OneSignalId : this.state.userId
-    })
-        .then(() => this.props.navigation.navigate('HomeRoute'))
-        .catch((e) => console.log(e))
-
+    }).then(() => this.props.navigation.navigate('HomeScreen'))
+    .catch((e) => console.log(e))
+    
   }
   render() {
         return (

@@ -1,9 +1,24 @@
 import React from 'react'
 import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import colors from '../../assets/colors'
-
+// import firebase from 'react-native-firebase'
 
 export default class Choice extends React.Component {
+    // componentDidMount(){
+    //     const firebaseConfig = {
+    //         apiKey: "AIzaSyD86qcj_Y7TebCE0ItFx3rbWk7Jt6hpOnk",
+    //         authDomain: "greybazaar-99830.firebaseapp.com",
+    //         databaseURL: "https://greybazaar-99830.firebaseio.com",
+    //         projectId: "greybazaar-99830",
+    //         storageBucket: "greybazaar-99830.appspot.com",
+    //         messagingSenderId: "633758325063",
+    //         appId: "1:633758325063:web:2c65acfd12dc333a04d462",
+    //         measurementId: "G-LG0H64QJ41"
+    //       };
+    //       if (!firebase.apps.length) {
+    //         firebase.initializeApp(firebaseConfig);
+    //     }
+    // }
     render () {
         return(
             <View style = {styles.container}>
@@ -11,13 +26,13 @@ export default class Choice extends React.Component {
                 <View style = {{flexDirection:'row', justifyContent:'space-evenly'}}>
                     <TouchableOpacity
                         style = {styles.button}
-                        onPress = {() => this.props.navigation.navigate('HomeRoute')}
+                        onPress = {() => this.props.navigation.navigate('LoginScreenBuyer')}
                     >
                         <Text style = {styles.text2}>BUYER</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style = {styles.button}
-                        onPress = {() => this.props.navigation.navigate('SellerHomeRoute')}
+                        onPress = {() => this.props.navigation.navigate('LoginScreenSeller')}
                     >
                         <Text style = {styles.text2}>SELLER</Text>
                     </TouchableOpacity>

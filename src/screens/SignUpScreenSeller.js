@@ -4,47 +4,58 @@ import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Ri
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,
 } from 'react-native';
-import firebase from 'firebase'
+import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 
-class SignUpScreen extends Component {
-  
-  constructor (props){
+class SignUpScreenSeller extends Component {
+
+  constructor(props) {
     super(props)
     this.state = {
-      pass : '',
-      pass2 : '',
-      visible : true,
-      error:'',
-      email:''
+      pass: '',
+      pass2: '',
+      visible: true,
+      error: '',
+      email: '',
     }
   }
-
+   
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
-        .then(() => this.props.navigation.navigate('CompanyDetailsRoute'))
-        .catch((e) => this.setState({
-          error: e,
-          visible: true
-        }))
+      auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
+        .then((userCredentials) => {
+          if (userCredentials.user) {
+            userCredentials.user.updateProfile({
+              buyer: true
+            }).then((s) => {
+              this.props.navigation.navigate('CompanyDetailsRoute',{
+                type : 'Seller',
+                email : this.state.email,
+              });
+            })
+          }
+        })
+        .catch(function (error) {
+          alert(error.message);
+        })
     }
     else {
 
       this.setState({
-        error : 'Password didnt match', 
-        visible: true 
+        error: 'Password didnt match',
+        visible: true
       })
     }
   }
+
 
   render() {
     return (
       <Container style={styles.container}>
         <Header style={{ backgroundColor: colors.colorBlack }}>
-          <Body style={{ marginLeft: 40, }}>
-            <Title>Login </Title>
+          <Body style={{ marginLeft: 40 }}>
+            <Title>SignUp as Seller </Title>
           </Body>
           <Right />
         </Header>
@@ -81,11 +92,11 @@ class SignUpScreen extends Component {
             onChangeText={(text) => this.setState({ pass2: text })}
           />
           {
-            this.state.visible ? 
-          <Text>{this.state.error}</Text>
-          :
-          null
-        }
+            this.state.visible ?
+              <Text>{this.state.error}</Text>
+              :
+              null
+          }
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.signUp()}
@@ -105,7 +116,7 @@ class SignUpScreen extends Component {
 
             <Text
               style={styles.loginText}
-              onPress={() => this.props.navigation.navigate('LoginRoute')}>
+              onPress={() => this.props.navigation.navigate('LoginScreenSeller')}>
               Login
                     </Text>
 
@@ -125,7 +136,7 @@ class SignUpScreen extends Component {
 }
 
 
-export default SignUpScreen;
+export default SignUpScreenSeller;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput } from "react-native";
+import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
@@ -31,7 +31,16 @@ export default class SendRequirementToScreen extends Component {
                 <Body style={styles.container}>
 
                     <Text style={styles.label}> Send Requirement To: </Text>
-
+                        <TouchableOpacity onPress = {()=>this.props.navigation.navigate('SearchProfiles')} style = {styles.button}>
+                            <View>
+                                <Text>Profiles</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=>this.props.navigation.navigate('Favorites')} style = {styles.button}>
+                            <View>
+                                <Text> Favorites</Text>
+                            </View>
+                        </TouchableOpacity>
                 </Body>
             </Container>
         )

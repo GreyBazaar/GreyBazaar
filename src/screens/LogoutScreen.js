@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet , TouchableOpacity } from "react-native";
 import { Container, Button, H3, Text } from "native-base";
-import firebase from 'firebase'
+import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 
 const deviceHeight = Dimensions.get("window").height;
@@ -10,8 +10,8 @@ const deviceHeight = Dimensions.get("window").height;
 export default class LogoutScreen extends Component {
   SignOut = async() => {
     console.log('Sign Out')
-    await firebase.auth().signOut()
-    this.props.navigation.navigate('LoginRoute')
+    await auth().signOut()
+    this.props.navigation.navigate('ChoiceRoute')
   }
   render() {
     return (

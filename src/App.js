@@ -157,19 +157,16 @@ const SellerHomeStack = createSwitchNavigator({
   SellerHomeScreenRoute: SellerHomeScreen,
 })
 
-const ChoiceStack = createSwitchNavigator({
-  Choice: Choice,
-  HomeRoute: HomeStack,
-  SellerHomeRoute: SellerHomeStack,
-},
-  {
-    initialRouteName: 'Choice'
-  })
+const BuyerSellerStack = createSwitchNavigator({
+    HomeRoute: HomeStack,
+    SellerHomeRoute: SellerHomeStack,
+  },
+)
 
 
 const Drawer = createDrawerNavigator(
   {
-    ChoiceRoute: ChoiceStack,
+    BuyerSellerStack: BuyerSellerStack,
     HomeRoute: HomeStack,
     SellerHomeRoute: SellerHomeStack,
     MyWalletRoute: { screen: MyWalletScreen },
@@ -177,9 +174,9 @@ const Drawer = createDrawerNavigator(
     AboutUsRoute: { screen: AboutUsScreen },
     LogoutRoute: { screen: LogoutScreen },
     HelpAndSupportRoute: { screen: HelpAndSupportScreen },
+    Choice : Choice
   },
   {
-    initialRouteName: "ChoiceRoute", //TODO: CHANGE TO HomeScreen
     contentOptions: {
       activeTintColor: "#e91e63"
     },

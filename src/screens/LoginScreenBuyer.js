@@ -18,8 +18,7 @@ export default class LoginScreenBuyer extends Component {
     login = () => {
         auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(
-            () => this.props.navigation.navigate('ChoiceRoute'), console.log(this.state.email)
-            //() => this.props.navigation.navigate('HomeRoute'), console.log(this.state.email)
+            () => this.props.navigation.navigate('HomeRoute')
           ).catch((e) => console.log(e))
       }
     render() {

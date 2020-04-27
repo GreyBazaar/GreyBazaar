@@ -61,7 +61,13 @@ class CompanyDetails extends Component {
         pincode : this.state.pincode,
         gstn : this.state.gstn
         // OneSignalId : this.state.userId
-    }).then(() => this.props.navigation.navigate('HomeScreen'))
+    }).then(() => {
+      if (this.state.type == "Buyer"){
+        this.props.navigation.navigate('HomeRoute')
+      }else{
+        this.props.navigation.navigate('SellerHomeRoute')
+      }
+    })
     .catch((e) => console.log(e))
     
   }

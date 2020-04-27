@@ -1,20 +1,53 @@
 import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput } from "react-native";
+import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, Alert } from "react-native";
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 
 
 export default class PostMyRequirement1 extends Component {
 
-    state = {
-        qualityType: '',
-        quantity: '',
+    constructor() {
+        super()
+        this.state = {
+            qualityType: '',
+            quantity: '',
+            email: '',
+        }
     }
 
-
     componentDidMount() {
-        console.disableYellowBox = true;
+    }
+
+    checkAllFilled = () => {
+        if (this.state.qualityType && this.state.quantity) {
+            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType , quantity: this.state.quantity})
+        } else if (!this.state.qualityType) {
+
+            Alert.alert('Please enter Quality Type',
+                '',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false },
+            )
+        } else if (!this.state.quantity) {
+
+            Alert.alert('Please enter Quantity',
+                '',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false },
+            )
+        }
+
+    }
+
+    nextButtonPressed = () => {
+        this.checkAllFilled()
     }
 
     render() {
@@ -48,7 +81,7 @@ export default class PostMyRequirement1 extends Component {
                         onChangeText={(text) => this.setState({ quantity: text })}
                     />
 
-                    <View style={{flexDirection:'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Button
                             style={styles.button}
                             onPress={() => this.props.navigation.navigate('HomeScreenRoute')}
@@ -58,7 +91,7 @@ export default class PostMyRequirement1 extends Component {
 
                         <Button
                             style={styles.button}
-                            onPress={() => this.props.navigation.navigate('PostMyRequirementRoute2')}
+                            onPress={this.nextButtonPressed}
                         >
                             <Text style={styles.nextFont}>NEXT</Text>
                         </Button>
@@ -95,6 +128,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.colorWhite,
         marginTop: 40,
         borderRadius: 10,
-        marginHorizontal:30,
+        marginHorizontal: 30,
     },
 })

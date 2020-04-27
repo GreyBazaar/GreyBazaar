@@ -9,13 +9,62 @@ const deviceHeight = Dimensions.get("window").height;
 export default class PostMyRequirement2 extends Component {
 
     state = {
+        //this screen
         expectedRate: '',
         selectedExpectedDelivery: '',
         selectedCloseRequest: '',
-        remarks:'',
+        remarks: '',
+
+        //from post my requirement1 screen
+        quantity: '',
+        qualityType: '',
+
+        //from clothspecification screen
+        weight: '',
+        panna: '',
+        reed: '',
+        peak: '',
+        warp: '',
+        weft: '',
+        combedCarded: '',
+        clothSpecificationsFilled: false,
+    }
+
+
+    skipPressed = () => {
+        // retrieve filled data from post my requirement screen 1
+        const qualityType = this.props.navigation.getParam('qualityType', 'None')
+        const quantity = this.props.navigation.getParam('quantity', 'None')
+
+        // retrieve filled data from post my requirement screen 2
+        const weight = this.props.navigation.getParam('weight', 'None')
+        const panna = this.props.navigation.getParam('panna', 'None')
+        const reed = this.props.navigation.getParam('reed', 'None')
+        const peak = this.props.navigation.getParam('peak', 'None')
+        const warp = this.props.navigation.getParam('warp', 'None')
+        const weft = this.props.navigation.getParam('weft', 'None')
+        const combedCarded = this.props.navigation.getParam('combedCarded', 'None')
+        const clothSpecificationsFilled = this.props.navigation.getParam('clothSpecificationsFilled', true)
+
+        // set it to the state
+        this.setState({
+            qualityType,
+            quantity,
+
+            weight,
+            panna,
+            reed,
+            peak,
+            warp,
+            weft,
+            combedCarded,
+            clothSpecificationsFilled,
+        },
+            () => this.props.navigation.navigate('SendRequirementToRoute', { allRequirementsData: this.state }))
     }
 
     render() {
+        console.log('state', this.state)
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
 
@@ -50,6 +99,7 @@ export default class PostMyRequirement2 extends Component {
                             mode='dropdown'
                             onValueChange={(itemValue) => this.setState({ selectedExpectedDelivery: itemValue })}
                         >
+                            <Picker.Item label="Select" value="None" />
                             <Picker.Item label="Within 2 days" value="within2days" />
                             <Picker.Item label="Within 4 days" value="within4days" />
                             <Picker.Item label="Within 7 days" value="within7days" />
@@ -57,11 +107,12 @@ export default class PostMyRequirement2 extends Component {
 
                         <Text style={styles.label}> CLOSE REQUEST IN </Text>
                         <Picker
-                            selectedValue={this.state.selectedExpectedDelivery}
+                            selectedValue={this.state.selectedCloseRequest}
                             style={styles.pickerStyle}
                             mode='dropdown'
                             onValueChange={(itemValue) => this.setState({ selectedCloseRequest: itemValue })}
                         >
+                            <Picker.Item label="Select" value="None" />
                             <Picker.Item label="8 hours" value="18hours" />
                             <Picker.Item label="16 hours" value="16hours" />
                             <Picker.Item label="1 day" value="1day" />
@@ -75,9 +126,9 @@ export default class PostMyRequirement2 extends Component {
                         />
                         <Button
                             style={styles.button}
-                            onPress={() => this.props.navigation.navigate('SendRequirementToRoute')}
+                            onPress={this.skipPressed}
                         >
-                            <Text style={styles.skipFont}>SKIP</Text>
+                            <Text style={styles.skipFont}>NEXT</Text>
                         </Button>
                     </ScrollView>
                 </Body>

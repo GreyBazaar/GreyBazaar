@@ -15,9 +15,23 @@ export default class ClothSpecificationScreen extends Component {
         warp: '',
         weft: '',
         combedCarded: '',
+        clothSpecificationsFilled: false,
     }
 
 
+    savePressed = () => {
+        Alert.alert('Specifications Saved')
+        this.props.navigation.navigate('PostMyRequirementRoute2', {
+            weight: this.state.weight,
+            panna: this.state.panna,
+            reed: this.state.reed,
+            peak: this.state.peak,
+            warp: this.state.warp,
+            weft: this.state.weft,
+            combedCarded: this.state.combedCarded,
+            clothSpecificationsFilled: true,
+        })
+    }
     componentDidMount() {
         console.disableYellowBox = true;
     }
@@ -93,11 +107,12 @@ export default class ClothSpecificationScreen extends Component {
                     <View style={styles.eachRow}>
                         <Text style={styles.label}> COMBED / CARDED </Text>
                         <Picker
-                            selectedValue={this.state.selectedExpectedDelivery}
+                            selectedValue={this.state.combedCarded}
                             style={styles.pickerStyle}
                             mode='dropdown'
                             onValueChange={(itemValue) => this.setState({ combedCarded: itemValue })}
                         >
+                            <Picker.Item label="Select" value="None" />
                             <Picker.Item label="Combed" value="combed" />
                             <Picker.Item label="Carded" value="carded" />
                         </Picker>
@@ -105,7 +120,7 @@ export default class ClothSpecificationScreen extends Component {
 
                     <Button
                         style={styles.button}
-                        onPress={() => Alert.alert('Saved')}
+                        onPress={this.savePressed}
                     >
                         <Text style={styles.skipFont}>SAVE</Text>
                     </Button>
@@ -150,7 +165,7 @@ const styles = StyleSheet.create({
         color: colors.colorBlack,
     },
     button: {
-        alignItems:'center',
+        alignItems: 'center',
         backgroundColor: colors.colorWhite,
         marginTop: 40,
         borderRadius: 10,

@@ -15,6 +15,8 @@ export default class SendRequirementToScreen extends Component {
 
     componentDidMount() {
         console.disableYellowBox = true;
+        const params = this.props.navigation.getParam('allRequirementsData', 'None')
+        console.log('params from previous screen', params)
     }
 
     render() {
@@ -31,16 +33,16 @@ export default class SendRequirementToScreen extends Component {
                 <Body style={styles.container}>
 
                     <Text style={styles.label}> Send Requirement To: </Text>
-                        <TouchableOpacity onPress = {()=>this.props.navigation.navigate('SearchProfiles')} style = {styles.button}>
-                            <View>
-                                <Text>Profiles</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress = {()=>this.props.navigation.navigate('Favorites')} style = {styles.button}>
-                            <View>
-                                <Text> Favorites</Text>
-                            </View>
-                        </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchProfiles')} style={styles.button}>
+                        <View>
+                            <Text>Profiles</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Favorites')} style={styles.button}>
+                        <View>
+                            <Text> Favorites</Text>
+                        </View>
+                    </TouchableOpacity>
                 </Body>
             </Container>
         )
@@ -64,14 +66,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         // borderRadius: 25,
     },
-    nextFont:{
+    nextFont: {
         color: colors.colorBlack,
-      
+
     },
     button: {
         backgroundColor: colors.colorWhite,
         marginTop: 40,
         borderRadius: 10,
-        alignSelf:'flex-end',
+        alignSelf: 'flex-end',
     },
 })

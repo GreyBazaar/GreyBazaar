@@ -30,7 +30,7 @@ import LoginScreenBuyer from './screens/LoginScreenBuyer';
 import LoginScreenSeller from './screens/LoginScreenSeller';
 import SignUpScreenBuyer from './screens/SignUpScreenBuyer';
 import SignUpScreenSeller from './screens/SignUpScreenSeller';
-
+import Divider from './screens/Divider'
 
 const RequestNavigator = createMaterialTopTabNavigator({
 
@@ -160,6 +160,7 @@ const SellerHomeStack = createSwitchNavigator({
 const BuyerSellerStack = createSwitchNavigator({
     HomeRoute: HomeStack,
     SellerHomeRoute: SellerHomeStack,
+    Divider : Divider
   },
 )
 
@@ -205,12 +206,14 @@ const LoginScreens = createSwitchNavigator(
 const AppNavigator = createSwitchNavigator(
   {
     Drawer: { screen: Drawer },
-    LoginRoute: { screen: LoginScreens },
+    LoginRoute: { screen: LoginScreenBuyer },
     CompanyDetailsRoute: { screen: CompanyDetails },
     ChoiceRoute: Choice,
+    SignUpScreenSeller : {screen : SignUpScreenSeller},
+    SignUpScreenBuyer : {screen : SignUpScreenBuyer}
   },
   {
-    initialRouteName: "ChoiceRoute",
+    initialRouteName: "LoginRoute",
     headerMode: "none"
   }
 );

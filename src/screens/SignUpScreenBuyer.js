@@ -17,24 +17,19 @@ class SignUpScreenBuyer extends Component {
       visible: true,
       error: '',
       email: '',
+      type: this.props.navigation.getParam('type', 'Buyer')
     }
   }
-  
+
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
       auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
-        .then((userCredentials) => {
-          if (userCredentials.user) {
-            userCredentials.user.updateProfile({
-              buyer: true
-            }).then((s) => {
-              this.props.navigation.navigate('CompanyDetailsRoute',{
-                type : 'Buyer',
-                email : this.state.email,
-              });
-            })
-          }
+        .then(() => {
+          this.props.navigation.navigate('CompanyDetailsRoute', {
+            type: this.state.type,
+            email: this.state.email,
+          });
         })
         .catch(function (error) {
           alert(error.message);
@@ -55,7 +50,7 @@ class SignUpScreenBuyer extends Component {
       <Container style={styles.container}>
         <Header style={{ backgroundColor: colors.colorBlack }}>
           <Body style={{ marginLeft: 40 }}>
-            <Title>SignUp as Buyer </Title>
+            <Title>SignUp as {this.state.type} </Title>
           </Body>
           <Right />
         </Header>
@@ -116,7 +111,7 @@ class SignUpScreenBuyer extends Component {
 
             <Text
               style={styles.loginText}
-              onPress={() => this.props.navigation.navigate('LoginScreenBuyer')}>
+              onPress={() => this.props.navigation.navigate('LoginRoute')}>
               Login
                     </Text>
 

@@ -1,78 +1,86 @@
 
 import React, { Component } from 'react';
-import {  Body,  Container,  Header, Title, Right,} from 'native-base';
+import { Body, Container, Header, Title, Right, } from 'native-base';
 import {
   StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import colors from '../../assets/colors'
-import {decode, encode} from 'base-64'
-if (!global.btoa) {  global.btoa = encode }
+import { decode, encode } from 'base-64'
+if (!global.btoa) { global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
 
 class CompanyDetails extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            name : '',
-            gstn : '' ,
-            add_1: '',
-            visible : false,
-            compname : '',
-            add_2 : '' ,
-            city : '',
-            state : '',
-            pincode : '',
-            email : this.props.navigation.getParam('email' , 'random@gmail.com'),
-            type : this.props.navigation.getParam('type' , 'Buyer')
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: '',
+      gstn: '',
+      add_1: '',
+      visible: false,
+      compname: '',
+      add_2: '',
+      city: '',
+      state: '',
+      pincode: '',
+      email: this.props.navigation.getParam('email', 'random@gmail.com'),
+      type: this.props.navigation.getParam('type', 'Buyer')
     }
-    fetchApi = async () => {
-        // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
-        // const result = await response.json()
-        const info = {"adadr": [], "ctb": "Proprietorship", "ctj": "RANGE-V", "ctjCd": "VN0305", "cxdt": "", "dty": "Regular", "gstin": "27ADYPA9158L1ZP", "lgnm": "VIJAY GOVINDPRASAD AGARWAL", "lstupdt": "07/09/2019", "nba": ["Wholesale Business"], "panNo": "ADYPA9158L", "pradr": {"addr": {"bnm": "JAI HIND BUILDING", "bno": "3-C", "city": "", "dst": "Mumbai City", "flno": "1ST FLOOR", "lg": "", "loc": "MUMBAI", "lt": "", "pncd": "400002", "st": "BHULESHWAR", "stcd": "Maharashtra"}, "ntr": "Wholesale Business"}, "rgdt": "06/07/2017", "stj": "KALBADEVI_701", "stjCd": "MHCG0378", "sts": "Active", "tradeNam": "KAVERI SAREES"}    
-        // const info = await result.taxpayerInfo
-        console.log(info)
-          this.setState({
-              compname : info.tradeNam,
-              visible:true,
-              add_1 : info.pradr.addr.bno + ' , ' + info.pradr.addr.bnm,
-              add_2 : info.pradr.addr.st + ' , ' + info.pradr.addr.loc,
-              city : info.pradr.addr.city,
-              state : info.pradr.addr.stcd,
-              pincode: info.pradr.addr.pncd  
-          })
   }
-  addToDb = async() => {
+  fetchApi = async () => {
+    // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
+    // const result = await response.json()
+    const info = { "adadr": [], "ctb": "Proprietorship", "ctj": "RANGE-V", "ctjCd": "VN0305", "cxdt": "", "dty": "Regular", "gstin": "27ADYPA9158L1ZP", "lgnm": "VIJAY GOVINDPRASAD AGARWAL", "lstupdt": "07/09/2019", "nba": ["Wholesale Business"], "panNo": "ADYPA9158L", "pradr": { "addr": { "bnm": "JAI HIND BUILDING", "bno": "3-C", "city": "", "dst": "Mumbai City", "flno": "1ST FLOOR", "lg": "", "loc": "MUMBAI", "lt": "", "pncd": "400002", "st": "BHULESHWAR", "stcd": "Maharashtra" }, "ntr": "Wholesale Business" }, "rgdt": "06/07/2017", "stj": "KALBADEVI_701", "stjCd": "MHCG0378", "sts": "Active", "tradeNam": "KAVERI SAREES" }
+    // const info = await result.taxpayerInfo
+    console.log(info)
+    this.setState({
+      compname: info.tradeNam,
+      visible: true,
+      add_1: info.pradr.addr.bno + ' , ' + info.pradr.addr.bnm,
+      add_2: info.pradr.addr.st + ' , ' + info.pradr.addr.loc,
+      city: info.pradr.addr.city,
+      state: info.pradr.addr.stcd,
+      pincode: info.pradr.addr.pncd
+    })
+  }
+  addToDb = () => {
     // let arr = this.handleEventName(this.state.name)
     console.log('Add to DB')
-    console.log(this.state.type , this.state.email)
-    await firestore().collection(this.state.type).doc(this.state.email).set({
-        name: this.state.name,
-        address1: this.state.add_1,
-        address12: this.state.add_2,
-        email: 'manavj@gmail.com',
-        image: '',
-        // keywords: this.state.keywords,
-        company_name : this.state.compname,
-        city : this.state.city,
-        state: this.state.state,
-        pincode : this.state.pincode,
-        gstn : this.state.gstn
-        // OneSignalId : this.state.userId
-    }).then(() => {
-      if (this.state.type == "Buyer"){
-        this.props.navigation.navigate('HomeRoute')
-      }else{
-        this.props.navigation.navigate('SellerHomeRoute')
-      }
+    console.log(this.state.type, this.state.email)
+    firestore().collection(this.state.type).doc(this.state.email).set({
+      name: this.state.name,
+      address1: this.state.add_1,
+      address12: this.state.add_2,
+      email: 'manavj@gmail.com',
+      image: '',
+      // keywords: this.state.keywords,
+      company_name: this.state.compname,
+      city: this.state.city,
+      state: this.state.state,
+      pincode: this.state.pincode,
+      gstn: this.state.gstn
+      // OneSignalId : this.state.userId
     })
-    .catch((e) => console.log(e))
-    
+      .then(() => {
+        firestore().collection('Users').doc(this.state.email).set({
+          name: this.state.name,
+          type: this.state.type
+        })
+          .then(() => {
+            if (this.state.type == "Buyer") {
+              this.props.navigation.navigate('HomeRoute')
+            }
+            else {
+              this.props.navigation.navigate('SellerHomeRoute')
+            }
+          })
+      })
+      .catch((e) => console.log(e))
+
   }
   render() {
-        return (
+    return (
       <Container style={styles.container}>
         <Header style={{ backgroundColor: colors.colorBlack }}>
           <Body style={{ marginLeft: 40, }}>
@@ -81,132 +89,132 @@ class CompanyDetails extends Component {
           <Right />
         </Header>
         <ScrollView>
-        {
-        this.state.visible ?
-        <View style={styles.innerContainer}>
-          <Text style={styles.heading}>Sign Up</Text>
+          {
+            this.state.visible ?
+              <View style={styles.innerContainer}>
+                <Text style={styles.heading}>Sign Up</Text>
 
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            placeholder="Name"
-            autoCapitalize='none'
-            onChangeText={(text) => this.setState({ name: text })}
-          />
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  placeholder="Name"
+                  autoCapitalize='none'
+                  onChangeText={(text) => this.setState({ name: text })}
+                />
 
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder="GSTN Number"
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ gstn: text })}
-          />
-          <Text>Company Name</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value = {this.state.compname}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ compname: text })}
-          />
-          <Text>Address Line 1</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value = {this.state.add_1}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ add_1: text })}
-          />
-          <Text>Address Line 2</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value={this.state.add_2}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ add_2: text })}
-          />
-          <Text>City</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value = {this.state.city}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ city: text })}
-          />
-          <Text>State</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value = {this.state.state}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ state: text })}
-          />
-          <Text>Pin Code</Text>
-          <TextInput
-            style={styles.inputBox}
-            underLineColorAndroid='#000000'
-            placeholder=""
-            value = {this.state.pincode}
-            placeholderTextColor='rgba(0,0,0,0.4)'
-            autoCapitalize="none"
-            onChangeText={(text) => this.setState({ pincode: text })}
-          />
-          
-          <TouchableOpacity
-            style={styles.button}
-            onPress = { () => this.addToDb()}
-          >
-            <Text style={styles.buttonText}>Confirm Company Details</Text>
-          </TouchableOpacity>
-      
-          {/* <Button
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder="GSTN Number"
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ gstn: text })}
+                />
+                <Text>Company Name</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.compname}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ compname: text })}
+                />
+                <Text>Address Line 1</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.add_1}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ add_1: text })}
+                />
+                <Text>Address Line 2</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.add_2}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ add_2: text })}
+                />
+                <Text>City</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.city}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ city: text })}
+                />
+                <Text>State</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.state}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ state: text })}
+                />
+                <Text>Pin Code</Text>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder=""
+                  value={this.state.pincode}
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ pincode: text })}
+                />
+
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.addToDb()}
+                >
+                  <Text style={styles.buttonText}>Confirm Company Details</Text>
+                </TouchableOpacity>
+
+                {/* <Button
                     color="transparent"
                     title="Login "
                     onPress={() => this.props.navigation.navigate('LoginRoute')}
                 /> */}
-        </View> :
-        <View style={styles.innerContainer}>
-        <Text style={styles.heading}>Sign Up</Text>
+              </View> :
+              <View style={styles.innerContainer}>
+                <Text style={styles.heading}>Sign Up</Text>
 
-        <TextInput
-          style={styles.inputBox}
-          underLineColorAndroid='#000000'
-          placeholderTextColor='rgba(0,0,0,0.4)'
-          placeholder="Name"
-          autoCapitalize='none'
-          onChangeText={(text) => this.setState({ name: text })}
-        />
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  placeholder="Name"
+                  autoCapitalize='none'
+                  onChangeText={(text) => this.setState({ name: text })}
+                />
 
-        <TextInput
-          style={styles.inputBox}
-          underLineColorAndroid='#000000'
-          placeholder="GSTN Number"
-          placeholderTextColor='rgba(0,0,0,0.4)'
-          autoCapitalize="none"
-          onChangeText={(text) => this.setState({ gstn: text })}
-        />
-        <TouchableOpacity
-          style={styles.button}
-          onPress = { () => this.fetchApi()}
-        >
-          <Text style={styles.buttonText}>Get Company Details</Text>
-        </TouchableOpacity>
-      </View>
+                <TextInput
+                  style={styles.inputBox}
+                  underLineColorAndroid='#000000'
+                  placeholder="GSTN Number"
+                  placeholderTextColor='rgba(0,0,0,0.4)'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ gstn: text })}
+                />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.fetchApi()}
+                >
+                  <Text style={styles.buttonText}>Get Company Details</Text>
+                </TouchableOpacity>
+              </View>
 
-  }
-    </ScrollView>
+          }
+        </ScrollView>
       </Container>
 
 
@@ -238,7 +246,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: colors.colorShadow,
     fontSize: 16,
-    
+
     // borderRadius: 25,
   },
   buttonText:

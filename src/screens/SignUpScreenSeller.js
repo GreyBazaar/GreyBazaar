@@ -116,7 +116,7 @@ class SignUpScreenSeller extends Component {
 
             <Text
               style={styles.loginText}
-              onPress={() => this.props.navigation.navigate('LoginScreenSeller')}>
+              onPress={() => this.props.navigation.navigate('LoginRoute')}>
               Login
                     </Text>
 

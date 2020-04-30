@@ -7,7 +7,8 @@ import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
 
-export default class ViewQuotes extends React.Component {
+export default class ViewQuotesBuyer extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -17,10 +18,12 @@ export default class ViewQuotes extends React.Component {
             quantity: '',
             documentData: [
                 {
-                    id: 1, qualityType: '52x52', rate: 'Rs. 16.00', days: 4
+                    id: 1, qualityType: '52x52', rate: 'Rs. 16.00', days: 4,
+                    color: 'white', checked: false
                 },
                 {
-                    id: 2, qualityType: '52x52', rate: 'Rs. 15.50', days: 6
+                    id: 2, qualityType: '52x52', rate: 'Rs. 15.50', days: 6,
+                    color: 'white', checked: false
                 },
 
 
@@ -35,10 +38,32 @@ export default class ViewQuotes extends React.Component {
             item: [],
 
 
-
-
         }
     }
+
+
+    isChecked = (item) => {
+
+        var data = this.state.documentData.map(e => {
+            if (item.id === e.id) {
+                item.checked = !e.checked;
+                item.color = '#f8bbd0'
+                //console.log(e.id)
+                //console.log(item.color)
+
+                return item;
+
+            }
+            else {
+                //console.log(data)
+                return e;
+            }
+
+        });
+        this.setState({ documentData: data })
+
+    }
+
 
     render() {
         // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
@@ -62,11 +87,15 @@ export default class ViewQuotes extends React.Component {
                     data={this.state.documentData}
 
                     // Render Items
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index, }) => (
 
                         //this.checkDate(item.day,item.event_name),
 
-                        <View style={styles.box}>
+                        <View style={{
+                            borderColor: colors.colorBlue,
+                            margin: 10,
+                            borderWidth: 1, backgroundColor: item.color
+                        }}>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginEnd: 10 }}>
                                 <View style={{ flexDirection: 'column' }}>
@@ -86,31 +115,44 @@ export default class ViewQuotes extends React.Component {
 
                                 </View>
 
-                                
+
                             </View>
-                            <View style={{ flexDirection: 'row', alignContent: 'space-between', justifyContent: 'space-evenly' }}>
+                            <View style={{ flexDirection: 'row', alignContent: 'flex-end', justifyContent: 'flex-end' }}>
+                                {(!item.checked) ?
                                     <TouchableOpacity
 
                                         style={styles.button2}
-                                        onPress={() => this.props.navigation.navigate('AcceptConfirm')}
+                                        onPress={() => this.isChecked(item)}
+
 
                                     >
                                         <Text style={{ textAlign: 'center', color: 'white' }}>ACCEPT</Text>
-                                    </TouchableOpacity>
-
+                                    </TouchableOpacity> :
                                     <TouchableOpacity
 
-                                        style={styles.button2}
-                                    //onPress = {() => this.setState ({ bordercolor: '#4fc3f7' , borderwidth: 8, disable_shortlist:true})}
+                                        style={styles.button3}
+                                        onPress={() => this.props.navigation.navigate('AcceptConfirm')}
 
 
                                     >
-                                        <Text style={{ textAlign: 'center', color: 'white' }}>CHAT</Text>
+                                        <Text style={{ textAlign: 'center', color: 'white' }}>CONFIRM ORDER</Text>
                                     </TouchableOpacity>
-                                </View>
+
+                    }
+
+                                    <TouchableOpacity
+                                    style={styles.button2}
+                                //onPress = {() => this.setState ({ bordercolor: '#4fc3f7' , borderwidth: 8, disable_shortlist:true})}
+
+
+                                >
+                                    <Text style={{ textAlign: 'center', color: 'white' }}>CHAT</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
                     )}
+
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
                     // Header (Title)
@@ -129,12 +171,12 @@ export default class ViewQuotes extends React.Component {
 
                     </View>}
 
-                
+
             </SafeAreaView>
         );
     }
 
-    
+
 }
 
 const styles = StyleSheet.create({
@@ -162,6 +204,25 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 10,
         elevation: 20,
+        marginLeft: 50,
+        marginRight: 10
+
+
+    },
+    button3: {
+        //marginHorizontal: 30,
+        backgroundColor: colors.colorBlue,
+        borderRadius: 0,
+        height: 35,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 125,
+        alignSelf: 'center',
+        marginBottom: 10,
+        elevation: 20,
+        marginLeft: 90,
+        //marginRight: 10
+        
 
 
     },

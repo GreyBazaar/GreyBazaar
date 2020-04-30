@@ -1,16 +1,18 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
 
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+//import * as firebase from 'firebase/app'
+//import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
 import colors from '../../assets/colors'
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import auth from '@react-native-firebase/auth';
 
 
 
 
 
-export default class PastRequests extends React.Component {
+export default class PastRequestsBuyer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +25,7 @@ export default class PastRequests extends React.Component {
             send_to: '',
             request_name: '',
 
-            db: firebase.firestore(),
+            //db: firebase.firestore(),
 
             documentData: [
                 {

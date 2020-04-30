@@ -27,7 +27,7 @@ export default class SellerHomeScreen extends Component {
         
         <Button
           style={styles.button}
-          onPress={() => this.props.navigation.navigate('RequestsRoute')}
+          onPress={() => this.props.navigation.navigate('RequestsRouteSeller')}
         >
           <Text>New Requests</Text>
         </Button>

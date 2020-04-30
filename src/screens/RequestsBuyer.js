@@ -1,13 +1,15 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox,TextInput } from 'react-native'
 import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+//import * as firebase from 'firebase/app'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
 //var db = firebase.firestore()
-export default class MyRequests extends React.Component {
+export default class RequestsBuyer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,7 +22,7 @@ export default class MyRequests extends React.Component {
             send_to: '',
             request_name: '',
 
-            db: firebase.firestore(),
+            //db: firebase.firestore(),
 
             documentData: [
                 {
@@ -48,7 +50,7 @@ export default class MyRequests extends React.Component {
     }
 
     componentDidMount() {
-        const user = firebase.auth().currentUser
+        const user = auth().currentUser
         this.setState({ email: user.email })
         console.log("success kinda")
         console.log(user.email)
@@ -368,3 +370,4 @@ const styles = StyleSheet.create({
     
     }
   })
+

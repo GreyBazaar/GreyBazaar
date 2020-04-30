@@ -19,27 +19,62 @@ import PostMyRequirementScreen1 from './screens/PostMyRequirementScreen1'
 import PostMyRequirementScreen2 from './screens/PostMyRequirementScreen2'
 import ClothSpecificationsScreen from './screens/ClothSpecificationsScreen'
 import SendRequirementToScreen from './screens/SendRequirementToScreen'
-import MyRequests from './screens/MyRequests'
-import ViewQuotes from './screens/ViewQuotes'
+import RequestsBuyer from './screens/RequestsBuyer'
+import ViewQuotesBuyer from './screens/ViewQuotesBuyer'
 import AcceptConfirm from './screens/AcceptConfirm'
 import QualitySpecs from './screens/QualitySpecs'
-import PastRequests from './screens/PastRequests'
+import PastRequestsBuyer from './screens/PastRequestsBuyer'
 import Choice from './screens/Choice'
 import SellerHomeScreen from './screens/SellerHomeScreen'
 import LoginScreenBuyer from './screens/LoginScreenBuyer';
 import LoginScreenSeller from './screens/LoginScreenSeller';
 import SignUpScreenBuyer from './screens/SignUpScreenBuyer';
 import SignUpScreenSeller from './screens/SignUpScreenSeller';
+import RequestsSeller from './screens/RequestsSeller'
+import PastRequestsSeller from './screens/PastRequestsSeller'
 
 
-const RequestNavigator = createMaterialTopTabNavigator({
+
+
+const RequestNavigatorBuyer = createMaterialTopTabNavigator({
 
   active: {
-    screen: MyRequests,
+    screen: RequestsBuyer,
     navigationOptions: { title: 'Active', }
   },
   past: {
-    screen: PastRequests,
+    screen: PastRequestsBuyer,
+    navigationOptions: { title: 'Past', }
+  },
+
+},
+  {
+    initialRouteName: 'active',
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveColor: '#9e9e9e', showIcon: 'true',
+      style: { backgroundColor: colors.colorBlue, marginBottom: 20 },
+      labelStyle: { fontSize: 20, textTransform: 'capitalize', textAlign: 'center', paddingBottom: 25 },
+      tabStyle: { height: 58, justifyContent: 'center', alignItems: 'center', alignContent: 'center' },
+      iconStyle: { inactiveColor: 'grey' }
+      , indicatorStyle: { height: 4, backgroundColor: '#f48fb1' }
+      //pressColor:'blue'
+
+
+    },
+    //order : ['home','event_main','notifs','profile'],
+
+  }
+)
+
+const RequestNavigatorSeller = createMaterialTopTabNavigator({
+
+  active: {
+    screen: RequestsSeller,
+    navigationOptions: { title: 'Active', }
+  },
+  past: {
+    screen: PastRequestsSeller,
     navigationOptions: { title: 'Past', }
   },
 
@@ -78,9 +113,9 @@ const RequirementStack = createStackNavigator({
     // headerMode: "none"
   })
 
-const RequestsStack = createStackNavigator({
-  RequestNavigator: {
-    screen: RequestNavigator,
+const RequestsStackBuyer = createStackNavigator({
+  RequestNavigatorBuyer: {
+    screen: RequestNavigatorBuyer,
     navigationOptions: {
       title: 'MY REQUESTS',
       headerTitleAlign: "center",
@@ -97,7 +132,7 @@ const RequestsStack = createStackNavigator({
     }
   },
   ViewQuotes: {
-    screen: ViewQuotes,
+    screen: ViewQuotesBuyer,
     navigationOptions: {
       title: 'VIEW QUOTES',
       headerTitleAlign: 'center',
@@ -136,8 +171,29 @@ const RequestsStack = createStackNavigator({
 
 },
   {
-    initialRouteName: 'RequestNavigator',
+    initialRouteName: 'RequestNavigatorBuyer',
     //headerMode: 'none'
+  })
+
+  const RequestsStackSeller = createStackNavigator({
+    RequestNavigatorSeller: {
+      screen: RequestNavigatorSeller,
+      navigationOptions: {
+        title: 'MY REQUESTS',
+        headerTitleAlign: "center",
+        headerStyle: {
+          //backgroundColor: 'blue',
+          //fontSize: 40,
+  
+  
+        },
+        headerTitleStyle: {
+          fontSize: 25,
+  
+        }
+      }
+    },
+
   })
 
 
@@ -145,7 +201,7 @@ const RequestsStack = createStackNavigator({
 const HomeStack = createSwitchNavigator({
   HomeScreenRoute: HomeScreen,
   RequirementsRoute: RequirementStack,
-  RequestsRoute: RequestsStack
+  RequestsRoute: RequestsStackBuyer
 
 },
   {
@@ -155,6 +211,11 @@ const HomeStack = createSwitchNavigator({
 
 const SellerHomeStack = createSwitchNavigator({
   SellerHomeScreenRoute: SellerHomeScreen,
+  RequestsRouteSeller: RequestsStackSeller,
+},
+{
+  initialRouteName: "SellerHomeScreenRoute",
+  headerMode: "none"
 })
 
 const BuyerSellerStack = createSwitchNavigator({

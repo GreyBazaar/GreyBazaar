@@ -6,7 +6,6 @@ import { createDrawerNavigator } from 'react-navigation-drawer'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import colors from '../assets/colors'
-
 import SideBar from "./util/sidebar";
 import CompanyDetails from './screens/CompanyDetails'
 import HomeScreen from './screens/HomeScreen'
@@ -27,12 +26,11 @@ import PastRequestsBuyer from './screens/PastRequestsBuyer'
 import Choice from './screens/Choice'
 import SellerHomeScreen from './screens/SellerHomeScreen'
 import LoginScreenBuyer from './screens/LoginScreenBuyer';
-import LoginScreenSeller from './screens/LoginScreenSeller';
 import SignUpScreenBuyer from './screens/SignUpScreenBuyer';
-import SignUpScreenSeller from './screens/SignUpScreenSeller';
+import Divider from './screens/Divider'
 import RequestsSeller from './screens/RequestsSeller'
 import PastRequestsSeller from './screens/PastRequestsSeller'
-
+import SplashScreen from './screens/SplashScreen'
 
 
 
@@ -122,8 +120,6 @@ const RequestsStackBuyer = createStackNavigator({
       headerStyle: {
         //backgroundColor: 'blue',
         //fontSize: 40,
-
-
       },
       headerTitleStyle: {
         fontSize: 25,
@@ -221,6 +217,7 @@ const SellerHomeStack = createSwitchNavigator({
 const BuyerSellerStack = createSwitchNavigator({
     HomeRoute: HomeStack,
     SellerHomeRoute: SellerHomeStack,
+    Divider : Divider
   },
 )
 
@@ -254,24 +251,18 @@ const Drawer = createDrawerNavigator(
   }
 );
 
-const LoginScreens = createSwitchNavigator(
-  {
-    LoginScreenBuyer : {screen : LoginScreenBuyer} ,
-    LoginScreenSeller : {screen : LoginScreenSeller},
-    SignUpScreenSeller : {screen : SignUpScreenSeller},
-    SignUpScreenBuyer : {screen : SignUpScreenBuyer}
-  }
-)
 
 const AppNavigator = createSwitchNavigator(
   {
     Drawer: { screen: Drawer },
-    LoginRoute: { screen: LoginScreens },
+    LoginRoute: { screen: LoginScreenBuyer },
     CompanyDetailsRoute: { screen: CompanyDetails },
     ChoiceRoute: Choice,
+    SignUpScreenBuyer : {screen : SignUpScreenBuyer},
+    SplashScreen : SplashScreen
   },
   {
-    initialRouteName: "ChoiceRoute",
+    initialRouteName: "SplashScreen",
     headerMode: "none"
   }
 );

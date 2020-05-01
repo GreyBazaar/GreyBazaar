@@ -11,7 +11,7 @@ export default class LogoutScreen extends Component {
   SignOut = async() => {
     console.log('Sign Out')
     await auth().signOut()
-    this.props.navigation.navigate('ChoiceRoute')
+    this.props.navigation.navigate('LoginRoute')
   }
   render() {
     return (

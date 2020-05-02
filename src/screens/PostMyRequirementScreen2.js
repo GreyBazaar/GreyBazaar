@@ -30,7 +30,6 @@ export default class PostMyRequirement2 extends Component {
         clothSpecificationsFilled: false,
     }
 
-
     skipPressed = () => {
         // retrieve filled data from post my requirement screen 1
         const qualityType = this.props.navigation.getParam('qualityType', 'None')
@@ -44,7 +43,7 @@ export default class PostMyRequirement2 extends Component {
         const warp = this.props.navigation.getParam('warp', 'None')
         const weft = this.props.navigation.getParam('weft', 'None')
         const combedCarded = this.props.navigation.getParam('combedCarded', 'None')
-        const clothSpecificationsFilled = this.props.navigation.getParam('clothSpecificationsFilled', true)
+        const clothSpecificationsFilled = this.props.navigation.getParam('clothSpecificationsFilled', this.state.clothSpecificationsFilled)
 
         // set it to the state
         this.setState({
@@ -64,7 +63,7 @@ export default class PostMyRequirement2 extends Component {
     }
 
     render() {
-        console.log('state', this.state)
+        
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
 
@@ -78,7 +77,15 @@ export default class PostMyRequirement2 extends Component {
                 <Body style={styles.container}>
                     <ScrollView>
                         <Text style={styles.label}> CLOTH SPECIFICATIONS: </Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ClothSpecificationsRoute')}
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ClothSpecificationsRoute', {
+                            weight: this.state.weight,
+                            panna: this.state.panna,
+                            reed: this.state.reed,
+                            peak:this.state.peak,
+                            warp: this.state.warp,
+                            weft: this.state.weft,
+                            combedCarded: this.state.combedCarded,
+                        })}
                             style={styles.clothspecsBox}>
 
                         </TouchableOpacity>

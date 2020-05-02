@@ -262,7 +262,7 @@ const AppNavigator = createSwitchNavigator(
     SplashScreen : SplashScreen
   },
   {
-    initialRouteName: "SplashScreen",
+    initialRouteName: "Drawer", //TODO: SplashScreen
     headerMode: "none"
   }
 );

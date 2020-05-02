@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox,TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox, TextInput } from 'react-native'
 import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
 //import * as firebase from 'firebase/app'
 import firestore from '@react-native-firebase/firestore';
@@ -14,18 +14,30 @@ export default class RequestsBuyer extends React.Component {
         super(props);
         this.state = {
             email: '',
-            id: 10,
-            qualityType: '',
+            expectedRate: '',
+            selectedExpectedDelivery: '',
+            selectedCloseRequest: '',
+            remarks: '',
+
+            //from post my requirement1 screen
             quantity: '',
-            date: '',
-            request_close_at: '',
-            send_to: '',
-            request_name: '',
+            qualityType: '',
+
+            //from clothspecification screen
+            weight: '',
+            panna: '',
+            reed: '',
+            peak: '',
+            warp: '',
+            weft: '',
+            combedCarded: '',
+            clothSpecificationsFilled: false,
+            id: '',
 
             //db: firebase.firestore(),
 
             documentData: [
-                {
+                /*{
                     id:1234,date:'20/2/20',qualityType: '52x52',quantity:'100 TAKA',send_to:'All sellers',request_close_at:'12:30 pm'
                 },
                  {
@@ -33,7 +45,7 @@ export default class RequestsBuyer extends React.Component {
                 },
                 {
                     id:1244,date:'16/5/20',qualityType: '100x100',quantity:'100 TAKA',send_to:'Selected sellers',request_close_at:'9:30 pm'
-                },
+                },*/
 
             ],
             limit: 9,
@@ -44,7 +56,7 @@ export default class RequestsBuyer extends React.Component {
             direct: false,
             visible: false,
             item: [],
-           // displayData: []
+            // displayData: []
 
         }
     }
@@ -54,12 +66,12 @@ export default class RequestsBuyer extends React.Component {
         this.setState({ email: user.email })
         console.log("success kinda")
         console.log(user.email)
-        //this.retrieveData(user.email)
+        this.retrieveData(user.email)
     }
 
-    
 
-   /* retrieveData = async (email) => {
+
+    retrieveData = async (email) => {
         try {
             // Set State: Loading
             this.setState({
@@ -68,13 +80,13 @@ export default class RequestsBuyer extends React.Component {
             });
             console.log('Retrieving Data for ', email);
             // Cloud Firestore: Query
-            let initialQuery = await firebase.firestore().collection('BuyerRequests').doc(email).collection('MyRequests')
-             
+            let initialQuery = await firestore().collection('BuyerRequests').doc(email).collection('MyRequests')
 
-            .limit(this.state.limit)
 
-            firebase.firestore.setLogLevel('debug')
-            firebase.firestore()
+                .limit(this.state.limit)
+
+            firestore.setLogLevel('debug')
+            firestore()
             // Cloud Firestore: Query Snapshot
             let documentSnapshots = await initialQuery.get();
             // Cloud Firestore: Document Data
@@ -90,7 +102,7 @@ export default class RequestsBuyer extends React.Component {
             });
         }
         catch (error) {
-            console.log('error isss : ',error);
+            console.log('error isss : ', error);
             this.setState({ loading: false, direct: true })
 
         }
@@ -104,7 +116,7 @@ export default class RequestsBuyer extends React.Component {
             });
             console.log('Retrieving additional Data');
             // Cloud Firestore: Query (Additional Query)
-            let additionalQuery = await firebase.firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests')
+            let additionalQuery = await firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests')
                 .startAfter(this.state.lastVisible)
                 .limit(this.state.limit)
 
@@ -122,9 +134,9 @@ export default class RequestsBuyer extends React.Component {
             });
         }
         catch (error) {
-            console.log("error is :" ,error);
+            console.log("error is :", error);
         }
-    };*/
+    };
 
     renderFooter = () => {
         try {
@@ -214,39 +226,46 @@ export default class RequestsBuyer extends React.Component {
     }*/
 
     render() {
-       // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
+        // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
         console.disableYellowBox = true
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
         //console.log(this.state.documentData)
 
         return (
             <SafeAreaView style={styles.container}>
-
+                
 
                 {(!this.state.direct) ? <FlatList
                     // Data
                     data={this.state.documentData}
-                    
+
                     // Render Items
                     renderItem={({ item }) => (
-                        
+
                         //this.checkDate(item.day,item.event_name),
-                <View style = {styles.box}>
-                    <Text style = {styles.boxText2, {marginStart:10,marginTop:10}}>REQUEST ID: {item.id}</Text>
-                    <View style = {{flexDirection: 'row'}}>
-                    <Text style = {styles.boxText2}>DATE: {item.date}</Text>
-                        <Text style = {styles.boxText2,{paddingLeft:75}}>REQUEST CLOSES AT : {item.request_close_at}</Text>
-                    </View>
-                    <Text style = {styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
-                    <Text style = {styles.boxText2}>QUANTITY: {item.quantity}</Text>
-                    <Text style = {styles.boxText2, {marginBottom:8,marginStart:10}}>SEND REQUIREMENT TO: {item.send_to}</Text>
-                    <TouchableOpacity 
-                        style = {styles.button2}
-                        onPress = {() => this.props.navigation.navigate('ViewQuotes')}
-                    >
-                        <Text style = {styles.boxText}>VIEW QUOTES</Text>
-                    </TouchableOpacity>
-                </View>
+                        <View style={styles.box}>
+
+                            <View style={{ flexDirection: 'row' }}>
+
+                                <View style={{ flexDirection: 'column' }}>
+                                    <Text style={styles.boxText2, { marginStart: 10, marginTop: 10 }}>REQUEST ID: {item.id}</Text>
+                                    <Text style={styles.boxText2}>REQUEST CLOSES AT : {item.close_time}</Text>
+                                    
+                                    <Text style={styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
+                                    <Text style={styles.boxText2}>QUANTITY: {item.quantity}</Text>
+                                    <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>SEND REQUIREMENT TO: null</Text>
+                                    
+                                </View>
+                                
+                                <Text style={styles.boxText2, {marginVertical: 10}}>DATE: {item.date}</Text>
+                            </View>
+                            <TouchableOpacity
+                                        style={styles.button2}
+                                        onPress={() => this.props.navigation.navigate('ViewQuotes')}
+                                    >
+                                        <Text style={styles.boxText}>VIEW QUOTES</Text>
+                                    </TouchableOpacity>
+                        </View>
 
                     )}
                     // Item Key
@@ -264,15 +283,15 @@ export default class RequestsBuyer extends React.Component {
                 /> : <View
                     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO REQUESTS</Text>
-                        
+
                     </View>}
 
-                    <TouchableOpacity
-                style = {styles.button}
-                 onPress = {() => this.props.navigation.navigate('HomeScreenRoute')}>
-                    <Text style = {{color: "white", fontSize : 14}}>BACK</Text>
-                </TouchableOpacity>      
-                
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => this.props.navigation.navigate('HomeScreenRoute')}>
+                    <Text style={{ color: "white", fontSize: 14 }}>BACK</Text>
+                </TouchableOpacity>
+
             </SafeAreaView>
         );
     }
@@ -322,31 +341,31 @@ const styles = StyleSheet.create({
         backgroundColor: colors.colorBlue,
         borderRadius: 8,
         height: 42,
-        justifyContent:"center",
-        alignItems:"center",
-       width: 100,
-       alignSelf: 'center',
-       marginBottom: 20
-       
+        justifyContent: "center",
+        alignItems: "center",
+        width: 100,
+        alignSelf: 'center',
+        marginBottom: 20
+
     },
     button2: {
         //marginHorizontal: 30,
         backgroundColor: colors.colorBlue,
         borderRadius: 0,
         height: 32,
-        justifyContent:"center",
-        alignItems:"center",
-       width: 100,
-       alignSelf: 'center',
-       marginBottom: 10,
-       elevation: 20,
-       
-       
+        justifyContent: "center",
+        alignItems: "center",
+        width: 100,
+        alignSelf: 'center',
+        marginBottom: 10,
+        elevation: 20,
+
+
     },
     container: {
-      flex:1,
-      
-      
+        flex: 1,
+
+
     },
     header: {
         alignSelf: "center",
@@ -367,7 +386,7 @@ const styles = StyleSheet.create({
     boxText2: {
         color: colors.colorBlue,
         marginLeft: 10,
-    
+
     }
-  })
+})
 

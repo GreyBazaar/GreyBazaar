@@ -32,6 +32,10 @@ import SignUpScreenBuyer from './screens/SignUpScreenBuyer';
 import SignUpScreenSeller from './screens/SignUpScreenSeller';
 import RequestsSeller from './screens/RequestsSeller'
 import PastRequestsSeller from './screens/PastRequestsSeller'
+import Favorites from './screens/Favorites'
+import Profiles from './screens/Profiles'
+import SearchProfiles from './screens/SearchProfiles'
+import AddToFavorites from './screens/AddToFavorites'
 
 
 
@@ -99,14 +103,18 @@ const RequestNavigatorSeller = createMaterialTopTabNavigator({
 )
 
 
+
 const RequirementStack = createStackNavigator({
   PostMyRequirementRoute1: PostMyRequirementScreen1,
   PostMyRequirementRoute2: PostMyRequirementScreen2,
   ClothSpecificationsRoute: ClothSpecificationsScreen,
   SendRequirementToRoute: SendRequirementToScreen,
-  // Favorites : Favorites,
-  // Profiles: Profiles,
-  // SearchProfiles : SearchProfiles
+  
+   Favorites : Favorites,
+   AddToFavorites: AddToFavorites,
+   Profiles: Profiles,
+   SearchProfiles : SearchProfiles,
+  
 },
   {
     initialRouteName: 'PostMyRequirementRoute1',

@@ -1,320 +1,439 @@
 import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity,FlatList,ActivityIndicator } from "react-native";
+import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
 import { Container, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
 
-import {Item,Icon,Input,CheckBox,Card,CardItem,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
+import { Item, Icon, Input, CheckBox, Card, CardItem, Content, Thumbnail, Grid, Button, Subtitle } from 'native-base'
 import ProfileCard from '../../src/components/ProfileCard.js'
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+//import * as firebase from 'firebase/app'
+//import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
+Array.prototype.unique = function () {
+  return Array.from(new Set(this));
+}
 
 
 export default class SearchProfiles extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-          db: firebase.firestore(),
-          data:[],
-          search: '',
-          displayData: [],
-          favs : [],
-          favData : [],
-          documentData: [],
-                limit: 9,
-                lastVisible: null,
-                loading: false,
-                refreshing: false,
-                notfirstTime: true,
-                direct: 'false',
-                visible: false,
-    
-        }
-      
-      }
-    
-    
-      onFocusFunction = (email) => {
-        const user = firebase.auth().currentUser
-        console.log("i am focused")
-        firebase
-          .firestore()
-          .collection("Users").doc(email)
-          .get()
-          .then((querySnapshot) => { 
-          
-              var favs
-              favs = querySnapshot.get("favorites")
-             this.setState(
-               {
-                 favs : favs
-               }
-             )
-          
-          });
-        this.handleChange('')
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      //db: firebase.firestore(),
+      data: [],
+      search: '',
+      displayData: [],
+      favs: [],
+      favData: [],
+      documentData: [],
+      limit: 9,
+      lastVisible: null,
+      loading: false,
+      refreshing: false,
+      notfirstTime: true,
+      direct: 'false',
+      visible: false,
+      checked: true,
+      refreshed: false,
+      selected_sellers: []
+
     }
-    
-    
-    
-    componentDidMount() {
-    
-    
-        const user = firebase.auth().currentUser
-        email = 'abc@gmail.com'
-        this.setState({ email: email })
-        
-        console.log("success kinda")
-        
-        //this.firebasegetdata(user.email)
-        //this.retrieveData(user.email)
-        this.focusListener = this.props.navigation.addListener('didFocus', () => {
-            this.onFocusFunction(email)
-        })
-        
-        // firebase
-        //   .firestore()
-        //   .collection("Users").doc(user.email)
-        //   .get()
-        //   .then((querySnapshot) => { 
-          
-        //       var favs
-        //       favs = querySnapshot.get("favorites")
-        //      console.log("My Favs"+favs)
-          
-        //   });
-    
-    }
-    
-    componentWillUnmount() {
-        this.focusListener.remove()
-    }
-    
-        
-        renderFooter = () => {
-          try {
-              // Check If Loading
-              if (this.state.loading) {
-                  return (
-                      <View style = {{flex:1, justifyContent:'center', marginTop:300}}>
-                        <ActivityIndicator size="large" color="#1a237e"/>
-                      </View>
-                  )
-              }
-              else {
-                  return null;
-              }
-          }
-          catch (error) {
-              console.log(error);
-          }
-      };
-    
-    
-    
-    
-    
-    
-      static navigationOptions = {
-        headerShown:false
-    }
-    
-    
-    
-    
-    showFav = async() => {
-      let data  = []
-      console.log("This is the list"+this.state.favs)
-      await this.state.favs.forEach(
-      async (elem)=>{
-        await
-      firebase
-      .firestore()
-      .collection("Users").doc(elem)
+
+  }
+
+
+  onFocusFunction = (email) => {
+    //const user = auth().currentUser
+    console.log("i am focused")
+
+    firestore()
+      .collection("Users").doc(email)
       .get()
-      .then((querySnapshot) => { 
-        
-        console.log("My DATA"+querySnapshot.data().email)
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data());
-          
-         data.push(querySnapshot.data())
-        
-      //  this.setState(
-      //    {
-      //      favData :[ ...this.state.favData, querySnapshot.data() ]
-      //    }
-      //  )
-    
-        });
-    
-       
-    });
-     this.setState(
-    
-          { favData : data,
-            loading : false
+      .then((querySnapshot) => {
+
+        var favs
+        favs = querySnapshot.get("favorites")
+        this.setState(
+          {
+            favs: favs
           }
-    
-      )
-    console.log("Check data "+data)
-    console.log("Chevk state "+ this.state.favData)
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    handleChange = async(search) => {
-      let Data = []
-      this.setState({displayData: []})
-      try {
-        this.setState({loading:true})
-        console.log('searching for ',search)
-        await this.state.db.collection('Users')
-            .where('keywords','array-contains',search)
-            .get()
-            .then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
-                  // doc.data() is never undefined for query doc snapshots
-                  console.log(doc.id, " => ", doc.data());
-                  Data.push(doc.data());
-                  
-              
-              });
-          })
-          console.log(Data)
-          this.setState({
-           //documentData: Data,
-           displayData:Data,
-            loading:false,
-    
-          },console.log("This is the data we are looking for : "+ this.state.displayData));
-          //Data=[]
-          
-    
-        
+        )
+
+      });
+    this.handleChange('')
+
+  }
+
+
+
+  componentDidMount() {
+
+
+    const user = auth().currentUser
+    //email = 'abc@gmail.com'
+    this.setState({ email: user.email })
+
+    console.log("success kinda")
+
+    //this.firebasegetdata(user.email)
+    //this.retrieveData(user.email)
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.onFocusFunction(user.email)
+    })
+    this.retrieveData()
+
+    // firebase
+    //   .firestore()
+    //   .collection("Users").doc(user.email)
+    //   .get()
+    //   .then((querySnapshot) => { 
+
+    //       var favs
+    //       favs = querySnapshot.get("favorites")
+    //      console.log("My Favs"+favs)
+
+    //   });
+
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove()
+  }
+
+
+  renderFooter = () => {
+    try {
+      // Check If Loading
+      if (this.state.loading) {
+        return (
+          <View style={{ flex: 1, justifyContent: 'center', marginTop: 300 }}>
+            <ActivityIndicator size="large" color="#1a237e" />
+          </View>
+        )
       }
-     
-     catch (error) {
-       console.log(error);
-     }
-    }
-    
-    
-    
-    handleRefresh = () => {
-      try {
-        this.setState({refreshing:true})
-        this.showFav()
-        this.handleChange('')
-        
-        this.setState({
-            
-            refreshing:false
-        })
+      else {
+        return null;
+      }
     }
     catch (error) {
       console.log(error);
     }
-    }
-    render() {
-        console.disableYellowBox = true
-        var {navigate} = this.props.navigation;
-        return (
-            
+  };
 
-              
-    
-            <View style = {{flex:1}}>
-              
-              <Header searchBar rounded>
+
+
+
+
+
+  static navigationOptions = {
+    headerShown: false
+  }
+
+  retrieveData = async () => {
+    try {
+      // Set State: Loading
+      this.setState({
+        loading: true,
+        direct: false
+      });
+      console.log('Retrieving Data from collection Seller ');
+      // Cloud Firestore: Query
+      let initialQuery = await firestore().collection('Seller')
+
+
+        .limit(this.state.limit)
+
+      firestore.setLogLevel('debug')
+      firestore()
+      // Cloud Firestore: Query Snapshot
+      let documentSnapshots = await initialQuery.get();
+      // Cloud Firestore: Document Data
+      let documentData = documentSnapshots.docs.map(document => document.data());
+      // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+      //let lastVisible = documentData[documentData.length - 1].id;
+      // Set State
+      console.log(documentData)
+      this.setState({
+        documentData: documentData,
+        //lastVisible: lastVisible,
+        loading: false,
+      });
+    }
+    catch (error) {
+      console.log('error isss : ', error);
+      this.setState({ loading: false, direct: true })
+
+    }
+  };
+  // Retrieve More
+  retrieveMore = async () => {
+    try {
+      // Set State: Refreshing
+      this.setState({
+        refreshing: true,
+      });
+      console.log('Retrieving additional Data');
+      // Cloud Firestore: Query (Additional Query)
+      let additionalQuery = await firestore().collection('Seller')
+        .startAfter(this.state.lastVisible)
+        .limit(this.state.limit)
+
+      // Cloud Firestore: Query Snapshot
+      let documentSnapshots = await additionalQuery.get();
+      // Cloud Firestore: Document Data
+      let documentData = documentSnapshots.docs.map(document => document.data());
+      // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+      let lastVisible = documentData[documentData.length - 1].id;
+      // Set State
+      this.setState({
+        documentData: [...this.state.documentData, ...documentData],
+        lastVisible: lastVisible,
+        refreshing: false,
+      });
+    }
+    catch (error) {
+      console.log("error is :", error);
+    }
+  };
+
+  isChecked = (item) => {
+    let selected_data = this.state.selected_sellers
+    var data = this.state.documentData.map(e => {
+      if (item.name === e.name) {
+        item.checked = !e.checked;
+
+
+        item.color = '#f8bbd0'
+        selected_data.push(item.email)
+        //selected_data = this.state.selected_sellers.map(item => item.email)
+
+        //console.log(e.id)
+        //console.log(item.color)
+
+
+        return item;
+
+      }
+      else {
+        //console.log(data)
+        return e;
+      }
+
+    });
+    console.log('checked dtaa is ', this.state.selected_sellers)
+    this.setState({ documentData: data, selected_sellers: selected_data })
+    //item.color = 'white'
+
+  }
+
+  unCheck = (item) => {
+    let selected_data = this.state.selected_sellers.unique()
+    var data = this.state.documentData.map(e => {
+      if (item.name === e.name) {
+        item.unchecked = !e.unchecked;
+
+
+        item.color = colors.colorBlue
+        if (selected_data.indexOf(item.email) > -1)
+          selected_data.splice(selected_data.indexOf(item.email), 1);
+
+
+        //console.log(e.id)
+        //console.log(item.color)
+
+
+        return item;
+
+      }
+      else {
+        //console.log(data)
+        return e;
+      }
+
+    });
+    this.setState({ documentData: data, selected_sellers: selected_data })
+    //item.color = 'white'
+
+
+  }
+
+
+
+  handleChange = async (search) => {
+    let Data = []
+    this.setState({ displayData: [] })
+    try {
+      this.setState({ loading: true })
+      console.log('searching for ', search)
+      await firestore().collection('Users')
+        .where('keywords', 'array-contains', search)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            Data.push(doc.data());
+
+
+          });
+        })
+      console.log(Data)
+      this.setState({
+        //documentData: Data,
+        displayData: Data,
+        loading: false,
+
+      }, console.log("This is the data we are looking for : " + this.state.displayData));
+      //Data=[]
+
+
+
+    }
+
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  doneSelect = () => {
+    let unique = this.state.selected_sellers.unique()
+    console.log(unique)
+    this.setState({
+      selected_sellers: unique
+    })
+  }
+
+
+
+  render() {
+    console.disableYellowBox = true
+    var { navigate } = this.props.navigation;
+    return (
+
+
+
+
+      <SafeAreaView style={styles.container}>
+
+        <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
-            <Input placeholder="Search people" 
-                   onChangeText={(search) => this.handleChange(search)}
-                   />
+            <Input placeholder="Search for sellers"
+            //onChangeText={(search) => this.handleChange(search)}
+            />
             <Icon name="ios-people" />
           </Item>
           <Button transparent>
             <Text>Search </Text>
           </Button>
-          
+
         </Header>
-        
-          {(this.state.loading)?<ActivityIndicator size='large'/>:null}
-        <View>
-          <Text>
-            People
-          </Text>
-        </View>
-       <FlatList
-          
+
+        <Text style={styles.heading}>Tap on the names to select</Text>
+        <Text style={styles.heading}>Tap and hold on the names to unselect</Text>
+
+        <FlatList
           scrollEnabled={true}
-          
-          data= {this.state.displayData}
-          renderItem={({ item }) => 
-          <TouchableOpacity onPress = {
-            ()=>navigate("ProfileDetails",{item})
-        }>
-        <ProfileCard
-            // image  = {require('../../assets/media2.jpg')}
-          Name = {item.name}
-          Sports = {item.sports}
-          Ratings = {item.rating}
-          Branch={item.branch}
-          Year = {item.year}
-        >
-      </ProfileCard>
-    </TouchableOpacity>
-    
-      }
-      ListHeaderComponent={this.renderHeader}
-                   
-                    onRefresh={this.handleRefresh}
-                    refreshing={this.state.refreshing}
+          // Data
+          data={this.state.documentData}
+
+          // Render Items
+          renderItem={({ item }) => (
+
+            //this.checkDate(item.day,item.event_name),
+            <View style={{
+              borderColor: '#f48fb1',
+              margin: 10,
+              borderWidth: 1, backgroundColor: item.color
+            }}>
+              <TouchableOpacity
+                onPress={() => this.isChecked(item)}
+                onLongPress={() => this.unCheck(item)}
+              >
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.text1}>{item.name}</Text>
+
+
+                </View>
+              </TouchableOpacity>
+
+            </View>
+
+          )}
+          // Item Key
+          keyExtractor={(item, index) => String(index)}
+          // Header (Title)
+          ListHeaderComponent={this.renderHeader}
+          // Footer (Activity Indicator)
+          ListFooterComponent={this.renderFooter}
+          // On End Reached (Takes a function)
+          //onEndReached={this.retrieveMore}
+          // How Close To The End Of List Until Next Data Request Is Made
+          onEndReachedThreshold={0}
+          // Refreshing (Set To True When End Reached)
+          refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
 
         />
-           
-            </View>
-            
-      );
-                        
-               
-        
-    }
+
+        <TouchableOpacity
+          onPress={() => {
+            this.doneSelect(),
+            this.props.navigation.navigate('SendRequirementToRoute', {selected_sellers: this.state.selected_sellers, some_selected:true})
+          }}
+          style={styles.button}
+        >
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.colorBlue, alignSelf: 'center' }}>DONE</Text>
+        </TouchableOpacity>
+
+      </SafeAreaView>
+
+    );
+
+
+
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-    },
-    label: {
-        color: colors.colorWhite,
-        fontSize: 14,
-    },
-    inputBox: {
-        marginVertical: 14,
-        paddingHorizontal: 16,
-        width: 300,
-        height: 50,
-        backgroundColor: colors.colorShadow,
-        fontSize: 16,
-        // borderRadius: 25,
-    },
-    nextFont:{
-        color: colors.colorBlack,
-      
-    },
-    button: {
-        backgroundColor: colors.colorWhite,
-        marginTop: 40,
-        borderRadius: 10,
-        alignSelf:'flex-end',
-    },
+
+  box: {
+    borderColor: '#f48fb1',
+    margin: 10,
+    borderWidth: 1,
+
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.colorBlue
+  },
+  text1: {
+    color: 'white',
+    fontSize: 20,
+    margin: 10
+  },
+  heading: {
+    fontSize: 18,
+    color: colors.colorGrey,
+    margin: 15,
+
+    alignSelf: 'center'
+  },
+  button: {
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: '#ec407a',
+    backgroundColor: '#f8bbd0',
+    alignSelf: 'center',
+    alignContent: 'center',
+    height: 35,
+    width: 100,
+    marginBottom: 15,
+    justifyContent: 'center'
+  }
+
 })

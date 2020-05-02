@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TouchableHighlight, FlatList, ActivityIndicator, YellowBox } from 'react-native'
 import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 

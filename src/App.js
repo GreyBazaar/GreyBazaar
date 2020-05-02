@@ -171,26 +171,26 @@ const RequestsStackBuyer = createStackNavigator({
     //headerMode: 'none'
   })
 
-  const RequestsStackSeller = createStackNavigator({
-    RequestNavigatorSeller: {
-      screen: RequestNavigatorSeller,
-      navigationOptions: {
-        title: 'MY REQUESTS',
-        headerTitleAlign: "center",
-        headerStyle: {
-          //backgroundColor: 'blue',
-          //fontSize: 40,
-  
-  
-        },
-        headerTitleStyle: {
-          fontSize: 25,
-  
-        }
-      }
-    },
+const RequestsStackSeller = createStackNavigator({
+  RequestNavigatorSeller: {
+    screen: RequestNavigatorSeller,
+    navigationOptions: {
+      title: 'MY REQUESTS',
+      headerTitleAlign: "center",
+      headerStyle: {
+        //backgroundColor: 'blue',
+        //fontSize: 40,
 
-  })
+
+      },
+      headerTitleStyle: {
+        fontSize: 25,
+
+      }
+    }
+  },
+
+})
 
 
 
@@ -209,16 +209,16 @@ const SellerHomeStack = createSwitchNavigator({
   SellerHomeScreenRoute: SellerHomeScreen,
   RequestsRouteSeller: RequestsStackSeller,
 },
-{
-  initialRouteName: "SellerHomeScreenRoute",
-  headerMode: "none"
-})
+  {
+    initialRouteName: "SellerHomeScreenRoute",
+    headerMode: "none"
+  })
 
 const BuyerSellerStack = createSwitchNavigator({
-    HomeRoute: HomeStack,
-    SellerHomeRoute: SellerHomeStack,
-    Divider : Divider
-  },
+  HomeRoute: HomeStack,
+  SellerHomeRoute: SellerHomeStack,
+  Divider: Divider
+},
 )
 
 
@@ -232,7 +232,7 @@ const Drawer = createDrawerNavigator(
     AboutUsRoute: { screen: AboutUsScreen },
     LogoutRoute: { screen: LogoutScreen },
     HelpAndSupportRoute: { screen: HelpAndSupportScreen },
-    Choice : Choice
+    Choice: Choice
   },
   {
     contentOptions: {
@@ -258,11 +258,12 @@ const AppNavigator = createSwitchNavigator(
     LoginRoute: { screen: LoginScreenBuyer },
     CompanyDetailsRoute: { screen: CompanyDetails },
     ChoiceRoute: Choice,
-    SignUpScreenBuyer : {screen : SignUpScreenBuyer},
-    SplashScreen : SplashScreen
+    SignUpScreenBuyer: { screen: SignUpScreenBuyer },
+    SplashScreen: SplashScreen,
+    NewRoute: { screen: PostMyQuoteScreen2 }
   },
   {
-    initialRouteName: "Drawer", //TODO: SplashScreen
+    initialRouteName: "SplashScreen",
     headerMode: "none"
   }
 );

@@ -18,7 +18,9 @@ export default class LoginScreenBuyer extends Component {
     login = () => {
         auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(
-            () => this.props.navigation.navigate('HomeRoute')
+            () => this.props.navigation.navigate('Divider',{
+                email : this.state.email
+            })
           ).catch((e) => console.log(e))
       }
     render() {
@@ -27,7 +29,7 @@ export default class LoginScreenBuyer extends Component {
 
                 <Header style={{ backgroundColor: colors.colorBlack }}>
                     <Body style={{ marginLeft: 40, }}>
-                        <Title>Login as a Buyer </Title>
+                        <Title>Login</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -65,7 +67,7 @@ export default class LoginScreenBuyer extends Component {
 
                         <Text
                             style={styles.signupText}
-                            onPress={() => this.props.navigation.navigate('SignUpScreenBuyer')}>
+                            onPress={() => this.props.navigation.navigate('ChoiceRoute')}>
                             Sign Up
                         </Text>
                     </Text>

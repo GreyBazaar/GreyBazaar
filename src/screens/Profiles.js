@@ -4,8 +4,8 @@ import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
 import {  Content, Card, CardItem, Thumbnail } from 'native-base';
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default class SendRequirementToScreen extends Component {
 
@@ -13,7 +13,7 @@ export default class SendRequirementToScreen extends Component {
         super(props);
         this.state = {
             iconname:"ios-timer",
-            db:firebase.firestore(),
+           
             email:'',
             joined: 0,
             num: 0,
@@ -29,13 +29,12 @@ export default class SendRequirementToScreen extends Component {
     }
     componentDidMount(){
         console.disableYellowBox = true;
-        const user = firebase.auth().currentUser
+        const user = auth().currentUser
         const doc = this.state.db.collection("Users").doc(user.email)
         var {params} = this.props.navigation.state
         var t 
        
-        firebase
-        .firestore()
+        firestore()
         .collection("Users").doc(user.email)
         .get()
         .then((querySnapshot) => { 
@@ -56,11 +55,11 @@ export default class SendRequirementToScreen extends Component {
     }
     addFav=()=>{
         var {params} = this.props.navigation.state
-        const user = firebase.auth().currentUser
+        const user = auth().currentUser
         let id = user.email
         
-        const  arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-          const doc = this.state.db.collection("Users").doc(id)
+        const  arrayUnion = firestore.FieldValue.arrayUnion;
+          const doc = firestore().collection("Users").doc(id)
           doc.update({
           favorites : arrayUnion(params.item.name)
           });
@@ -74,11 +73,11 @@ export default class SendRequirementToScreen extends Component {
   
          remFav=()=>{
           var {params} = this.props.navigation.state
-          const user = firebase.auth().currentUser
+          const user = auth().currentUser
           let id = user.email
           
-          const  arrayRemove = firebase.firestore.FieldValue.arrayRemove;
-            const doc = this.state.db.collection("Users").doc(id)
+          const  arrayRemove = firestore.FieldValue.arrayRemove;
+            const doc = firestore().collection("Users").doc(id)
             doc.update({
             favorites : arrayRemove(params.item.name)
             });

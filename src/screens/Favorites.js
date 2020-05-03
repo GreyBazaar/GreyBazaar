@@ -1,115 +1,93 @@
-import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity,FlatList,ActivityIndicator } from "react-native";
-import { Container, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
+import React from 'react'
+import {SafeAreaView, View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator} from 'react-native'
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
-
-import {Item,Icon,Input,CheckBox,Card,CardItem,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
-import ProfileCard from '../../src/components/ProfileCard.js'
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export default class SearchProfiles extends Component {
+Array.prototype.unique = function () {
+  return Array.from(new Set(this));
+}
+
+export default class Favorites extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-          db: firebase.firestore(),
-          data:[],
+          //db: firebase.firestore(),
+          data: [],
           search: '',
           displayData: [],
-          favs : [],
-          favData : [],
+          favs: [],
+          favData: [],
           documentData: [],
-                limit: 9,
-                lastVisible: null,
-                loading: false,
-                refreshing: false,
-                notfirstTime: true,
-                direct: 'false',
-                visible: false,
+          limit: 9,
+          lastVisible: null,
+          loading: false,
+          refreshing: false,
+          notfirstTime: true,
+          direct: 'false',
+          visible: false,
+          checked: true,
+          refreshed: false,
+          fav_sellers: [],
+          email: ''
     
         }
-      
+    
       }
+
+      componentDidMount() {
+
+        const user = auth().currentUser
+        this.setState({ email: user.email })   
+        console.log("on addToFav screen")
+        this.retrieveData(user.email)
     
-    
-      onFocusFunction = (email) => {
-        const user = firebase.auth().currentUser
-        console.log("i am focused")
-        firebase
-          .firestore()
-          .collection("Users").doc(email)
-          .get()
-          .then((querySnapshot) => { 
-          
-              var favs
-              favs = querySnapshot.get("favorites")
-             this.setState(
-               {
-                 favs : favs
-               }
-             )
-          
-          });
-        this.handleChange('')
-    
-    }
-    
-    
-    
-    componentDidMount() {
-    
-    
-        const user = firebase.auth().currentUser
-        email = 'abc@gmail.com'
-        this.setState({ email: email })
-        
-        console.log("success kinda")
-        
-        //this.firebasegetdata(user.email)
-        //this.retrieveData(user.email)
-        this.focusListener = this.props.navigation.addListener('didFocus', () => {
-            this.onFocusFunction(email)
+      }
+
+      isChecked = (hey) => {
+        let data = this.state.fav_sellers
+
+        this.state.documentData.map((item) => {
+            if (item.name === hey.name) {
+                item.check = !item.check
+                if (item.check === true) {
+                  data.push(item);
+                  console.log('selected:' + item.name);
+                } else if (item.check === false) {
+                  const i = data.indexOf(item)
+                  if (i  > -1) {
+                    this.state.data.splice(i, 1)
+                    console.log('unselect:' + item.name)
+                    return data
+                  }
+                }
+              }
         })
-        
-        // firebase
-        //   .firestore()
-        //   .collection("Users").doc(user.email)
-        //   .get()
-        //   .then((querySnapshot) => { 
-          
-        //       var favs
-        //       favs = querySnapshot.get("favorites")
-        //      console.log("My Favs"+favs)
-          
-        //   });
-    
+        //console.log()
+        console.log(this.state.fav_sellers)
+        this.setState({fav_sellers: data,documentData: this.state.documentData})
     }
-    
-    componentWillUnmount() {
-        this.focusListener.remove()
-    }
-    
-        
-        renderFooter = () => {
-          try {
-              // Check If Loading
-              if (this.state.loading) {
-                  return (
-                      <View style = {{flex:1, justifyContent:'center', marginTop:300}}>
-                        <ActivityIndicator size="large" color="#1a237e"/>
-                      </View>
-                  )
-              }
-              else {
-                  return null;
-              }
+
+      renderFooter = () => {
+        try {
+          // Check If Loading
+          if (this.state.loading) {
+            return (
+              <View style={{ flex: 1, justifyContent: 'center', marginTop: 300 }}>
+                <ActivityIndicator size="large" color="#1a237e" />
+              </View>
+            )
           }
-          catch (error) {
-              console.log(error);
+          else {
+            return null;
           }
+        }
+        catch (error) {
+          console.log(error);
+        }
       };
     
     
@@ -118,206 +96,222 @@ export default class SearchProfiles extends Component {
     
     
       static navigationOptions = {
-        headerShown:false
-    }
+        headerShown: false
+      }
     
-    
-    
-    
-    showFav = async() => {
-      let data  = []
-      console.log("This is the list"+this.state.favs)
-      await this.state.favs.forEach(
-      async (elem)=>{
-        await
-      firebase
-      .firestore()
-      .collection("Users").doc(elem)
-      .get()
-      .then((querySnapshot) => { 
-        
-        console.log("My DATA"+querySnapshot.data().email)
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data());
-          
-         data.push(querySnapshot.data())
-        
-      //  this.setState(
-      //    {
-      //      favData :[ ...this.state.favData, querySnapshot.data() ]
-      //    }
-      //  )
-    
-        });
-    
-       
-    });
-     this.setState(
-    
-          { favData : data,
-            loading : false
-          }
-    
-      )
-    console.log("Check data "+data)
-    console.log("Chevk state "+ this.state.favData)
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    handleChange = async(search) => {
-      let Data = []
-      this.setState({displayData: []})
-      try {
-        this.setState({loading:true})
-        console.log('searching for ',search)
-        await this.state.db.collection('Users')
-            .where('keywords','array-contains',search)
-            .get()
-            .then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
-                  // doc.data() is never undefined for query doc snapshots
-                  console.log(doc.id, " => ", doc.data());
-                  Data.push(doc.data());
-                  
-              
-              });
-          })
-          console.log(Data)
+      retrieveData = async (email) => {
+        try {
+          // Set State: Loading
           this.setState({
-           //documentData: Data,
-           displayData:Data,
-            loading:false,
+            loading: true,
+            direct: false
+          });
+          console.log('Retrieving Data from collection Seller ');
+          // Cloud Firestore: Query
+          let initialQuery = await firestore().collection('Buyer').doc(email).collection('MyFavorites')
     
-          },console.log("This is the data we are looking for : "+ this.state.displayData));
-          //Data=[]
-          
     
-        
-      }
+            .limit(this.state.limit)
+    
+          firestore.setLogLevel('debug')
+          firestore()
+          // Cloud Firestore: Query Snapshot
+          let documentSnapshots = await initialQuery.get();
+          // Cloud Firestore: Document Data
+          let documentData = documentSnapshots.docs.map(document => document.data());
+          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+          //let lastVisible = documentData[documentData.length - 1].id;
+          // Set State
+          console.log(documentData)
+          this.setState({
+            documentData: documentData,
+            //lastVisible: lastVisible,
+            loading: false,
+          });
+        }
+        catch (error) {
+          console.log('error isss : ', error);
+          this.setState({ loading: false, direct: true })
+    
+        }
+      };
+      // Retrieve More
+      retrieveMore = async () => {
+        try {
+          // Set State: Refreshing
+          this.setState({
+            refreshing: true,
+          });
+          console.log('Retrieving additional Data');
+          // Cloud Firestore: Query (Additional Query)
+          let additionalQuery = await firestore().collection('Buyer').doc(this.state.email).collection('MyFavorites')
+            .startAfter(this.state.lastVisible)
+            .limit(this.state.limit)
+    
+          // Cloud Firestore: Query Snapshot
+          let documentSnapshots = await additionalQuery.get();
+          // Cloud Firestore: Document Data
+          let documentData = documentSnapshots.docs.map(document => document.data());
+          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+          let lastVisible = documentData[documentData.length - 1].id;
+          // Set State
+          this.setState({
+            documentData: [...this.state.documentData, ...documentData],
+            lastVisible: lastVisible,
+            refreshing: false,
+          });
+        }
+        catch (error) {
+          console.log("error is :", error);
+        }
+      };
+    
      
-     catch (error) {
-       console.log(error);
-     }
-    }
-    
-    
-    
-    handleRefresh = () => {
-      try {
-        this.setState({refreshing:true})
-        this.showFav()
-        this.handleChange('')
-        
+      /*doneSelect = () => {
+        let unique = this.state.selected_sellers.unique()
+        console.log(unique)
         this.setState({
-            
-            refreshing:false
+          selected_sellers: unique
         })
-    }
-    catch (error) {
-      console.log(error);
-    }
-    }
-    render() {
-        console.disableYellowBox = true
-        var {navigate} = this.props.navigation;
-        return (
-            
+      }*/
 
-              
+      render() {
+        console.log(this.state.documentData)
+        console.disableYellowBox = true
+        var { navigate } = this.props.navigation;
+        return (
     
-            <View style = {{flex:1}}>
-              
-              <Header searchBar rounded>
-          <Item>
-            <Icon name="ios-search" />
-            <Input placeholder="Search people" 
-                   onChangeText={(search) => this.handleChange(search)}
-                   />
-            <Icon name="ios-people" />
-          </Item>
-          <Button transparent>
-            <Text>Search </Text>
-          </Button>
-          
-        </Header>
-        
-          {(this.state.loading)?<ActivityIndicator size='large'/>:null}
-        <View>
-          <Text>
-            favorites
-          </Text>
-        </View>
-        {(Array.isArray(this.state.favs))?
-          <FlatList
-          
-          scrollEnabled={true}
-          
-          data= {this.state.favData}
-          renderItem={({ item }) => 
-          <TouchableOpacity onPress = {
-            ()=>navigate("ProfileDetails",{item})
-        }>
-        <ProfileCard
-            // image  = {require('../../assets/media2.jpg')}
-          Name = {item.name}
-          Sports = {item.name}
-          Ratings = {item.email}
-          Branch={item.email}
-          Year = {item.state}
-        >
-      </ProfileCard>
-    </TouchableOpacity>
+  
+    
+    
+          <SafeAreaView style={styles.container}>
+    
+            <TouchableOpacity
+            onPress = {() => this.props.navigation.navigate('AddToFavorites')} 
+            style = {styles.button2}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: colors.colorBlue, alignSelf: 'center' }}>ADD FAVOURITES</Text>
+            </TouchableOpacity>
+    
+            <FlatList
+            
+                    scrollEnabled={true}
+                    // Data
+                    data={this.state.documentData}
+
+                    // Render Items
+                    renderItem={({ item }) => (
+
+                        //this.checkDate(item.day,item.event_name),
+                        <View style={{
+                            borderColor: '#f48fb1',
+                            margin: 10,
+                            borderWidth: 1
+                        }}>
+                            <TouchableOpacity disabled={true} onPress = {() => {}}>
+
+                            <View style={{ flexDirection: 'column' }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                
+                                
+                                        <Text style={styles.text1}>{item.name}</Text>
+                                        
+                                    
+                                    
+                                </View>
+                                
+
+
+                            </View>
+                            </TouchableOpacity>
+
+
+                        </View>
+
+                    )}
+                    // Item Key
+                    keyExtractor={(item, index) => String(index)}
+                    // Header (Title)
+                    ListHeaderComponent={this.renderHeader}
+                    // Footer (Activity Indicator)
+                    ListFooterComponent={this.renderFooter}
+                    // On End Reached (Takes a function)
+                    //onEndReached={this.retrieveMore}
+                    // How Close To The End Of List Until Next Data Request Is Made
+                    onEndReachedThreshold={0}
+                    // Refreshing (Set To True When End Reached)
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.handleRefresh}
+
+                />
+
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('SendRequirementToRoute')
+                //this.doneSelect()
+                //this.props.navigation.navigate('SendRequirementToRoute', {selected_sellers: this.state.selected_sellers, some_selected:true})
+              }}
+              style={styles.button}
+            >
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.colorBlue, alignSelf: 'center' }}>DONE</Text>
+            </TouchableOpacity>
+    
+          </SafeAreaView>
+    
+        );
+    
+    
     
       }
-      ListHeaderComponent={this.renderHeader}
-                   
-                    onRefresh={this.handleRefresh}
-                    refreshing={this.state.refreshing}
-
-        />:
-        <Text>You have no Favorites</Text>}
-        
-           
-            </View>
-            
-      );
-                        
-               
-        
-    }
-}
+    
+} 
 
 const styles = StyleSheet.create({
+
+    box: {
+      borderColor: '#f48fb1',
+      margin: 10,
+      borderWidth: 1,
+  
+    },
     container: {
-        padding: 20,
+      flex: 1,
+      backgroundColor: colors.colorBlue
     },
-    label: {
-        color: colors.colorWhite,
-        fontSize: 14,
+    text1: {
+      color: 'white',
+      fontSize: 20,
+      margin: 10
     },
-    inputBox: {
-        marginVertical: 14,
-        paddingHorizontal: 16,
-        width: 300,
-        height: 50,
-        backgroundColor: colors.colorShadow,
-        fontSize: 16,
-        // borderRadius: 25,
-    },
-    nextFont:{
-        color: colors.colorBlack,
-      
+    heading: {
+      fontSize: 18,
+      color: colors.colorGrey,
+      margin: 15,
+  
+      alignSelf: 'center'
     },
     button: {
-        backgroundColor: colors.colorWhite,
-        marginTop: 40,
-        borderRadius: 10,
-        alignSelf:'flex-end',
+      borderRadius: 9,
+      borderWidth: 1,
+      borderColor: '#ec407a',
+      backgroundColor: '#f8bbd0',
+      alignSelf: 'center',
+      alignContent: 'center',
+      height: 35,
+      width: 100,
+      marginBottom: 15,
+      justifyContent: 'center'
     },
-})
+    button2: {
+      borderRadius: 9,
+      borderWidth: 1,
+      borderColor: '#ec407a',
+      backgroundColor: '#f8bbd0',
+      alignSelf: 'center',
+      alignContent: 'center',
+      height: 40,
+      width: 200,
+      marginTop: 15,
+      justifyContent: 'center'
+    },
+    
+  })

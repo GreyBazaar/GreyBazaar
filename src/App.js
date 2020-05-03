@@ -31,6 +31,7 @@ import Divider from './screens/Divider'
 import RequestsSeller from './screens/RequestsSeller'
 import PastRequestsSeller from './screens/PastRequestsSeller'
 import SplashScreen from './screens/SplashScreen'
+import PostMyQuoteScreen2 from './screens/PostMyQuoteScreen2'
 
 
 

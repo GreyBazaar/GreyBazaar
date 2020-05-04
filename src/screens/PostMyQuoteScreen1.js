@@ -3,6 +3,8 @@ import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, Tex
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 
 
@@ -19,7 +21,7 @@ export default class PostMyQuoteScreen1 extends Component {
     }
 
     componentDidMount() {
-        const {state} = this.props.navigation;
+        const { state } = this.props.navigation;
 
         this.setState({
             id: state.params.id,
@@ -30,8 +32,13 @@ export default class PostMyQuoteScreen1 extends Component {
     checkAllFilled = () => {
         //console.log(this.state.id, this.state.from)
         if (this.state.rate && this.state.deliveryDays) {
-            this.props.navigation.navigate('PostMyQuoteScreen2',{id:this.state.id, from: this.state.from})
-            
+            this.props.navigation.navigate('PostMyQuoteScreen2', {
+                rate: this.state.rate,
+                deliveryDays: this.state.deliveryDays,
+                id: this.state.id,
+                from: this.state.from
+            })
+
             //Alert.alert('GOTO PostMyQuoteScreen2')
         } else if (!this.state.rate) {
 

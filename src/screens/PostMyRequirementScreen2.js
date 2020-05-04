@@ -35,7 +35,7 @@ export default class PostMyRequirement2 extends Component {
         const qualityType = this.props.navigation.getParam('qualityType', 'None')
         const quantity = this.props.navigation.getParam('quantity', 'None')
 
-        // retrieve filled data from post my requirement screen 2
+        // retrieve filled data from post my requirement cloth specs
         const weight = this.props.navigation.getParam('weight', 'None')
         const panna = this.props.navigation.getParam('panna', 'None')
         const reed = this.props.navigation.getParam('reed', 'None')

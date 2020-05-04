@@ -4,27 +4,172 @@ import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "
 import colors from '../../assets/colors'
 import { ScrollView } from "react-native-gesture-handler";
 const deviceHeight = Dimensions.get("window").height;
-
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import moment from 'moment';
 
 export default class PostMyQuoteScreen2 extends Component {
 
     state = {
+        // current user email
+        email: '',
+
+        //today's date
+        date: '',
+
+        //from this screen
         remarks: '',
+
+        // from seller requests screen
         from: '',
-        id: ''
+        id: '',
+
+        // from post my quote screen 1
+        rate: '',
+        deliveryDays: '',
+
+        //from clothspecification screen
+        weight: '',
+        panna: '',
+        reed: '',
+        peak: '',
+        warp: '',
+        weft: '',
+        combedCarded: '',
+        clothSpecificationsFilled: false,
+
+        //quote id
+        quoteId: '',
     }
 
     componentDidMount() {
-        const {state} = this.props.navigation;
-
+        //id => request id, from: buyer email
+        const { state } = this.props.navigation;
         this.setState({
             id: state.params.id,
             from: state.params.from
         })
+
+        //get current user
+        const user = auth().currentUser
+        this.setState({ email: user.email })
+
+        const date = moment().format('DD/MM/YY')
+        this.setState({ date })
     }
 
-    nextPressed = () => {
-        Alert.alert('goto NextScreen')
+    // submitPressed = () => {
+    //     this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id })
+    // }
+
+    sendToDatabaseBuyer = () => {
+
+        firestore().collection('BuyerRequests').doc(this.state.from).collection('MyRequests').doc(this.state.id).collection('Quotes').doc(this.state.quoteId).set({
+
+            //from post my quote screen 2
+            remarks: this.state.remarks,
+
+            //from post my quote screen 1
+            rate: this.state.rate,
+            deliveryDays: this.state.deliveryDays,
+
+            //from clothspecification screen
+            weight: this.state.weight,
+            panna: this.state.panna,
+            reed: this.state.reed,
+            peak: this.state.peak,
+            warp: this.state.warp,
+            weft: this.state.weft,
+            combedCarded: this.state.combedCarded,
+            clothSpecificationsFilled: this.state.clothSpecificationsFilled,
+
+            //primary key of quote
+            id: this.state.quoteId,
+
+            //seller email
+            quoteGivenBy: this.state.email,
+
+            //current date
+            date: this.state.date,
+
+        })
+            .then(() => console.log("doc added successfully to buyer database", this.state.quoteId))
+            .catch(function (error) {
+                console.log("error adding ", error);
+            });
+    }
+
+    sendToDatabaseSeller = () => {
+        firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller').doc(this.state.id).collection('MyQuote').doc(this.state.quoteId).set({
+
+            //from post my quote screen 2
+            remarks: this.state.remarks,
+
+            //from post my quote screen 1
+            rate: this.state.rate,
+            deliveryDays: this.state.deliveryDays,
+
+            //from clothspecification screen
+            weight: this.state.weight,
+            panna: this.state.panna,
+            reed: this.state.reed,
+            peak: this.state.peak,
+            warp: this.state.warp,
+            weft: this.state.weft,
+            combedCarded: this.state.combedCarded,
+            clothSpecificationsFilled: this.state.clothSpecificationsFilled,
+
+            //primary key of quote
+            id: this.state.quoteId,
+
+            //seller email
+            requestBy: this.state.from,
+
+            //current date
+            date: this.state.date,
+
+        })
+            .then(() => console.log("doc added successfully to seller database", this.state.quoteId))
+            .catch(function (error) {
+                console.log("error adding ", error);
+            });
+    }
+
+
+    submitPressed = () => {
+        //make a quoteId
+        const quoteId = moment().format('HmDDDD')
+
+        // retrieve filled data from post my quote screen 1
+        const rate = this.props.navigation.getParam('rate', 'None')
+        const deliveryDays = this.props.navigation.getParam('deliveryDays', 'None')
+
+        // retrieve filled data from post my quote cloth specs
+        const weight = this.props.navigation.getParam('weight', 'None')
+        const panna = this.props.navigation.getParam('panna', 'None')
+        const reed = this.props.navigation.getParam('reed', 'None')
+        const peak = this.props.navigation.getParam('peak', 'None')
+        const warp = this.props.navigation.getParam('warp', 'None')
+        const weft = this.props.navigation.getParam('weft', 'None')
+        const combedCarded = this.props.navigation.getParam('combedCarded', 'None')
+        const clothSpecificationsFilled = this.props.navigation.getParam('clothSpecificationsFilled', this.state.clothSpecificationsFilled)
+
+        // set it to the state
+        this.setState({
+            quoteId,
+
+            rate,
+            deliveryDays,
+
+            weight,
+            panna,
+            reed,
+            peak,
+            warp,
+            weft,
+            combedCarded,
+            clothSpecificationsFilled,
+        }, () => { this.sendToDatabaseBuyer(), this.sendToDatabaseSeller(), this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id }) })
     }
 
     render() {
@@ -42,7 +187,7 @@ export default class PostMyQuoteScreen2 extends Component {
                 <Body style={styles.container}>
                     <ScrollView>
                         <Text style={styles.label}> CLOTH SPECIFICATIONS: </Text>
-                        <TouchableOpacity onPress={() => Alert.alert('Go to PostMyQuoteClothSpecs Screen')}
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('PostMyQuoteClothSpecifications')}
                             style={styles.clothspecsBox}>
 
                         </TouchableOpacity>
@@ -55,9 +200,9 @@ export default class PostMyQuoteScreen2 extends Component {
                         />
                         <Button
                             style={styles.button}
-                            onPress={() => this.props.navigation.navigate('RequestNavigatorSeller', {id: this.state.id})}
+                            onPress={() => this.submitPressed()}
                         >
-                            <Text style={styles.skipFont}>NEXT</Text>
+                            <Text style={styles.submitFont}>SUBMIT</Text>
                         </Button>
                     </ScrollView>
                 </Body>
@@ -88,7 +233,7 @@ const styles = StyleSheet.create({
         width: 300,
         backgroundColor: colors.colorShadow,
     },
-    skipFont: {
+    submitFont: {
         color: colors.colorBlack,
     },
     pickerStyle: {

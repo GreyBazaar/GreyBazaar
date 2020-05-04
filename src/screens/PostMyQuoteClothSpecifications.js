@@ -20,7 +20,17 @@ export default class PostMyQuoteClothSpecifications extends Component {
 
 
     savePressed = () => {
-        Alert.alert('Goto PostMyQuoteScreen2')
+        Alert.alert('Saved!')
+        this.props.navigation.navigate('PostMyQuoteScreen2', {
+            weight: this.state.weight,
+            panna: this.state.panna,
+            reed: this.state.reed,
+            peak: this.state.peak,
+            warp: this.state.warp,
+            weft: this.state.weft,
+            combedCarded: this.state.combedCarded,
+            clothSpecificationsFilled: true,
+        })
     }
 
     render() {

@@ -3,24 +3,36 @@ import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, Tex
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+
 
 
 export default class PostMyQuoteScreen1 extends Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             rate: '',
             deliveryDays: '',
+            id: '',
+            from: ''
         }
     }
 
+    componentDidMount() {
+        const {state} = this.props.navigation;
+
+        this.setState({
+            id: state.params.id,
+            from: state.params.from
+        })
+    }
+
     checkAllFilled = () => {
+        //console.log(this.state.id, this.state.from)
         if (this.state.rate && this.state.deliveryDays) {
-            // this.props.navigation.navigate('PostMyQuoteRoute2')
-            Alert.alert('GOTO PostMyQuoteScreen2')
+            this.props.navigation.navigate('PostMyQuoteScreen2',{id:this.state.id, from: this.state.from})
+            
+            //Alert.alert('GOTO PostMyQuoteScreen2')
         } else if (!this.state.rate) {
 
             Alert.alert('Please enter Rate',
@@ -88,7 +100,7 @@ export default class PostMyQuoteScreen1 extends Component {
 
                         <Button
                             style={styles.button}
-                            onPress={this.nextButtonPressed}
+                            onPress={() => this.nextButtonPressed()}
                         >
                             <Text style={styles.nextFont}>NEXT</Text>
                         </Button>

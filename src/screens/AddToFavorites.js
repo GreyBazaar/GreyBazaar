@@ -35,7 +35,7 @@ export default class AddToFavorites extends React.Component {
             checked: true,
             refreshed: false,
             fav_sellers: [],
-           email: ''
+            email: ''
 
         }
 
@@ -178,21 +178,21 @@ export default class AddToFavorites extends React.Component {
             if (item.name === hey.name) {
                 item.check = !item.check
                 if (item.check === true) {
-                  data.push(item);
-                  console.log('selected:' + item.name);
+                    data.push(item);
+                    console.log('selected:' + item.name);
                 } else if (item.check === false) {
-                  const i = data.indexOf(item)
-                  if (i  > -1) {
-                    this.state.data.splice(i, 1)
-                    console.log('unselect:' + item.name)
-                    return data
-                  }
+                    const i = data.indexOf(item)
+                    if (i > -1) {
+                        this.state.data.splice(i, 1)
+                        console.log('unselect:' + item.name)
+                        return data
+                    }
                 }
-              }
+            }
         })
         //console.log()
         console.log(this.state.fav_sellers)
-        this.setState({fav_sellers: data,documentData: this.state.documentData})
+        this.setState({ fav_sellers: data, documentData: this.state.documentData })
     }
 
 
@@ -232,28 +232,28 @@ export default class AddToFavorites extends React.Component {
         }
     }
 
-    
-handleCreate = (item) => {
-    firestore().collection('Buyer').doc(this.state.email).collection('MyFavorites').doc(item.email).set({
-        name: item.name,
-        email: item.email,
-        gstn: item.gstn,
-        company_name: item.company_name
 
-    
-    })
-    .then(() => console.log("doc added successfully"))
-        .catch(function(error) {
-            console.log("error adding ", error);
-        });
-}
+    handleCreate = (item) => {
+        firestore().collection('Buyer').doc(this.state.email).collection('MyFavorites').doc(item.email).set({
+            name: item.name,
+            email: item.email,
+            gstn: item.gstn,
+            company_name: item.company_name
+
+
+        })
+            .then(() => console.log("doc added successfully"))
+            .catch(function (error) {
+                console.log("error adding ", error);
+            });
+    }
 
 
     doneSelect = () => {
         let data = this.state.fav_sellers
         console.log('fav data hai ', data)
         console.log(data.length)
-        for(let i = 0; i<data.length;i ++)
+        for (let i = 0; i < data.length; i++)
             this.handleCreate(data[i])
         /*data.forEach(function(item) {
             console.log(item)
@@ -306,31 +306,31 @@ handleCreate = (item) => {
                             margin: 10,
                             borderWidth: 1
                         }}>
-                            <TouchableOpacity onPress = {() => this.isChecked(item)}>
+                            <TouchableOpacity onPress={() => this.isChecked(item)}>
 
-                            <View style={{ flexDirection: 'column' }}>
-                                <View style={{ flexDirection: 'row' , justifyContent:'space-between'}}>
-                                    
+                                <View style={{ flexDirection: 'column' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
                                         <Text style={styles.text1}>{item.name}</Text>
-                                    
+
                                         {!item.check ? (
-                                        <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
-                                        name="circle-o"
-                                        size={20}
-                                        color='#f8bbd0'
-                                    />
-                                    ) : (
-                                        <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
-                                        name="check-circle"
-                                        size={20}
-                                        color='#f8bbd0'
-                                    />
-                                        )}
+                                            <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
+                                                name="circle-o"
+                                                size={20}
+                                                color='#f8bbd0'
+                                            />
+                                        ) : (
+                                                <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
+                                                    name="check-circle"
+                                                    size={20}
+                                                    color='#f8bbd0'
+                                                />
+                                            )}
+                                    </View>
+
+
+
                                 </View>
-                                
-
-
-                            </View>
                             </TouchableOpacity>
 
 

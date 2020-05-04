@@ -36,6 +36,8 @@ import Favorites from './screens/Favorites'
 import Profiles from './screens/Profiles'
 import SearchProfiles from './screens/SearchProfiles'
 import AddToFavorites from './screens/AddToFavorites'
+import PostMyQuoteScreen1 from './screens/PostMyQuoteScreen1'
+import PostMyQuoteClothSpecifications from './screens/PostMyQuoteClothSpecifications'
 
 
 
@@ -199,7 +201,14 @@ const RequestsStackSeller = createStackNavigator({
       }
     }
   },
+  PostMyQuoteScreen1: PostMyQuoteScreen1,
+  PostMyQuoteScreen2: PostMyQuoteScreen2,
+  PostMyQuoteClothSpecifications: PostMyQuoteClothSpecifications
 
+
+},
+{
+  initialRouteName: 'RequestNavigatorSeller'
 })
 
 
@@ -270,7 +279,7 @@ const AppNavigator = createSwitchNavigator(
     ChoiceRoute: Choice,
     SignUpScreenBuyer: { screen: SignUpScreenBuyer },
     SplashScreen: SplashScreen,
-    NewRoute: { screen: PostMyQuoteScreen2 }
+    //NewRoute: { screen: PostMyQuoteScreen2 }
   },
   {
     initialRouteName: "SplashScreen",

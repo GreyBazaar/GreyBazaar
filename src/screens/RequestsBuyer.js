@@ -253,7 +253,7 @@ export default class RequestsBuyer extends React.Component {
                                     
                                     <Text style={styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
                                     <Text style={styles.boxText2}>QUANTITY: {item.quantity}</Text>
-                                    <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>SEND REQUIREMENT TO: null</Text>
+                                    <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>SEND REQUIREMENT TO: {item.send_to_title}</Text>
                                     
                                 </View>
                                 

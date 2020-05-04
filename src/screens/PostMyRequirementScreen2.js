@@ -119,10 +119,10 @@ export default class PostMyRequirement2 extends Component {
                             mode='dropdown'
                             onValueChange={(itemValue) => this.setState({ selectedCloseRequest: itemValue })}
                         >
-                            <Picker.Item label="Select" value="None" />
-                            <Picker.Item label="8 hours" value="18hours" />
-                            <Picker.Item label="16 hours" value="16hours" />
-                            <Picker.Item label="1 day" value="1day" />
+                            <Picker.Item label="Select" value="48" />
+                            <Picker.Item label="8 hours" value="8" />
+                            <Picker.Item label="16 hours" value="16" />
+                            <Picker.Item label="1 day" value="24" />
                         </Picker>
 
                         <Text style={styles.label}> REMARKS </Text>

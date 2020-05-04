@@ -1,9 +1,15 @@
 import React from 'react'
 import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import colors from '../../assets/colors'
+import AsyncStorage from '@react-native-community/async-storage'
 // import firebase from 'react-native-firebase'
 
 export default class Choice extends React.Component {
+    
+    Navigate = async(type) => {
+        await AsyncStorage.setItem('type' , type)
+        this.props.navigation.navigate('SignUpScreenBuyer')
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -11,16 +17,12 @@ export default class Choice extends React.Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('SignUpScreenBuyer', {
-                            type: 'Buyer'
-                        })}>
+                        onPress={() => this.Navigate('Buyer')}>
                         <Text style={styles.text2}>BUYER</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('SignUpScreenBuyer', {
-                            type: 'Seller'
-                        })}
+                        onPress={() => this.Navigate('Seller')}
                     >
                         <Text style={styles.text2}>SELLER</Text>
                     </TouchableOpacity>

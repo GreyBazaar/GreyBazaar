@@ -23,10 +23,11 @@ export default class RequestsSeller extends React.Component {
             delivery_days: 6,
             rate: 16.00,
             remarks: 'hell',
+            documentData:[],
 
             //db: firebase.firestore(),
 
-            documentData: [
+            /*documentData: [
                 {
                     id: 1234, date: '20/2/20', qualityType: '52x52', quantity: '100 TAKA', request_close_at: '12:30 pm', delivery_days: 6,
                     rate: 16.00, remarks: '', checked: false
@@ -37,7 +38,7 @@ export default class RequestsSeller extends React.Component {
                 },
 
 
-            ],
+            ],*/
             limit: 9,
             lastVisible: null,
             loading: false,
@@ -46,6 +47,7 @@ export default class RequestsSeller extends React.Component {
             direct: false,
             visible: false,
             item: [],
+            direct: true
             // displayData: []
 
         }
@@ -54,9 +56,9 @@ export default class RequestsSeller extends React.Component {
     componentDidMount() {
         const user = auth().currentUser
         this.setState({ email: user.email })
-        console.log("success kinda")
+        //console.log("success kinda")
         console.log(user.email)
-        //this.retrieveData(user.email)
+        this.retrieveData(user.email)
     }
 
     isChecked = (item) => {
@@ -80,22 +82,22 @@ export default class RequestsSeller extends React.Component {
 
 
 
-    /* retrieveData = async (email) => {
+     retrieveData = async (email) => {
          try {
              // Set State: Loading
              this.setState({
                  loading: true,
-                 direct: false
+                 direct: true
              });
-             console.log('Retrieving Data for ', email);
+             console.log('Retrieving Data for seller ', email);
              // Cloud Firestore: Query
-             let initialQuery = await firebase.firestore().collection('BuyerRequests').doc(email).collection('MyRequests')
+             let initialQuery = await firestore().collection('Seller').doc(email).collection('RequestToSeller')
               
  
              .limit(this.state.limit)
  
-             firebase.firestore.setLogLevel('debug')
-             firebase.firestore()
+             firestore.setLogLevel('debug')
+             firestore()
              // Cloud Firestore: Query Snapshot
              let documentSnapshots = await initialQuery.get();
              // Cloud Firestore: Document Data
@@ -125,7 +127,7 @@ export default class RequestsSeller extends React.Component {
              });
              console.log('Retrieving additional Data');
              // Cloud Firestore: Query (Additional Query)
-             let additionalQuery = await firebase.firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests')
+             let additionalQuery = await firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller')
                  .startAfter(this.state.lastVisible)
                  .limit(this.state.limit)
  
@@ -143,9 +145,9 @@ export default class RequestsSeller extends React.Component {
              });
          }
          catch (error) {
-             console.log("error is :" ,error);
+             console.log("error retrieving more is :" ,error);
          }
-     };*/
+     };
 
     renderFooter = () => {
         try {
@@ -244,7 +246,7 @@ export default class RequestsSeller extends React.Component {
             <SafeAreaView style={styles.container}>
 
 
-                {(!this.state.direct) ? <FlatList
+                <FlatList
                     // Data
                     data={this.state.documentData}
 
@@ -259,14 +261,15 @@ export default class RequestsSeller extends React.Component {
                                 <Text style={styles.boxText2, { marginStart: 10, marginTop: 10 }}>REQUEST ID: {item.id}</Text>
                                 <Text style={styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
                                 <Text style={styles.boxText2}>QUANTITY: {item.quantity}</Text>
-                                <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>RATE: {item.rate}</Text>
+                                <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>EXPECTED RATE: {item.expectedRate}</Text>
                                 </View>
 
                                 
                                 <View syle = {{flexDirection: 'column'}}>
-                                <Text style={styles.boxText2, { marginEnd: 10, marginTop: 10 }}>DATE: {item.date} , {item.request_close_at}</Text>
-                                <Text style={styles.boxText2, { marginEnd: 10 }}>DELIVERY DAYS : {item.delivery_days}</Text>
-                                <Text style={styles.boxText2, { marginEnd: 10 }}>REMARKS : {item.remarks}</Text>
+                                <Text style={styles.boxText2, { marginEnd: 10, marginTop: 10 }}>DATE: {item.close_time}</Text>
+                                <Text style={styles.boxText2, { marginEnd: 10 }}>EXPECTED DELIVERY DAYS : </Text>
+                                <Text style={styles.boxText2, { marginEnd: 10 }}>{item.selectedExpectedDelivery}</Text>
+                                <Text style={styles.boxText2, { marginEnd: 10 , width: 200}}>REMARKS : {item.remarks}</Text>
                                 </View>
                             </View>
 
@@ -274,7 +277,7 @@ export default class RequestsSeller extends React.Component {
 
                                 <TouchableOpacity
                                     style={styles.button2}
-                                    onPress={() => this.isChecked(item)}
+                                    onPress={() => this.props.navigation.navigate('PostMyQuoteScreen1',{id: item.id, from: item.from})} //this.isChecked(item)}
                                 >
                                     <Text style={styles.boxText}>SEND QUOTE</Text>
                                 </TouchableOpacity> :
@@ -303,12 +306,7 @@ export default class RequestsSeller extends React.Component {
                     onEndReachedThreshold={0}
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
-                /> : <View
-                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO REQUESTS</Text>
-
-                    </View>}
-
+                /> 
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => this.props.navigation.navigate('SellerHomeScreenRoute')}>

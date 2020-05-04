@@ -10,6 +10,17 @@ export default class PostMyQuoteScreen2 extends Component {
 
     state = {
         remarks: '',
+        from: '',
+        id: ''
+    }
+
+    componentDidMount() {
+        const {state} = this.props.navigation;
+
+        this.setState({
+            id: state.params.id,
+            from: state.params.from
+        })
     }
 
     nextPressed = () => {
@@ -44,7 +55,7 @@ export default class PostMyQuoteScreen2 extends Component {
                         />
                         <Button
                             style={styles.button}
-                            onPress={this.nextPressed}
+                            onPress={() => this.props.navigation.navigate('RequestNavigatorSeller', {id: this.state.id})}
                         >
                             <Text style={styles.skipFont}>NEXT</Text>
                         </Button>

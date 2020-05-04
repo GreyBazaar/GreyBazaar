@@ -49,25 +49,23 @@ export default class SendRequirementToScreen extends React.Component {
         //this.retrieveData()
         console.log("i am focused")
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
-        const {state} = this.props.navigation;
-        
-        if(this.state.some_select) 
-        {
+        const { state } = this.props.navigation;
+
+        if (this.state.some_select) {
             this.setState({
                 send_request_to: state.params.selected_sellers,
                 send_to_title: 'Selected Sellers'
-            },console.log('Send Request to ',this.state.send_to_title.toUpperCase(),state.params.selected_sellers, this.state.some_select))
-            
+            }, console.log('Send Request to ', this.state.send_to_title.toUpperCase(), state.params.selected_sellers, this.state.some_select))
+
         }
 
-        if(this.state.fav_select)
-            {
-                this.setState({
-                    send_to_title: 'Favourites',
-                    send_request_to: 'MyFavourites'
-                },console.log('Send Request to ',this.state.send_to_title.toUpperCase()))
-                
-            }
+        if (this.state.fav_select) {
+            this.setState({
+                send_to_title: 'Favourites',
+                send_request_to: state.params.fav_sellers
+            }, console.log('Send Request to ', this.state.send_to_title.toUpperCase()))
+
+        }
 
     }
 
@@ -92,7 +90,7 @@ export default class SendRequirementToScreen extends React.Component {
         var close_time = moment().add(params.selectedCloseRequest, 'h').format('DD/MM/YY, hh:mm a')
         console.log(close_time)
 
-        const {state} = this.props.navigation;
+        const { state } = this.props.navigation;
         //console.log('blah bhabhb',state.params.selected_sellers)
 
 
@@ -119,7 +117,7 @@ export default class SendRequirementToScreen extends React.Component {
             clothSpecificationsFilled: params.clothSpecificationsFilled,
             close_time: close_time,
             date: date,
-            
+
 
 
         })
@@ -170,7 +168,8 @@ export default class SendRequirementToScreen extends React.Component {
 
 
         })
-            .then(() => console.log(identity), console.log("doc added successfully"), this.props.navigation.navigate('HomeScreenRoute', { refresh: 'true' }))
+            .then(() => console.log(identity), console.log("doc added successfully"))//, this.props.navigation.navigate('HomeScreenRoute', { refresh: 'true' }))
+            .then(this.sendToSellers(identity), this.props.navigation.navigate('HomeScreenRoute', { refresh: 'true' }))
             .catch(function (error) {
                 console.log("error adding ", error);
             });
@@ -178,7 +177,46 @@ export default class SendRequirementToScreen extends React.Component {
 
     }
 
-    addAllSellers = async() => {
+    sendToSellers = async (identity) => {
+        let sendArr = this.state.send_request_to
+        console.log(identity, sendArr)
+        let len = this.state.send_request_to.length
+
+        for (let i = 0; i < len; i++) {
+            firestore().collection('Seller').doc(sendArr[i]).collection('RequestToSeller').doc(identity).set({
+                expectedRate: this.state.expectedRate,
+                selectedExpectedDelivery: this.state.selectedExpectedDelivery,
+                selectedCloseRequest: this.state.selectedCloseRequest,
+                remarks: this.state.remarks,
+    
+                //from post my requirement1 screen
+                quantity: this.state.quantity,
+                qualityType: this.state.qualityType,
+    
+                //from clothspecification screen
+                weight: this.state.weight,
+                panna: this.state.panna,
+                reed: this.state.reed,
+                peak: this.state.peak,
+                warp: this.state.warp,
+                weft: this.state.weft,
+                combedCarded: this.state.combedCarded,
+                clothSpecificationsFilled: this.state.clothSpecificationsFilled,
+                id: identity,
+                close_time: this.state.close_time,
+                date: this.state.date,
+                from: this.state.email
+
+            })
+                .then(() => console.log("request ", identity, " sent to ",sendArr[i]," successfully"))
+                .catch(function (error) {
+                    console.log("error adding ", error);
+                });
+        }
+
+    }
+
+    addAllSellers = async () => {
         let data = []
         //console.log("This is the list" + this.state.favs)
 
@@ -208,27 +246,28 @@ export default class SendRequirementToScreen extends React.Component {
                 //  )
 
             });*/
-            try {
+        try {
 
-        let initialQuery = await firestore().collection('Seller')
-        // Cloud Firestore: Query Snapshot
-        let documentSnapshots = await initialQuery.get();
-        // Cloud Firestore: Document Data
-        let documentData = documentSnapshots.docs.map(document => document.data().email);
-        
-        this.setState({
-            send_request_to: documentData,
-            send_to_title: 'All Sellers'
-            
-        });
-        console.log('Send Request to ' , this.state.send_to_title.toUpperCase() , this.state.send_request_to)}
-        catch(error) {
+            let initialQuery = await firestore().collection('Seller')
+            // Cloud Firestore: Query Snapshot
+            let documentSnapshots = await initialQuery.get();
+            // Cloud Firestore: Document Data
+            let documentData = documentSnapshots.docs.map(document => document.data().email);
+
+            this.setState({
+                send_request_to: documentData,
+                send_to_title: 'All Sellers'
+
+            });
+            console.log('Send Request to ', this.state.send_to_title.toUpperCase(), this.state.send_request_to)
+        }
+        catch (error) {
             console.log(error)
         }
 
         return console.log('done')
 
-        
+
     }
 
     render() {
@@ -245,7 +284,7 @@ export default class SendRequirementToScreen extends React.Component {
 
 
                 <View style={{ paddingVertical: 100 }}>
-                    <View style={{ flexDirection: 'row', marginBottom: 40}}>
+                    <View style={{ flexDirection: 'row', marginBottom: 40 }}>
                         <RadioButton
                             onPress={() => this.addAllSellers().then(this.setState({
                                 all_select: true,
@@ -308,7 +347,7 @@ export default class SendRequirementToScreen extends React.Component {
                 <TouchableOpacity style={styles.button2}
                     onPress={() => this.handleCreate()}>
                     <View>
-                        <Text style={{ color: colors.colorBlue, fontWeight: 'bold', fontSize: 27, alignSelf:'center',textAlign:'center' }}>SUBMIT REQUEST</Text>
+                        <Text style={{ color: colors.colorBlue, fontWeight: 'bold', fontSize: 27, alignSelf: 'center', textAlign: 'center' }}>SUBMIT REQUEST</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -359,7 +398,7 @@ const styles = StyleSheet.create({
         width: 260,
         alignItems: 'center',
         justifyContent: 'center',
-        
+
 
     },
     text1: {

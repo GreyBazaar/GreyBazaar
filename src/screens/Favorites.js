@@ -38,38 +38,29 @@ export default class Favorites extends React.Component {
     
       }
 
+      onFocusFunction = (email) => {
+        this.retrieveData(email)
+        console.log("i am focused")
+        //console.log(today.format('MMMM Do YYYY, h:mm A'))
+
+    }
+
       componentDidMount() {
 
         const user = auth().currentUser
         this.setState({ email: user.email })   
         console.log("on addToFav screen")
-        this.retrieveData(user.email)
+        //this.retrieveData(user.email)
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+          this.onFocusFunction(user.email)
+      })
     
       }
 
-      isChecked = (hey) => {
-        let data = this.state.fav_sellers
-
-        this.state.documentData.map((item) => {
-            if (item.name === hey.name) {
-                item.check = !item.check
-                if (item.check === true) {
-                  data.push(item);
-                  console.log('selected:' + item.name);
-                } else if (item.check === false) {
-                  const i = data.indexOf(item)
-                  if (i  > -1) {
-                    this.state.data.splice(i, 1)
-                    console.log('unselect:' + item.name)
-                    return data
-                  }
-                }
-              }
-        })
-        //console.log()
-        console.log(this.state.fav_sellers)
-        this.setState({fav_sellers: data,documentData: this.state.documentData})
+      componentWillUnmount() {
+        this.focusListener.remove()
     }
+
 
       renderFooter = () => {
         try {
@@ -97,6 +88,19 @@ export default class Favorites extends React.Component {
     
       static navigationOptions = {
         headerShown: false
+      }
+
+      favArray = (documentData) => {
+        
+        for(let i =0; i<documentData.length; i++ )
+          {
+            this.state.fav_sellers.push(documentData[i].email)
+          }
+          this.setState({
+            fav_sellers: this.state.fav_sellers.unique()
+
+          })
+          
       }
     
       retrieveData = async (email) => {
@@ -128,6 +132,8 @@ export default class Favorites extends React.Component {
             //lastVisible: lastVisible,
             loading: false,
           });
+
+          this.favArray(documentData)
         }
         catch (error) {
           console.log('error isss : ', error);
@@ -246,7 +252,8 @@ export default class Favorites extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('SendRequirementToRoute')
+                console.log(this.state.fav_sellers)
+                this.props.navigation.navigate('SendRequirementToRoute', { fav_sellers: this.state.fav_sellers})
                 //this.doneSelect()
                 //this.props.navigation.navigate('SendRequirementToRoute', {selected_sellers: this.state.selected_sellers, some_selected:true})
               }}

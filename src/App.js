@@ -36,7 +36,6 @@ import Favorites from './screens/Favorites'
 import Profiles from './screens/Profiles'
 import SearchProfiles from './screens/SearchProfiles'
 import AddToFavorites from './screens/AddToFavorites'
-import PostMyQuoteScreen2 from './screens/PostMyQuoteScreen2'
 
 
 

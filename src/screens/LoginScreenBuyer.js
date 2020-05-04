@@ -6,6 +6,7 @@ import {
 import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 import firestore from '@react-native-firebase/firestore'
+import OneSignal from 'react-native-onesignal'
 export default class LoginScreenBuyer extends Component {
     constructor(props){
         super(props)
@@ -16,7 +17,7 @@ export default class LoginScreenBuyer extends Component {
         }
     }
     componentDidMount = async() => {
-        OneSignal.addEventListener('ids', this.onIds)
+        await OneSignal.addEventListener('ids', this.onIds)
     }
     
     onIds = (devices) => {

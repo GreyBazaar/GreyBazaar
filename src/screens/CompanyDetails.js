@@ -8,7 +8,7 @@ import firestore from '@react-native-firebase/firestore'
 import colors from '../../assets/colors'
 import { decode, encode } from 'base-64'
 import OneSignal from 'react-native-onesignal'
-
+import auth from '@react-native-firebase/auth'
 class CompanyDetails extends Component {
   constructor(props) {
     super(props)
@@ -22,7 +22,7 @@ class CompanyDetails extends Component {
       city: '',
       state: '',
       pincode: '',
-      email: this.props.navigation.getParam('email', 'random@gmail.com'),
+      email: auth().currentUser.email,
       type: this.props.navigation.getParam('type', 'Buyer'),
       userId : '',
     }
@@ -52,7 +52,6 @@ onIds = (devices) => {
       city: info.pradr.addr.city,
       state: info.pradr.addr.stcd,
       pincode: info.pradr.addr.pncd,
-      OneSignalId : this.state.userId,
     })
   }
   addToDb = () => {
@@ -63,15 +62,15 @@ onIds = (devices) => {
       name: this.state.name,
       address1: this.state.add_1,
       address12: this.state.add_2,
-      email: 'manavj@gmail.com',
+      email: this.state.email,
       image: '',
       // keywords: this.state.keywords,
       company_name: this.state.compname,
       city: this.state.city,
       state: this.state.state,
       pincode: this.state.pincode,
-      gstn: this.state.gstn
-      // OneSignalId : this.state.userId
+      gstn: this.state.gstn,
+      OneSignalId : this.state.userId
     })
       .then(() => {
         firestore().collection('Users').doc(this.state.email).set({

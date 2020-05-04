@@ -17,7 +17,6 @@ class SignUpScreenBuyer extends Component {
       visible: true,
       error: '',
       email: '',
-      type: this.props.navigation.getParam('type', 'Buyer')
     }
   }
   
@@ -25,13 +24,7 @@ class SignUpScreenBuyer extends Component {
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
       auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
-        .then(() => {
-          this.props.navigation.navigate('CompanyDetailsRoute', {
-            type: this.state.type,
-            email: this.state.email,
-          });
-        })
-        .catch(function (error) {
+         .catch(function (error) {
           alert(error.message);
         })
     }

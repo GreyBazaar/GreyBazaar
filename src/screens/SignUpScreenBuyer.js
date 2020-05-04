@@ -20,7 +20,7 @@ class SignUpScreenBuyer extends Component {
       type: this.props.navigation.getParam('type', 'Buyer')
     }
   }
-
+  
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {

@@ -7,9 +7,7 @@ import {
 import firestore from '@react-native-firebase/firestore'
 import colors from '../../assets/colors'
 import { decode, encode } from 'base-64'
-if (!global.btoa) { global.btoa = encode }
-if (!global.atob) { global.atob = decode }
-
+import OneSignal from 'react-native-onesignal'
 
 class CompanyDetails extends Component {
   constructor(props) {
@@ -25,9 +23,21 @@ class CompanyDetails extends Component {
       state: '',
       pincode: '',
       email: this.props.navigation.getParam('email', 'random@gmail.com'),
-      type: this.props.navigation.getParam('type', 'Buyer')
+      type: this.props.navigation.getParam('type', 'Buyer'),
+      userId : '',
     }
   }
+  componentDidMount = async() => {
+    OneSignal.addEventListener('ids', this.onIds)
+}
+
+onIds = (devices) => {
+    console.log('Device info = ', devices)
+    this.setState({
+      userId: devices.userId
+    })
+  }
+
   fetchApi = async () => {
     // const response = await fetch('https://appyflow.in/api/verifyGST?gstNo='+this.state.gstn+'&key_secret=cqtiXFypuaPAgPtFUexLOx31igt1')
     // const result = await response.json()
@@ -41,7 +51,8 @@ class CompanyDetails extends Component {
       add_2: info.pradr.addr.st + ' , ' + info.pradr.addr.loc,
       city: info.pradr.addr.city,
       state: info.pradr.addr.stcd,
-      pincode: info.pradr.addr.pncd
+      pincode: info.pradr.addr.pncd,
+      OneSignalId : this.state.userId,
     })
   }
   addToDb = () => {

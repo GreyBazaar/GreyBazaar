@@ -5,23 +5,41 @@ import {
     StyleSheet, View, Text,  TextInput, TouchableOpacity,} from 'react-native';
 import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
-
+import firestore from '@react-native-firebase/firestore'
+import OneSignal from 'react-native-onesignal'
 export default class LoginScreenBuyer extends Component {
     constructor(props){
         super(props)
         this.state ={
             email : '' ,
-            password : ''
+            password : '',
+            userId : '',
         }
     }
+    componentDidMount = async() => {
+        await OneSignal.addEventListener('ids', this.onIds)
+    }
     
+    onIds = (devices) => {
+        console.log('Device info = ', devices)
+        this.setState({
+          userId: devices.userId
+        })
+      }
+    
+      signIn = async() => {
+        await firestore().collection("Users").doc(this.state.Id).update({
+          OneSignalId : this.state.userId
+        })
+        this.props.navigation.navigate('Divider',{
+            email : this.state.email
+        })
+      }
     login = () => {
         auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(
-            () => this.props.navigation.navigate('Divider',{
-                email : this.state.email
-            })
-          ).catch((e) => console.log(e))
+            () => this.signIn())
+          .catch((e) => console.log(e))
       }
     render() {
         return (

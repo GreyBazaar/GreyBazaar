@@ -29,8 +29,8 @@ export default class SplashScreen extends React.Component{
     }
 render(){
     return(
-        <View style={{flex:1}}>
-            <Text style={style.text}>WELCOME TO</Text>
+        <View style={{flex:1 , justifyContent: 'center' , alignContent:'center'}}>
+            <Text style={style.text}>Welcome To</Text>
             <Text style={style.text}>GreyBazaar</Text>
         </View>
 )}

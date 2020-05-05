@@ -13,11 +13,11 @@ export default class ViewQuotesBuyer extends React.Component {
         super(props);
         this.state = {
             email: '',
-            reqID: '',
+            id: '',
             qualityType: '',
             quantity: '',
             documentData: [
-                {
+                /*{
                     id: 1, qualityType: '52x52', rate: 'Rs. 16.00', days: 4,
                     color: 'white', checked: false
                 },
@@ -27,7 +27,7 @@ export default class ViewQuotesBuyer extends React.Component {
                 },
 
 
-            ],
+            */],
             limit: 9,
             lastVisible: null,
             loading: false,
@@ -39,6 +39,16 @@ export default class ViewQuotesBuyer extends React.Component {
 
 
         }
+    }
+
+    componentDidMount () {
+        const {state} = this.props.navigation;
+
+        this.setState({
+            id : state.params.id,
+            email: state.params.email
+        })
+        this.retrieveData()
     }
 
 
@@ -63,6 +73,140 @@ export default class ViewQuotesBuyer extends React.Component {
         this.setState({ documentData: data })
 
     }
+
+    isAccepted = (item) => {
+        //accepted field indicates quote has been accepted by buyer
+        let id = item.id
+        let quoteBy = item.quoteGivenBy
+
+        firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests').doc(this.state.id).collection('Quotes').doc(id).update({
+            accepted: true
+        })
+        //.then(console.log(' Quote of quote id ', id, ' accepted.' ))
+        .then(
+            
+            firestore().collection('Seller').doc(quoteBy).collection('RequestToSeller').doc(this.state.id).update({
+                accepted: true
+            })
+            .then(console.log(' Quote of quote id ', id, ' accepted.' ))
+            .catch((error) => {
+                console.log('nested error occured updating accepted field : ', error)
+            })
+        )
+        .catch((error) => {
+            console.log('error occured updating accepted field : ', error)
+        })
+
+        this.handleRefresh()
+
+       // this.setState({refreshing: true})
+
+
+    }
+
+    retrieveData = async () => {
+        const {state} = this.props.navigation;
+
+        let id = state.params.id
+        let email = state.params.email
+        try {
+            // Set State: Loading
+            this.setState({
+                loading: true,
+                direct: false
+            });
+            console.log('Retrieving Quotes Data for buyer ', email);
+            // Cloud Firestore: Query
+            let initialQuery = await firestore().collection('BuyerRequests').doc(email).collection('MyRequests').doc(id).collection('Quotes')
+
+
+                .limit(this.state.limit)
+
+            firestore.setLogLevel('debug')
+            firestore()
+            // Cloud Firestore: Query Snapshot
+            let documentSnapshots = await initialQuery.get();
+            // Cloud Firestore: Document Data
+            let documentData = documentSnapshots.docs.map(document => document.data());
+            // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+            //let lastVisible = documentData[documentData.length - 1].id;
+            // Set State
+            console.log(documentData)
+            this.setState({
+                documentData: documentData,
+                //lastVisible: lastVisible,
+                loading: false,
+            });
+        }
+        catch (error) {
+            console.log('error isss : ', error);
+            this.setState({ loading: false, direct: true })
+
+        }
+    };
+    // Retrieve More
+    retrieveMore = async () => {
+        try {
+            // Set State: Refreshing
+            this.setState({
+                refreshing: true,
+            });
+            console.log('Retrieving additional Data');
+            // Cloud Firestore: Query (Additional Query)
+            let additionalQuery = await firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests').doc(this.state.id).collection('Quotes')
+                .startAfter(this.state.lastVisible)
+                .limit(this.state.limit)
+
+            // Cloud Firestore: Query Snapshot
+            let documentSnapshots = await additionalQuery.get();
+            // Cloud Firestore: Document Data
+            let documentData = documentSnapshots.docs.map(document => document.data());
+            // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+            let lastVisible = documentData[documentData.length - 1].id;
+            // Set State
+            this.setState({
+                documentData: [...this.state.documentData, ...documentData],
+                lastVisible: lastVisible,
+                refreshing: false,
+            });
+        }
+        catch (error) {
+            console.log("error is :", error);
+        }
+    };
+
+    renderFooter = () => {
+        try {
+            // Check If Loading
+            if (this.state.loading) {
+                return (
+                    <ActivityIndicator />
+                )
+            }
+            else {
+                return null;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
+
+    handleRefresh = () => {
+        try {
+          this.setState({refreshing:true})
+          this.retrieveData().then
+          //this.handleChange('')
+          (this.setState({
+              
+              refreshing:false
+          }))
+      }
+      catch (error) {
+        console.log(error);
+      }
+      }
+ 
 
 
     render() {
@@ -99,9 +243,9 @@ export default class ViewQuotesBuyer extends React.Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginEnd: 10 }}>
                                 <View style={{ flexDirection: 'column' }}>
-                                    <Text style={styles.boxText2}>SELLER {item.id}</Text>
+                                    <Text style={styles.boxText2}>SELLER </Text>
                                     <Text style={styles.boxText2}>RATE: Rs. {item.rate}</Text>
-                                    <Text style={styles.boxText2}>DELIVERY DAYS: {item.days}</Text>
+                                    <Text style={styles.boxText2}>DELIVERY DAYS: {item.deliveryDays}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'column' }}>
                                     <Text style={styles.boxText2}>QUALITY: {item.qualityType}</Text>
@@ -118,11 +262,11 @@ export default class ViewQuotesBuyer extends React.Component {
 
                             </View>
                             <View style={{ flexDirection: 'row', alignContent: 'flex-end', justifyContent: 'flex-end' }}>
-                                {(!item.checked) ?
+                                {(!item.accepted) ?
                                     <TouchableOpacity
 
                                         style={styles.button2}
-                                        onPress={() => this.isChecked(item)}
+                                        onPress={() => this.isAccepted(item)}
 
 
                                     >
@@ -158,13 +302,14 @@ export default class ViewQuotesBuyer extends React.Component {
                     // Header (Title)
                     ListHeaderComponent={this.renderHeader}
                     // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
+                    //ListFooterComponent={this.renderFooter}
                     // On End Reached (Takes a function)
-                    onEndReached={this.retrieveMore}
+                    //onEndReached={this.retrieveMore}
                     // How Close To The End Of List Until Next Data Request Is Made
                     onEndReachedThreshold={0}
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
+                    onRefresh={this.handleRefresh}
                 /> : <View
                     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO REQUESTS</Text>

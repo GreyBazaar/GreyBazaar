@@ -261,7 +261,7 @@ export default class RequestsBuyer extends React.Component {
                             </View>
                             <TouchableOpacity
                                         style={styles.button2}
-                                        onPress={() => this.props.navigation.navigate('ViewQuotes')}
+                                        onPress={() => this.props.navigation.navigate('ViewQuotes', {id : item.id, email: this.state.email})}
                                     >
                                         <Text style={styles.boxText}>VIEW QUOTES</Text>
                                     </TouchableOpacity>

@@ -208,7 +208,8 @@ const RequestsStackSeller = createStackNavigator({
 
 },
 {
-  initialRouteName: 'RequestNavigatorSeller'
+  initialRouteName: 'RequestNavigatorSeller',
+  headerMode:'none'
 })
 
 

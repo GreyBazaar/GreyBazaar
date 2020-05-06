@@ -62,6 +62,18 @@ export default class PostMyQuoteScreen2 extends Component {
     //     this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id })
     // }
 
+    checkEditBuyer = () => {
+        firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller').doc(this.state.id).update({
+            checked: true
+        })
+        //checked field signifies quote has been sent by seller
+        //accepted field indicates quote has been accepted by buyer
+        .then(console.log('checked field updated'))
+        .catch((error) => {
+            console.log('Error updating checked field : ', error)
+        })
+    }
+
     sendToDatabaseBuyer = () => {
 
         firestore().collection('BuyerRequests').doc(this.state.from).collection('MyRequests').doc(this.state.id).collection('Quotes').doc(this.state.quoteId).set({
@@ -169,8 +181,10 @@ export default class PostMyQuoteScreen2 extends Component {
             weft,
             combedCarded,
             clothSpecificationsFilled,
-        }, () => { this.sendToDatabaseBuyer(), this.sendToDatabaseSeller(), this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id }) })
+        }, () => {this.checkEditBuyer(), this.sendToDatabaseBuyer(), this.sendToDatabaseSeller(), this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id }) })
+        
     }
+
 
     render() {
 

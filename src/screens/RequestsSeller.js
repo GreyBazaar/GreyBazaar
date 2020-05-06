@@ -58,7 +58,23 @@ export default class RequestsSeller extends React.Component {
         this.setState({ email: user.email })
         //console.log("success kinda")
         console.log(user.email)
-        this.retrieveData(user.email)
+        //this.retrieveData(user.email)
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            this.onFocusFunction(user.email)
+        })
+      
+    }
+
+    onFocusFunction = (email) => {
+        this.retrieveData(email)
+        console.log("Focused on RequestsSeller screen")
+        //console.log(today.format('MMMM Do YYYY, h:mm A'))
+        
+
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove()
     }
 
     isChecked = (item) => {
@@ -105,7 +121,7 @@ export default class RequestsSeller extends React.Component {
              // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
              //let lastVisible = documentData[documentData.length - 1].id;
              // Set State
-             console.log(documentData)
+             //console.log(documentData)
              this.setState({
                  documentData: documentData,
                  //lastVisible: lastVisible,
@@ -275,12 +291,14 @@ export default class RequestsSeller extends React.Component {
 
                             {(!item.checked) ?
 
-                                <TouchableOpacity
+                                (<TouchableOpacity
                                     style={styles.button2}
                                     onPress={() => this.props.navigation.navigate('PostMyQuoteScreen1',{id: item.id, from: item.from})} //this.isChecked(item)}
                                 >
                                     <Text style={styles.boxText}>SEND QUOTE</Text>
-                                </TouchableOpacity> :
+                                </TouchableOpacity>) :
+                               
+                                ((!item.accepted)?
                                 <View style={{ flexDirection: 'row', }}>
                                     <View style = {{flexDirection: 'column', width: 150}}>
                                     <Text style={{ marginLeft: 10, fontWeight: 'bold', marginBottom: 10 }}>AWAITING BUYER ACCEPTANCE ... </Text>
@@ -289,7 +307,12 @@ export default class RequestsSeller extends React.Component {
                                     <Text style={{ marginRight: 10, fontWeight: 'bold' , marginLeft: 65}}>LOWEST QUOTE: 15.50</Text>
                                     </View>
 
-                                </View>
+                                </View>:<TouchableOpacity
+                                    style={styles.button3}
+                                    onPress={() => {}}
+                                >
+                                    <Text style={styles.boxText}>VIEW ORDER SUMMARY</Text>
+                                </TouchableOpacity>)
                             }
                         </View>
 
@@ -408,7 +431,21 @@ const styles = StyleSheet.create({
         color: colors.colorBlue,
         marginLeft: 10,
 
-    }
+    },
+    button3: {
+        //marginHorizontal: 30,
+        backgroundColor: colors.colorBlue,
+        borderRadius: 0,
+        height: 32,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 200,
+        alignSelf: 'center',
+        marginBottom: 10,
+        elevation: 5,
+
+
+    },
 })
 
 /*

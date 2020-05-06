@@ -30,7 +30,7 @@ export default class PostMyQuoteScreen1 extends Component {
     }
 
     checkAllFilled = () => {
-        //console.log(this.state.id, this.state.from)
+        console.log(this.state.id, this.state.from)
         if (this.state.rate && this.state.deliveryDays) {
             this.props.navigation.navigate('PostMyQuoteScreen2', {
                 rate: this.state.rate,
@@ -100,7 +100,7 @@ export default class PostMyQuoteScreen1 extends Component {
                     <View style={{ flexDirection: 'row' }}>
                         <Button
                             style={styles.button}
-                            onPress={() => Alert.alert('Back Pressed')}
+                            onPress={() => this.props.navigation.navigate('RequestNavigatorSeller')}
                         >
                             <Text style={styles.nextFont}>CANCEL</Text>
                         </Button>

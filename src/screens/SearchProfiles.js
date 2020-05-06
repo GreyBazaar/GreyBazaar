@@ -201,12 +201,16 @@ export default class SearchProfiles extends Component {
   isChecked = (item) => {
     let selected_data = this.state.selected_sellers
     var data = this.state.documentData.map(e => {
-      if (item.name === e.name) {
+      if (item.email === e.email) {
         item.checked = !e.checked;
-
-
-        item.color = '#f8bbd0'
-        selected_data.push(item.email)
+        if( item.checked == false){
+          item.color = '#f8bbd0'
+          selected_data.push(item.email)
+        }
+        else {
+          selected_data.pop(item.email)
+          item.color = colors.colorBlue
+        }
         //selected_data = this.state.selected_sellers.map(item => item.email)
 
         //console.log(e.id)

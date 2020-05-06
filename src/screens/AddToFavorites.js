@@ -175,7 +175,7 @@ export default class AddToFavorites extends React.Component {
         //item.color = 'white'
 
         this.state.documentData.map((item) => {
-            if (item.name === hey.name) {
+            if (item.email === hey.email) {
                 item.check = !item.check
                 if (item.check === true) {
                     data.push(item);
@@ -304,29 +304,32 @@ export default class AddToFavorites extends React.Component {
                         <View style={{
                             borderColor: '#f48fb1',
                             margin: 10,
-                            borderWidth: 1
+                            borderWidth: 1,
+                             
                         }}>
                             <TouchableOpacity onPress={() => this.isChecked(item)}>
 
                                 <View style={{ flexDirection: 'column' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' , }}>
+                                        <View>
                                         <Text style={styles.text1}>{item.name}</Text>
-
+                                        <Text style={styles.text1}>{item.company_name}</Text>
+                                        </View>
                                         {!item.check ? (
-                                            <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
-                                                name="circle-o"
-                                                size={20}
+                                            <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' , paddingTop:20 }}
+                                                name="star-o"
+                                                size={30}
                                                 color='#f8bbd0'
                                             />
                                         ) : (
-                                                <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' }}
-                                                    name="check-circle"
-                                                    size={20}
+                                                <Icon style={{ margin: 14, alignSelf: 'stretch', flexDirection: 'column' ,paddingTop:20 }}
+                                                    name="star"
+                                                    size={30}
                                                     color='#f8bbd0'
                                                 />
                                             )}
                                     </View>
+                                    
 
 
 
@@ -388,8 +391,8 @@ const styles = StyleSheet.create({
     text1: {
         color: 'white',
         fontSize: 20,
-        margin: 10
-    },
+        margin: 10,
+       },
     heading: {
         fontSize: 18,
         color: colors.colorGrey,

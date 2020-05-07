@@ -13,6 +13,13 @@ export default class DrawerScreen3 extends Component {
 
           <View style={styles.container}>
             <H3 style={styles.text}>About Us Screen</H3>
+            <Text style={{fontSize:30}}>Created By</Text>
+            <Text style={{fontSize:30}}>Manav Jain</Text>
+            <Text style={{fontSize:30}}>Simrn Gupta</Text>
+            <Text style={{fontSize:30}}>Nirali Parekh</Text>
+            <Text style={{fontSize:30 , paddingTop:10}}>Contacts Us </Text>
+            <Text style={{fontSize:30}}>greybazaar123@gmail.com</Text>
+            
           </View>
   
       </Container>

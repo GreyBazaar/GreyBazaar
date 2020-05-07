@@ -1,12 +1,9 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox, TextInput } from 'react-native'
-import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
-//import * as firebase from 'firebase/app'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import colors from '../../assets/colors'
-import { Title } from 'react-native-paper'
 
 //var db = firebase.firestore()
 export default class RequestsSeller extends React.Component {

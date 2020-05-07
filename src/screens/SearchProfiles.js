@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
-import { Container, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
+import {  View,  StyleSheet,  TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView,  } from "react-native";
+import {  Text, Header, } from "native-base";
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
 
-import { Item, Icon, Input, CheckBox, Card, CardItem, Content, Thumbnail, Grid, Button, Subtitle } from 'native-base'
-import ProfileCard from '../../src/components/ProfileCard.js'
-//import * as firebase from 'firebase/app'
-//import 'firebase/firestore'
+import { Item, Icon, Input,  Button, } from 'native-base'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 

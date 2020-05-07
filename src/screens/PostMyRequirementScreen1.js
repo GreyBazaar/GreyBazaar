@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, Alert } from "react-native";
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 
 
 export default class PostMyRequirement1 extends Component {

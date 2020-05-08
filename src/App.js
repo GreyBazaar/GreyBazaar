@@ -8,7 +8,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import colors from '../assets/colors'
 import SideBar from "./util/sidebar";
 import CompanyDetails from './screens/CompanyDetails'
-import HomeScreen from './screens/HomeScreen'
+import BuyerHomeScreen from './screens/BuyerHomeScreen'
 import MyWalletScreen from './screens/MyWalletScreen'
 import ShareAppScreen from './screens/ShareAppScreen'
 import AboutUsScreen from './screens/AboutUsScreen'
@@ -87,6 +87,16 @@ const RequestNavigatorSeller = createMaterialTopTabNavigator({
 },
   {
     initialRouteName: 'active',
+    navigationOptions: {
+      title: 'New Requests',
+      headerStyle: {
+        backgroundColor: colors.colorShadow,
+      },
+      headerTintColor: colors.colorBlack,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
     tabBarOptions: {
       activeTintColor: 'white',
       inactiveColor: '#9e9e9e', showIcon: 'true',
@@ -95,12 +105,8 @@ const RequestNavigatorSeller = createMaterialTopTabNavigator({
       tabStyle: { height: 58, justifyContent: 'center', alignItems: 'center', alignContent: 'center' },
       iconStyle: { inactiveColor: 'grey' }
       , indicatorStyle: { height: 4, backgroundColor: '#f48fb1' }
-      //pressColor:'blue'
-
 
     },
-    //order : ['home','event_main','notifs','profile'],
-
   }
 )
 
@@ -135,7 +141,6 @@ const RequestsStackBuyer = createStackNavigator({
       },
       headerTitleStyle: {
         fontSize: 25,
-
       }
     }
   },
@@ -184,38 +189,20 @@ const RequestsStackBuyer = createStackNavigator({
   })
 
 const RequestsStackSeller = createStackNavigator({
-  RequestNavigatorSeller: {
-    screen: RequestNavigatorSeller,
-    navigationOptions: {
-      title: 'MY REQUESTS',
-      headerTitleAlign: "center",
-      headerStyle: {
-        //backgroundColor: 'blue',
-        //fontSize: 40,
-
-
-      },
-      headerTitleStyle: {
-        fontSize: 25,
-
-      }
-    }
-  },
+  RequestNavigatorSeller: RequestNavigatorSeller,
   PostMyQuoteScreen1: PostMyQuoteScreen1,
   PostMyQuoteScreen2: PostMyQuoteScreen2,
   PostMyQuoteClothSpecifications: PostMyQuoteClothSpecifications
-
-
 },
 {
+  headerMode: 'screen',
   initialRouteName: 'RequestNavigatorSeller',
-  headerMode:'none'
 })
 
 
 
 const HomeStack = createSwitchNavigator({
-  HomeScreenRoute: HomeScreen,
+  HomeScreenRoute: BuyerHomeScreen,
   RequirementsRoute: RequirementStack,
   RequestsRoute: RequestsStackBuyer
 

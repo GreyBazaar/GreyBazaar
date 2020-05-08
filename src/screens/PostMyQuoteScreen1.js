@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, Alert } from "react-native";
-import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
+import { Container, Button, H3, Text, Header, Left, Right, Body, Title, Icon } from "native-base";
 import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
 import firestore from '@react-native-firebase/firestore';
@@ -62,21 +62,29 @@ export default class PostMyQuoteScreen1 extends Component {
 
     }
 
+    static navigationOptions = {
+        title: 'Home',
+      };
+
     nextButtonPressed = () => {
         this.checkAllFilled()
     }
 
+    static navigationOptions = {
+        title: 'Post My Quote',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
-
-                {/* <Header style={{ backgroundColor: colors.colorBlack }}>
-                    <Body style={{ marginLeft: 40, }}>
-                        <Title>Post My Requirement </Title>
-                    </Body>
-                    <Right />
-                </Header> */}
-
+               
                 <Body style={styles.container}>
 
                     <Text style={styles.label}> RATE: </Text>

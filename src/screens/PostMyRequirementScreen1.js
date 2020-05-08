@@ -23,7 +23,7 @@ export default class PostMyRequirement1 extends Component {
 
     checkAllFilled = () => {
         if (this.state.qualityType && this.state.quantity) {
-            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType , quantity: this.state.quantity})
+            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType, quantity: this.state.quantity })
         } else if (!this.state.qualityType) {
 
             Alert.alert('Please enter Quality Type',
@@ -54,12 +54,6 @@ export default class PostMyRequirement1 extends Component {
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
 
-                {/* <Header style={{ backgroundColor: colors.colorBlack }}>
-                    <Body style={{ marginLeft: 40, }}>
-                        <Title>Post My Requirement </Title>
-                    </Body>
-                    <Right />
-                </Header> */}
 
                 <Body style={styles.container}>
 

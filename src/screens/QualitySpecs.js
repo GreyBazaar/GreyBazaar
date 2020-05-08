@@ -7,6 +7,19 @@ import colors from '../../assets/colors'
 
 
 export default class QualitySpecs extends React.Component {
+
+    static navigationOptions = {
+        title: 'Quality Specs',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
+
     constructor(props) {
         super(props);
         this.state = {

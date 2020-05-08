@@ -11,7 +11,7 @@ const drawerCover = require('../../assets/db6574-01.png')
 const datas = [
     {
         name: "Home",
-        route: "HomeRoute",
+        route: "BuyerHomeRoute",
         icon: "paper",
         bg: colors.colorBlue
     },

@@ -17,7 +17,7 @@ export default class Divider extends React.Component{
             console.log(querySnapshot)
             if(querySnapshot.data()){
                 if(querySnapshot.data().type == 'Buyer')
-                    this.props.navigation.navigate('HomeRoute')
+                    this.props.navigation.navigate('BuyerHomeRoute')
                 else
                     this.props.navigation.navigate('SellerHomeRoute')
             }

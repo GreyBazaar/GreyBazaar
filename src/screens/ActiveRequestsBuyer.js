@@ -9,7 +9,8 @@ import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
 //var db = firebase.firestore()
-export default class RequestsBuyer extends React.Component {
+export default class ActiveRequestsBuyer extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {

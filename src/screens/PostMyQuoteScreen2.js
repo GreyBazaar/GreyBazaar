@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity, Picker, KeyboardAvoidingView, Alert } from "react-native";
-import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
+import { Container, Button, H3, Text, Header, Left, Right, Body, Title, Icon } from "native-base";
 import colors from '../../assets/colors'
 import { ScrollView } from "react-native-gesture-handler";
 const deviceHeight = Dimensions.get("window").height;
@@ -66,12 +66,12 @@ export default class PostMyQuoteScreen2 extends Component {
         firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller').doc(this.state.id).update({
             checked: true
         })
-        //checked field signifies quote has been sent by seller
-        //accepted field indicates quote has been accepted by buyer
-        .then(console.log('checked field updated'))
-        .catch((error) => {
-            console.log('Error updating checked field : ', error)
-        })
+            //checked field signifies quote has been sent by seller
+            //accepted field indicates quote has been accepted by buyer
+            .then(console.log('checked field updated'))
+            .catch((error) => {
+                console.log('Error updating checked field : ', error)
+            })
     }
 
     sendToDatabaseBuyer = () => {
@@ -181,22 +181,26 @@ export default class PostMyQuoteScreen2 extends Component {
             weft,
             combedCarded,
             clothSpecificationsFilled,
-        }, () => {this.checkEditBuyer(), this.sendToDatabaseBuyer(), this.sendToDatabaseSeller(), this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id }) })
-        
+        }, () => { this.checkEditBuyer(), this.sendToDatabaseBuyer(), this.sendToDatabaseSeller(), this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id }) })
+
     }
+
+    static navigationOptions = {
+        title: 'Post My Quote',
+        headerStyle: {
+            backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+    };
 
 
     render() {
 
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
-
-                {/* <Header style={{ backgroundColor: colors.colorBlack }}>
-                    <Body style={{ marginLeft: 40, }}>
-                        <Title>Post My Requirement </Title>
-                    </Body>
-                    <Right />
-                </Header> */}
 
                 <Body style={styles.container}>
                     <ScrollView>

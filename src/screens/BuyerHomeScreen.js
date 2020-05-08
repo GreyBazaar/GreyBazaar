@@ -5,7 +5,7 @@ import colors from '../../assets/colors'
 const deviceHeight = Dimensions.get("window").height;
 
 
-export default class SellerHomeScreen extends Component {
+export default class HomeScreen extends Component {
 
 
   componentDidMount() {
@@ -17,23 +17,30 @@ export default class SellerHomeScreen extends Component {
       <Container style={{ flex: 1, backgroundColor: colors.colorShadow }}>
 
         <Header style={{ backgroundColor: colors.colorWhite }}>
-          <Left> 
+          <Left>
             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
-            <Icon name='menu' style={{ color: colors.colorBlack }} />
-          </Button></Left>
+              <Icon name='menu' style={{ color: colors.colorBlack }} />
+            </Button></Left>
           <Body style={{ marginLeft: 40, }}>
-            <Title style={{color: colors.colorBlack, fontWeight:'bold'}}>Home</Title>
+            <Title style={{ color: colors.colorBlack, fontWeight: 'bold' }}>Home</Title>
           </Body>
           <Right />
         </Header>
 
+
         <Body style={styles.container}>
+          <Button
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate('RequirementsRoute')}
+          >
+            <Text>Post My Requirement</Text>
+          </Button>
 
           <Button
             style={styles.button}
-            onPress={() => this.props.navigation.navigate('RequestsRouteSeller')}
+            onPress={() => this.props.navigation.navigate('RequestsRoute')}
           >
-            <Text>New Requests</Text>
+            <Text>My Requests</Text>
           </Button>
 
           <Button
@@ -54,7 +61,7 @@ export default class SellerHomeScreen extends Component {
             style={styles.button}
             onPress={() => this.props.navigation.openDrawer()}
           >
-            <Text>Publish Grey Offers</Text>
+            <Text>Explore Grey Offers</Text>
           </Button>
         </Body>
 

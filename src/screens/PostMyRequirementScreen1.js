@@ -50,6 +50,17 @@ export default class PostMyRequirement1 extends Component {
         this.checkAllFilled()
     }
 
+    static navigationOptions = {
+        title: 'Post My Requirement',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
@@ -71,6 +82,7 @@ export default class PostMyRequirement1 extends Component {
                         style={styles.inputBox}
                         underLineColorAndroid='#000000'
                         placeholder="100"
+                        keyboardType='numeric'
                         placeholderTextColor='rgba(0,0,0,0.4)'
                         onChangeText={(text) => this.setState({ quantity: text })}
                     />

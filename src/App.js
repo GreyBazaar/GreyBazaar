@@ -16,19 +16,19 @@ import LogoutScreen from './screens/LogoutScreen'
 import HelpAndSupportScreen from './screens/HelpAndSupportScreen'
 import PostMyRequirementScreen1 from './screens/PostMyRequirementScreen1'
 import PostMyRequirementScreen2 from './screens/PostMyRequirementScreen2'
-import ClothSpecificationsScreen from './screens/ClothSpecificationsScreen'
+import PostMyRequirementClothSpecifications from './screens/PostMyRequirementClothSpecifications'
 import SendRequirementToScreen from './screens/SendRequirementToScreen'
-import RequestsBuyer from './screens/RequestsBuyer'
+import RequestsBuyer from './screens/ActiveRequestsBuyer'
+import PastRequestsBuyer from './screens/PastRequestsBuyer'
 import ViewQuotesBuyer from './screens/ViewQuotesBuyer'
 import AcceptConfirm from './screens/AcceptConfirm'
 import QualitySpecs from './screens/QualitySpecs'
-import PastRequestsBuyer from './screens/PastRequestsBuyer'
 import Choice from './screens/Choice'
 import SellerHomeScreen from './screens/SellerHomeScreen'
 import LoginScreenBuyer from './screens/LoginScreenBuyer';
 import SignUpScreenBuyer from './screens/SignUpScreenBuyer';
 import Divider from './screens/Divider'
-import RequestsSeller from './screens/RequestsSeller'
+import RequestsSeller from './screens/ActiveRequestsSeller'
 import PastRequestsSeller from './screens/PastRequestsSeller'
 import SplashScreen from './screens/SplashScreen'
 import PostMyQuoteScreen2 from './screens/PostMyQuoteScreen2'
@@ -40,6 +40,9 @@ import PostMyQuoteScreen1 from './screens/PostMyQuoteScreen1'
 import PostMyQuoteClothSpecifications from './screens/PostMyQuoteClothSpecifications'
 
 
+
+
+/* BUYER NAVIGATORS */
 
 
 const RequestNavigatorBuyer = createMaterialTopTabNavigator({
@@ -56,6 +59,16 @@ const RequestNavigatorBuyer = createMaterialTopTabNavigator({
 },
   {
     initialRouteName: 'active',
+    navigationOptions: {
+      title: 'My Requests',
+      headerStyle: {
+        backgroundColor: colors.colorShadow,
+      },
+      headerTintColor: colors.colorBlack,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
     tabBarOptions: {
       activeTintColor: 'white',
       inactiveColor: '#9e9e9e', showIcon: 'true',
@@ -64,14 +77,52 @@ const RequestNavigatorBuyer = createMaterialTopTabNavigator({
       tabStyle: { height: 58, justifyContent: 'center', alignItems: 'center', alignContent: 'center' },
       iconStyle: { inactiveColor: 'grey' }
       , indicatorStyle: { height: 4, backgroundColor: '#f48fb1' }
-      //pressColor:'blue'
-
-
     },
-    //order : ['home','event_main','notifs','profile'],
 
   }
 )
+
+const RequirementStack = createStackNavigator({
+  PostMyRequirementRoute1: PostMyRequirementScreen1,
+  PostMyRequirementRoute2: PostMyRequirementScreen2,
+  ClothSpecificationsRoute: PostMyRequirementClothSpecifications,
+  SendRequirementToRoute: SendRequirementToScreen,
+  Favorites: Favorites,
+  AddToFavorites: AddToFavorites,
+  Profiles: Profiles,
+  SearchProfiles: SearchProfiles,
+},
+  {
+    initialRouteName: 'PostMyRequirementRoute1',
+  
+  })
+
+const RequestsStackBuyer = createStackNavigator({
+  RequestNavigatorBuyer:RequestNavigatorBuyer,
+  ViewQuotes: ViewQuotesBuyer,
+  AcceptConfirm: AcceptConfirm,
+  QualitySpecs: QualitySpecs,
+},
+  {
+    initialRouteName: 'RequestNavigatorBuyer',
+    headerMode: 'screen',
+  })
+
+const BuyerHomeStack = createSwitchNavigator({
+  HomeScreenRoute: BuyerHomeScreen,
+  RequirementsRoute: RequirementStack,
+  RequestsRoute: RequestsStackBuyer
+
+},
+  {
+    initialRouteName: "HomeScreenRoute",
+    headerMode: "none"
+  })
+
+
+
+
+/* SELLER NAVIGATORS*/
 
 const RequestNavigatorSeller = createMaterialTopTabNavigator({
 
@@ -111,105 +162,15 @@ const RequestNavigatorSeller = createMaterialTopTabNavigator({
 )
 
 
-
-const RequirementStack = createStackNavigator({
-  PostMyRequirementRoute1: PostMyRequirementScreen1,
-  PostMyRequirementRoute2: PostMyRequirementScreen2,
-  ClothSpecificationsRoute: ClothSpecificationsScreen,
-  SendRequirementToRoute: SendRequirementToScreen,
-  
-   Favorites : Favorites,
-   AddToFavorites: AddToFavorites,
-   Profiles: Profiles,
-   SearchProfiles : SearchProfiles,
-  
-},
-  {
-    initialRouteName: 'PostMyRequirementRoute1',
-    // headerMode: "none"
-  })
-
-const RequestsStackBuyer = createStackNavigator({
-  RequestNavigatorBuyer: {
-    screen: RequestNavigatorBuyer,
-    navigationOptions: {
-      title: 'MY REQUESTS',
-      headerTitleAlign: "center",
-      headerStyle: {
-        //backgroundColor: 'blue',
-        //fontSize: 40,
-      },
-      headerTitleStyle: {
-        fontSize: 25,
-      }
-    }
-  },
-  ViewQuotes: {
-    screen: ViewQuotesBuyer,
-    navigationOptions: {
-      title: 'VIEW QUOTES',
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontSize: 25,
-
-      },
-
-
-    }
-  },
-  AcceptConfirm: {
-    screen: AcceptConfirm,
-    navigationOptions: {
-      title: 'CONFIRMATION',
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontSize: 25,
-
-      },
-
-    }
-  },
-  QualitySpecs: {
-    screen: QualitySpecs,
-    navigationOptions: {
-      title: 'Quality Specifications',
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontSize: 25,
-
-      },
-
-    }
-  }
-
-},
-  {
-    initialRouteName: 'RequestNavigatorBuyer',
-    //headerMode: 'none'
-  })
-
 const RequestsStackSeller = createStackNavigator({
   RequestNavigatorSeller: RequestNavigatorSeller,
   PostMyQuoteScreen1: PostMyQuoteScreen1,
   PostMyQuoteScreen2: PostMyQuoteScreen2,
   PostMyQuoteClothSpecifications: PostMyQuoteClothSpecifications
 },
-{
-  headerMode: 'screen',
-  initialRouteName: 'RequestNavigatorSeller',
-})
-
-
-
-const HomeStack = createSwitchNavigator({
-  HomeScreenRoute: BuyerHomeScreen,
-  RequirementsRoute: RequirementStack,
-  RequestsRoute: RequestsStackBuyer
-
-},
   {
-    initialRouteName: "HomeScreenRoute",
-    headerMode: "none"
+    headerMode: 'screen',
+    initialRouteName: 'RequestNavigatorSeller',
   })
 
 const SellerHomeStack = createSwitchNavigator({
@@ -221,24 +182,25 @@ const SellerHomeStack = createSwitchNavigator({
     headerMode: "none"
   })
 
+/* BuyerSeller Dividing Navigators*/
 const BuyerSellerStack = createSwitchNavigator({
-  HomeRoute: HomeStack,
+  BuyerHomeRoute: BuyerHomeStack,
   SellerHomeRoute: SellerHomeStack,
   Divider: Divider
 },
 )
 
-
+/* COMMON NAVIGATOR */
 const Drawer = createDrawerNavigator(
   {
     BuyerSellerStack: BuyerSellerStack,
-    HomeRoute: HomeStack,
+    BuyerHomeRoute: BuyerHomeStack,
     SellerHomeRoute: SellerHomeStack,
-    MyWalletRoute: { screen: MyWalletScreen },
-    ShareAppRoute: { screen: ShareAppScreen },
-    AboutUsRoute: { screen: AboutUsScreen },
-    LogoutRoute: { screen: LogoutScreen },
-    HelpAndSupportRoute: { screen: HelpAndSupportScreen },
+    MyWalletRoute: MyWalletScreen,
+    ShareAppRoute: ShareAppScreen,
+    AboutUsRoute: AboutUsScreen,
+    LogoutRoute: LogoutScreen,
+    HelpAndSupportRoute: HelpAndSupportScreen,
     Choice: Choice
   },
   {
@@ -258,16 +220,21 @@ const Drawer = createDrawerNavigator(
   }
 );
 
-
+/* TOP NAVIGATOR */
+/* Drawer: common drawer for both buyer and seller
+SplashScreen: First screen that comes up
+ChoiceRoute: whether buyer or seller
+CompanyDetails: when signup 
+LoginRoute and SignUpRoute: adds users to db
+*/
 const AppNavigator = createSwitchNavigator(
   {
-    Drawer: { screen: Drawer },
-    LoginRoute: { screen: LoginScreenBuyer },
-    CompanyDetailsRoute: { screen: CompanyDetails },
+    Drawer: Drawer,
+    LoginRoute: LoginScreenBuyer,
+    SignUpRoute: SignUpScreenBuyer,
+    CompanyDetailsRoute: CompanyDetails,
     ChoiceRoute: Choice,
-    SignUpScreenBuyer: { screen: SignUpScreenBuyer },
     SplashScreen: SplashScreen,
-    //NewRoute: { screen: PostMyQuoteScreen2 }
   },
   {
     initialRouteName: "SplashScreen",

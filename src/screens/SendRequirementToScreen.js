@@ -12,6 +12,18 @@ import RadioButton from 'react-native-radio-button'
 
 export default class SendRequirementToScreen extends React.Component {
 
+    static navigationOptions = {
+        title: 'Send Requirement To',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -301,8 +313,9 @@ export default class SendRequirementToScreen extends React.Component {
 
                         />
                         <Text style={styles.label}>All Sellers</Text>
-
                     </View>
+
+
                     <View style={{ flexDirection: 'row', marginBottom: 40 }}>
                         <RadioButton
                             onPress={() => this.setState({
@@ -320,8 +333,9 @@ export default class SendRequirementToScreen extends React.Component {
 
                         />
                         <Text style={styles.label}>Select Sellers</Text>
-
                     </View>
+
+                    
                     <View style={{ flexDirection: 'row', marginBottom: 40 }}>
                         <RadioButton
                             onPress={() => this.setState({

@@ -252,17 +252,6 @@ export default class RequestsSeller extends React.Component {
        
     }*/
 
-    static navigationOptions = {
-        title: 'New Requests',
-        headerStyle: {
-          backgroundColor: colors.colorGrey,
-        },
-        headerTintColor: colors.colorBlack,
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      };
-
     render() {
         // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
         console.disableYellowBox = true

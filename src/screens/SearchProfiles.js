@@ -128,8 +128,15 @@ export default class SearchProfiles extends Component {
 
 
   static navigationOptions = {
-    headerShown: false
-  }
+    title: 'Select Sellers',
+    headerStyle: {
+      backgroundColor: colors.colorWhite,
+    },
+    headerTintColor: colors.colorBlack,
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
 
   retrieveData = async () => {
     try {

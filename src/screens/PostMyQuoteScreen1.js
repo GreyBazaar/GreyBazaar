@@ -13,8 +13,8 @@ export default class PostMyQuoteScreen1 extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            rate: '',
-            deliveryDays: '',
+            rate: 0,
+            deliveryDays: 0,
             id: '',
             from: ''
         }
@@ -42,7 +42,7 @@ export default class PostMyQuoteScreen1 extends Component {
             //Alert.alert('GOTO PostMyQuoteScreen2')
         } else if (!this.state.rate) {
 
-            Alert.alert('Please enter Rate',
+            Alert.alert('Please enter valid Rate',
                 '',
                 [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },
@@ -51,7 +51,7 @@ export default class PostMyQuoteScreen1 extends Component {
             )
         } else if (!this.state.deliveryDays) {
 
-            Alert.alert('Please enter Delivery Days',
+            Alert.alert('Please enter valid Delivery Days',
                 '',
                 [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },
@@ -85,7 +85,8 @@ export default class PostMyQuoteScreen1 extends Component {
                         underLineColorAndroid='#000000'
                         placeholderTextColor='rgba(0,0,0,0.4)'
                         placeholder="5.50"
-                        onChangeText={(text) => this.setState({ rate: text })}
+                        keyboardType="numeric"
+                        onChangeText={(text) => this.setState({ rate: parseFloat(text) })}
                     />
 
                     <Text style={styles.label}>DELIVERY DAYS: </Text>
@@ -93,8 +94,9 @@ export default class PostMyQuoteScreen1 extends Component {
                         style={styles.inputBox}
                         underLineColorAndroid='#000000'
                         placeholder="2"
+                        keyboardType='numeric'
                         placeholderTextColor='rgba(0,0,0,0.4)'
-                        onChangeText={(text) => this.setState({ deliveryDays: text })}
+                        onChangeText={(text) => this.setState({ deliveryDays: parseFloat(text) })}
                     />
 
                     <View style={{ flexDirection: 'row' }}>

@@ -62,6 +62,19 @@ export default class PostMyRequirement2 extends Component {
             () => this.props.navigation.navigate('SendRequirementToRoute', { allRequirementsData: this.state }))
     }
 
+    static navigationOptions = {
+        title: 'Post My Requirement',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
+
+
     render() {
         
         return (

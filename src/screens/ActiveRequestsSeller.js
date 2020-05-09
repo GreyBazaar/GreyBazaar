@@ -54,7 +54,7 @@ export default class RequestsSeller extends React.Component {
         const user = auth().currentUser
         this.setState({ email: user.email })
         //console.log("success kinda")
-        console.log(user.email)
+        // console.log(user.email)
         //this.retrieveData(user.email)
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             this.onFocusFunction(user.email)
@@ -138,7 +138,7 @@ export default class RequestsSeller extends React.Component {
              this.setState({
                  refreshing: true,
              });
-             console.log('Retrieving additional Data');
+            //  console.log('Retrieving additional Data');
              // Cloud Firestore: Query (Additional Query)
              let additionalQuery = await firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller')
                  .startAfter(this.state.lastVisible)

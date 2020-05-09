@@ -79,7 +79,7 @@ onIds = (devices) => {
         })
           .then(() => {
             if (this.state.type == "Buyer") {
-              this.props.navigation.navigate('HomeRoute')
+              this.props.navigation.navigate('BuyerHomeRoute')
             }
             else {
               this.props.navigation.navigate('SellerHomeRoute')

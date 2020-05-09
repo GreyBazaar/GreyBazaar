@@ -8,7 +8,7 @@ export default class Choice extends React.Component {
     
     Navigate = async(type) => {
         await AsyncStorage.setItem('type' , type)
-        this.props.navigation.navigate('SignUpScreenBuyer')
+        this.props.navigation.navigate('SignUpRoute')
     }
     render() {
         return (

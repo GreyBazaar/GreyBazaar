@@ -81,14 +81,16 @@ export default class Favorites extends React.Component {
     }
   };
 
-
-
-
-
-
   static navigationOptions = {
-    headerShown: false
-  }
+    title: 'Favourites',
+    headerStyle: {
+      backgroundColor: colors.colorWhite,
+    },
+    headerTintColor: colors.colorBlack,
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
 
   favArray = (documentData) => {
 

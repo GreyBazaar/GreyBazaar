@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import {  View,  StyleSheet,  TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView,  } from "react-native";
-import {  Text, Header, } from "native-base";
+import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
+import { Container, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
+const deviceHeight = Dimensions.get("window").height;
 
-import { Item, Icon, Input,  Button, } from 'native-base'
+import { Item, Icon, Input, CheckBox, Card, CardItem, Content, Thumbnail, Grid, Button, Subtitle } from 'native-base'
+import ProfileCard from '../../src/components/ProfileCard.js'
+//import * as firebase from 'firebase/app'
+//import 'firebase/firestore'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -124,15 +128,8 @@ export default class SearchProfiles extends Component {
 
 
   static navigationOptions = {
-    title: 'Select Sellers',
-    headerStyle: {
-      backgroundColor: colors.colorWhite,
-    },
-    headerTintColor: colors.colorBlack,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  };
+    headerShown: false
+  }
 
   retrieveData = async () => {
     try {
@@ -204,16 +201,12 @@ export default class SearchProfiles extends Component {
   isChecked = (item) => {
     let selected_data = this.state.selected_sellers
     var data = this.state.documentData.map(e => {
-      if (item.email === e.email) {
+      if (item.name === e.name) {
         item.checked = !e.checked;
-        if( item.checked == false){
-          item.color = '#f8bbd0'
-          selected_data.push(item.email)
-        }
-        else {
-          selected_data.pop(item.email)
-          item.color = colors.colorBlue
-        }
+
+
+        item.color = '#f8bbd0'
+        selected_data.push(item.email)
         //selected_data = this.state.selected_sellers.map(item => item.email)
 
         //console.log(e.id)

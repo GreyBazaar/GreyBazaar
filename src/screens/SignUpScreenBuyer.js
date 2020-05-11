@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Button, Body, Input, Container, Content, Header, Item, Label, Title, Right, Left } from 'native-base';
 import {
-  SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,
+  SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Dimensions,Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
@@ -19,12 +19,12 @@ class SignUpScreenBuyer extends Component {
       email: '',
     }
   }
-  
+
 
   signUp = () => {
     if (this.state.pass == this.state.pass2) {
       auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
-         .catch(function (error) {
+        .catch(function (error) {
           alert(error.message);
         })
     }
@@ -41,14 +41,14 @@ class SignUpScreenBuyer extends Component {
   render() {
     return (
       <Container style={styles.container}>
-        <Header style={{ backgroundColor: colors.colorBlack }}>
-          <Body style={{ marginLeft: 40 }}>
-            <Title>SignUp as {this.state.type} </Title>
-          </Body>
-          <Right />
-        </Header>
-
+        
         <View style={styles.innerContainer}>
+
+        <Image
+          source={require('../images/logo1.jpg')}
+          style={{ height: 200, width: 200 }}
+        />
+
           <Text style={styles.heading}>Sign Up</Text>
 
           <TextInput
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingTop: 20,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     // alignItems: 'center',
     // alignContent:'center',
     backgroundColor: colors.colorShadow,
@@ -168,15 +168,12 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     // padding:10,
-    margin: 20,
-    paddingTop: 16,
-    justifyContent: 'center',
-    borderRadius: 10,
-    backgroundColor: colors.colorWhite,
-    // alignContent:'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // alignSelf:'center',
+    padding: 10,
+        margin: 15,
+        borderRadius: 10,
+        backgroundColor: colors.colorWhite,
+        justifyContent: 'center',
+        alignItems: 'center',
   },
   button:
   {

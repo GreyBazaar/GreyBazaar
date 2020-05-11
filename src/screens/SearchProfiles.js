@@ -128,15 +128,8 @@ export default class SearchProfiles extends Component {
 
 
   static navigationOptions = {
-    title: 'Select Sellers',
-    headerStyle: {
-      backgroundColor: colors.colorWhite,
-    },
-    headerTintColor: colors.colorBlack,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  };
+    headerShown: false
+  }
 
   retrieveData = async () => {
     try {
@@ -208,16 +201,12 @@ export default class SearchProfiles extends Component {
   isChecked = (item) => {
     let selected_data = this.state.selected_sellers
     var data = this.state.documentData.map(e => {
-      if (item.email === e.email) {
+      if (item.name === e.name) {
         item.checked = !e.checked;
-        if( item.checked == false){
-          item.color = '#f8bbd0'
-          selected_data.push(item.email)
-        }
-        else {
-          selected_data.pop(item.email)
-          item.color = colors.colorBlue
-        }
+
+
+        item.color = '#f8bbd0'
+        selected_data.push(item.email)
         //selected_data = this.state.selected_sellers.map(item => item.email)
 
         //console.log(e.id)

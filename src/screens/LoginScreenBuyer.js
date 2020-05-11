@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {  Body,  Container,  Header,  Title, Right,} from 'native-base';
 import {
-    StyleSheet, View, Text,  TextInput, TouchableOpacity,} from 'react-native';
+    StyleSheet, View, Text,  TextInput, TouchableOpacity, Image} from 'react-native';
 import auth from '@react-native-firebase/auth'
 import colors from '../../assets/colors'
 import firestore from '@react-native-firebase/firestore'
@@ -45,15 +45,13 @@ export default class LoginScreenBuyer extends Component {
         return (
             <Container style={styles.container}>
 
-                <Header style={{ backgroundColor: colors.colorBlack }}>
-                    <Body style={{ marginLeft: 40, }}>
-                        <Title>Login</Title>
-                    </Body>
-                    <Right />
-                </Header>
-
+              
                 <View style={styles.innerContainer}>
-
+                    <Image 
+                        source = {require('../images/logo1.jpg')}
+                        style = {{height:200 , width:200}}
+                    />
+                <Text style={{fontSize:50,fontWeight:'bold',padding:15}}>GreyBazaar</Text>
                     <TextInput
                         style={styles.inputBox}
                         underLineColorAndroid='#000000'
@@ -110,11 +108,13 @@ const styles = StyleSheet.create({
         // paddingTop: 20,
         flex: 1,
         backgroundColor: colors.colorShadow,
+        justifyContent:'center'
     },
     heading: {
         color: colors.colorBlack,
         fontSize: 26,
-        marginBottom: 10
+        marginBottom: 10,
+        
     },
     inputBox: {
         marginVertical: 14,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         padding: 10,
-        margin: 20,
+        margin: 15,
         borderRadius: 10,
         backgroundColor: colors.colorWhite,
         justifyContent: 'center',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     {
         paddingVertical: 15,
         paddingHorizontal: 15,
-        margin: 10,
+        margin: 20,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 6,

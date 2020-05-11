@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet } from "react-native";
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, Icon } from "native-base";
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
 
 
 export default class SellerHomeScreen extends Component {

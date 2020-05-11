@@ -1,8 +1,5 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
-
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 import colors from '../../assets/colors'
 
 

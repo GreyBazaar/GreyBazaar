@@ -11,7 +11,7 @@ import moment from 'moment';
 export default class PostMyQuoteScreen2 extends Component {
 
     state = {
-        // current user email
+        // current user email (seller)
         email: '',
 
         //today's date
@@ -40,6 +40,9 @@ export default class PostMyQuoteScreen2 extends Component {
 
         //quote id
         quoteId: '',
+
+        //qualityType (fetched from db, to be added to quotes doc)
+        qualityType: '',
     }
 
     componentDidMount() {
@@ -54,13 +57,23 @@ export default class PostMyQuoteScreen2 extends Component {
         const user = auth().currentUser
         this.setState({ email: user.email })
 
+        //get current date
         const date = moment().format('DD/MM/YY')
         this.setState({ date })
+
+        //get quality type
+        this.fetchQualityType(state.params.from, state.params.id)
+
     }
 
-    // submitPressed = () => {
-    //     this.props.navigation.navigate('RequestNavigatorSeller', { id: this.state.id })
-    // }
+    fetchQualityType = async (fromBuyer, requestId) => {
+        //get data from request (qualityType)
+        let requestData = await firestore().collection('BuyerRequests').doc(fromBuyer).collection('MyRequests')
+            .doc(requestId).get();
+        qualityType = requestData.data().qualityType
+        this.setState({ qualityType })
+
+    }
 
     checkEditBuyer = () => {
         firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller').doc(this.state.id).update({
@@ -74,7 +87,6 @@ export default class PostMyQuoteScreen2 extends Component {
                 console.log('Error updating checked field : ', error)
             })
 
-        
     }
 
     sendToDatabaseBuyer = () => {
@@ -98,6 +110,9 @@ export default class PostMyQuoteScreen2 extends Component {
             combedCarded: this.state.combedCarded,
             clothSpecificationsFilled: this.state.clothSpecificationsFilled,
 
+            //fetched from buyer request
+            qualityType: this.state.qualityType,
+
             //primary key of quote
             id: this.state.quoteId,
 
@@ -106,7 +121,6 @@ export default class PostMyQuoteScreen2 extends Component {
 
             //current date
             date: this.state.date,
-
         })
             .then(() => console.log("doc added successfully to buyer database", this.state.quoteId))
             .catch(function (error) {
@@ -134,6 +148,9 @@ export default class PostMyQuoteScreen2 extends Component {
             combedCarded: this.state.combedCarded,
             clothSpecificationsFilled: this.state.clothSpecificationsFilled,
 
+             //fetched from buyer request
+             qualityType: this.state.qualityType,
+
             //primary key of quote
             id: this.state.quoteId,
 
@@ -153,7 +170,7 @@ export default class PostMyQuoteScreen2 extends Component {
 
     submitPressed = () => {
         //make a quoteId
-        const quoteId = moment().format('HmDDDD')
+        const quoteId = moment().format('HmDDDSS')
 
         // retrieve filled data from post my quote screen 1
         const rate = this.props.navigation.getParam('rate', 'None')

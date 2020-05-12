@@ -32,9 +32,17 @@ export default class ClothSpecificationScreen extends Component {
             clothSpecificationsFilled: true,
         })
     }
-    componentDidMount() {
-        console.disableYellowBox = true;
-    }
+
+    static navigationOptions = {
+        title: 'Cloth Specifications',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
 
     render() {
         return (

@@ -122,6 +122,18 @@ export default class ViewQuotesBuyer extends React.Component {
 
     }
 
+    static navigationOptions = {
+        title: 'View Quotes',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
+
     isAccepted = (item) => {
         //accepted field indicates quote has been accepted by buyer
         let id = item.id

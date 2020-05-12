@@ -1,12 +1,22 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
-
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 import colors from '../../assets/colors'
 
 
 export default class AcceptConfirm extends React.Component {
+
+    static navigationOptions = {
+        title: 'Accept And Confirm',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
+
     constructor(props) {
         super(props);
         this.state = {

@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
+import React from "react";
+import {  View, StyleSheet, TouchableOpacity } from "react-native";
+import { Container, Text, } from "native-base";
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
@@ -11,6 +10,18 @@ import RadioButton from 'react-native-radio-button'
 
 
 export default class SendRequirementToScreen extends React.Component {
+
+    static navigationOptions = {
+        title: 'Send Requirement To',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
 
     constructor(props) {
         super(props);
@@ -302,8 +313,9 @@ export default class SendRequirementToScreen extends React.Component {
 
                         />
                         <Text style={styles.label}>All Sellers</Text>
-
                     </View>
+
+
                     <View style={{ flexDirection: 'row', marginBottom: 40 }}>
                         <RadioButton
                             onPress={() => this.setState({
@@ -321,8 +333,9 @@ export default class SendRequirementToScreen extends React.Component {
 
                         />
                         <Text style={styles.label}>Select Sellers</Text>
-
                     </View>
+
+                    
                     <View style={{ flexDirection: 'row', marginBottom: 40 }}>
                         <RadioButton
                             onPress={() => this.setState({

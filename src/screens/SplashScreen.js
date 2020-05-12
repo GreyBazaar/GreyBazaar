@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet,} from 'react-native';
+import { Text, StyleSheet, Image} from 'react-native';
 import auth from '@react-native-firebase/auth'
 import { View } from 'native-base';
 import OneSignal from 'react-native-onesignal'
@@ -29,7 +29,11 @@ export default class SplashScreen extends React.Component{
     }
 render(){
     return(
-        <View style={{flex:1 , justifyContent: 'center' , alignContent:'center'}}>
+        <View style={{flex:1 , justifyContent: 'center' , alignItems:'center'}}>
+            <Image 
+                source = {require('../images/logo1.jpg')}
+                style = {{height:250 , width:250}}
+            />
             <Text style={style.text}>Welcome To</Text>
             <Text style={style.text}>GreyBazaar</Text>
         </View>

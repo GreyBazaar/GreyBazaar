@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Dimensions, Platform, StyleSheet, TextInput, Alert } from "react-native";
 import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "native-base";
 import colors from '../../assets/colors'
-const deviceHeight = Dimensions.get("window").height;
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 
 
 export default class PostMyRequirement1 extends Component {
@@ -23,7 +20,7 @@ export default class PostMyRequirement1 extends Component {
 
     checkAllFilled = () => {
         if (this.state.qualityType && this.state.quantity) {
-            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType , quantity: this.state.quantity})
+            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType, quantity: this.state.quantity })
         } else if (!this.state.qualityType) {
 
             Alert.alert('Please enter Quality Type',
@@ -50,16 +47,21 @@ export default class PostMyRequirement1 extends Component {
         this.checkAllFilled()
     }
 
+    static navigationOptions = {
+        title: 'Post My Requirement',
+        headerStyle: {
+          backgroundColor: colors.colorWhite,
+        },
+        headerTintColor: colors.colorBlack,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      };
+
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
 
-                {/* <Header style={{ backgroundColor: colors.colorBlack }}>
-                    <Body style={{ marginLeft: 40, }}>
-                        <Title>Post My Requirement </Title>
-                    </Body>
-                    <Right />
-                </Header> */}
 
                 <Body style={styles.container}>
 
@@ -77,6 +79,7 @@ export default class PostMyRequirement1 extends Component {
                         style={styles.inputBox}
                         underLineColorAndroid='#000000'
                         placeholder="100"
+                        keyboardType='numeric'
                         placeholderTextColor='rgba(0,0,0,0.4)'
                         onChangeText={(text) => this.setState({ quantity: text })}
                     />

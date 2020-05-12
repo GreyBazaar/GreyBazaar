@@ -66,6 +66,7 @@ export default class RequestsSeller extends React.Component {
         this.retrieveData(email)
         console.log("Focused on RequestsSeller screen")
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
+       
         
 
     }
@@ -249,6 +250,21 @@ export default class RequestsSeller extends React.Component {
        
     }*/
 
+    handleRefresh = () => {
+        try {
+          this.setState({refreshing:true})
+          this.retrieveData(this.state.email).then
+          //this.handleChange('')
+          (this.setState({
+              
+              refreshing:false
+          }))
+      }
+      catch (error) {
+        console.log(error);
+      }
+      }
+
     render() {
         // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
         console.disableYellowBox = true
@@ -301,7 +317,7 @@ export default class RequestsSeller extends React.Component {
                                     <Text style={{ marginLeft: 10, fontWeight: 'bold', marginBottom: 10 }}>AWAITING BUYER ACCEPTANCE ... </Text>
                                     </View>
                                     <View syle = {{flexDirection: 'column'}}>
-                                    <Text style={{ marginRight: 10, fontWeight: 'bold' , marginLeft: 65}}>LOWEST QUOTE: 15.50</Text>
+                                    <Text style={{ marginRight: 10, fontWeight: 'bold' , marginLeft: 65}}>LOWEST QUOTE: {item.lowestQuote}</Text>
                                     </View>
 
                                 </View>:<TouchableOpacity
@@ -319,12 +335,14 @@ export default class RequestsSeller extends React.Component {
                     // Header (Title)
                     ListHeaderComponent={this.renderHeader}
                     // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
+                  //  ListFooterComponent={this.renderFooter}
                     // On End Reached (Takes a function)
-                    onEndReached={this.retrieveMore}
+                  //  onEndReached={this.retrieveMore}
                     // How Close To The End Of List Until Next Data Request Is Made
                     onEndReachedThreshold={0}
                     // Refreshing (Set To True When End Reached)
+                    onRefresh={this.handleRefresh}
+
                     refreshing={this.state.refreshing}
                 /> 
                 <TouchableOpacity

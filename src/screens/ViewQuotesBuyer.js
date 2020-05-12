@@ -6,6 +6,9 @@ import auth from '@react-native-firebase/auth';
 import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
+Array.prototype.unique = function () {
+    return Array.from(new Set(this));
+}
 
 export default class ViewQuotesBuyer extends React.Component {
 
@@ -49,6 +52,51 @@ export default class ViewQuotesBuyer extends React.Component {
             email: state.params.email
         })
         this.retrieveData()
+        
+    }
+
+    lowestQuote = () => {
+        let data = this.state.documentData
+        let rate = []
+        let quotesBy = []
+
+        for ( let i=0; i<data.length; i++)
+           {
+            rate.push(parseFloat(data[i].rate))
+            
+            quotesBy.push(data[i].quoteGivenBy)
+           }
+
+        rate = rate.unique()
+        console.log(rate)
+        quotesBy = quotesBy.unique()
+        //console.log(quotesBy)
+        let min = rate[0]
+
+        for(let i=1; i<rate.length; i++)
+        {
+            if(rate[i]<min)
+                min = rate[i]
+        }
+        console.log('lowest quote is ', typeof(min))
+        
+        // sending lowest quote to sellers
+        for( let i=0; i<quotesBy.length; i++)
+        {
+            firestore().collection('Seller').doc(quotesBy[i]).collection('RequestToSeller').doc(this.state.id).update({
+                lowestQuote : min
+            })
+            .then(console.log(' Lowest quote of ', min, ' sent to ', quotesBy[i], ' request id being ', this.state.id ))
+            
+            .catch((error) => {
+                console.log('nested error occured updating accepted field : ', error)
+            })
+        }
+
+
+
+
+
     }
 
 
@@ -101,6 +149,7 @@ export default class ViewQuotesBuyer extends React.Component {
                 accepted: true
             })
             .then(console.log(' Quote of quote id ', id, ' accepted.' ))
+            .then(this.handleRefresh())
             .catch((error) => {
                 console.log('nested error occured updating accepted field : ', error)
             })
@@ -109,7 +158,7 @@ export default class ViewQuotesBuyer extends React.Component {
             console.log('error occured updating accepted field : ', error)
         })
 
-        this.handleRefresh()
+        
 
        // this.setState({refreshing: true})
 
@@ -149,6 +198,8 @@ export default class ViewQuotesBuyer extends React.Component {
                 //lastVisible: lastVisible,
                 loading: false,
             });
+            
+            this.lowestQuote()
         }
         catch (error) {
             console.log('error isss : ', error);

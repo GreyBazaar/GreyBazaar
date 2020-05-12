@@ -136,7 +136,7 @@ export default class SendRequirementToScreen extends React.Component {
 
     createId = () => {
 
-        var identity = moment().format('HmDDDD')
+        var identity = moment().format('HmDDDSS')
         this.setState({
             id: identity
         })
@@ -216,7 +216,8 @@ export default class SendRequirementToScreen extends React.Component {
                 id: identity,
                 close_time: this.state.close_time,
                 date: this.state.date,
-                from: this.state.email
+                from: this.state.email,
+                lowestQuote: null
 
             })
                 .then(() => console.log("request ", identity, " sent to ",sendArr[i]," successfully"))

@@ -13,7 +13,7 @@ export default class PostMyRequirement2 extends Component {
         //this screen
         expectedRate: '',
         selectedExpectedDelivery: '',
-        selectedCloseRequest: '',
+        selectedCloseRequest: '8',
         remarks: '',
 
         //from post my requirement1 screen

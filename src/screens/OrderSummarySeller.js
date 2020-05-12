@@ -1,20 +1,11 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
 import colors from '../../assets/colors'
+import firestore from '@react-native-firebase/firestore';
 
+export default class OrderSummarySeller extends React.Component {
 
-export default class AcceptConfirm extends React.Component {
-
-    static navigationOptions = {
-        title: 'Accept And Confirm',
-        headerStyle: {
-          backgroundColor: colors.colorWhite,
-        },
-        headerTintColor: colors.colorBlack,
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      };
+    
 
 
     constructor(props) {
@@ -24,8 +15,44 @@ export default class AcceptConfirm extends React.Component {
             reqID: '',
             qualityType: '',
             quantity: '',
-
+            rate: 0,
+            deliveryDays: 0,
         }
+    }
+
+    componentDidMount() {
+        const {state} = this.props.navigation;
+        let reqID = state.params.reqID
+        let email = state.params.email
+        let quoteId = state.params.quoteId
+        console.log(reqID, 'qid   ',quoteId)
+        this.setState({
+            reqID: state.params.reqID,
+            quantity: state.params.quantity,
+            qualityType: state.params.qualityType,
+            email: state.params.email,
+            
+        })
+
+        
+            console.log('Summary of seller')
+try{
+             firestore().collection('Seller').doc(email).collection('RequestToSeller').doc(reqID).collection('MyQuote').doc(quoteId)
+            .onSnapshot(documentSnapshot => {
+              console.log('User data: ', documentSnapshot.data());
+              this.setState({
+                  rate:documentSnapshot.data().rate,
+                  deliveryDays:documentSnapshot.data().deliveryDays
+              })
+            })
+            .then(console.log('great'))}
+
+            catch (error) {
+                console.log(error)
+            }
+            
+   
+
     }
 
     render() {
@@ -34,13 +61,13 @@ export default class AcceptConfirm extends React.Component {
                 
                 
                 <View style = {styles.para}>
-                    <Text style = {styles.paragraph}>Hi Buyer,
-                        {'\n\n'}You are about to confirm your deal with Seller1.
+                    <Text style = {styles.paragraph}>Hi Seller,
+                        {'\n\n'}You are about to confirm your deal with Buyer.
                         {'\n\n'}Kindly check the details and click on submit
-                        {'\n\n'}Quality: 52 x 52
-                        {'\n\n'}Quantity: 100
-                        {'\n\n'}Rate: 16.00
-                        {'\n\n'}Delivery Days: 4
+                        {'\n\n'}Quality: {this.state.qualityType}
+                        {'\n\n'}Quantity: {this.state.quantity}
+                        {'\n\n'}Rate: {this.state.rate}
+                        {'\n\n'}Delivery Days: {this.state.deliveryDays}
                         {'\n\n'}Delivery at (Process): 
                     </Text>
                 </View>

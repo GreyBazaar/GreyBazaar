@@ -52,7 +52,8 @@ export default class SendRequirementToScreen extends React.Component {
             some_select: false,
             fav_select: false,
             send_request_to: [],
-            send_to_title: ''
+            send_to_title: '',
+            close_day:''
         }
     }
 
@@ -98,8 +99,12 @@ export default class SendRequirementToScreen extends React.Component {
             this.onFocusFunction()
         })
         var date = moment().format('DD/MM/YY')
+        
         var close_time = moment().add(params.selectedCloseRequest, 'h').format('DD/MM/YY, hh:mm a')
-        console.log(close_time)
+        var close_day = moment().add(params.selectedCloseRequest, 'h').format()
+    
+        console.log(close_time,close_day)
+        
 
         const { state } = this.props.navigation;
         //console.log('blah bhabhb',state.params.selected_sellers)
@@ -128,6 +133,7 @@ export default class SendRequirementToScreen extends React.Component {
             clothSpecificationsFilled: params.clothSpecificationsFilled,
             close_time: close_time,
             date: date,
+            close_day : close_day
 
 
 
@@ -175,7 +181,8 @@ export default class SendRequirementToScreen extends React.Component {
             date: this.state.date,
             color: 'white',
             send_to_title: this.state.send_to_title,
-            send_request_to: this.state.send_request_to
+            send_request_to: this.state.send_request_to,
+            close_day: this.state.close_day
 
 
         })
@@ -217,7 +224,9 @@ export default class SendRequirementToScreen extends React.Component {
                 close_time: this.state.close_time,
                 date: this.state.date,
                 from: this.state.email,
-                lowestQuote: null
+                lowestQuote: null,
+                close_day: this.state.close_day
+
 
             })
                 .then(() => console.log("request ", identity, " sent to ",sendArr[i]," successfully"))

@@ -64,7 +64,8 @@ export default class PostMyQuoteScreen2 extends Component {
 
     checkEditBuyer = () => {
         firestore().collection('Seller').doc(this.state.email).collection('RequestToSeller').doc(this.state.id).update({
-            checked: true
+            checked: true,
+            quoteId: this.state.quoteId
         })
             //checked field signifies quote has been sent by seller
             //accepted field indicates quote has been accepted by buyer
@@ -72,6 +73,8 @@ export default class PostMyQuoteScreen2 extends Component {
             .catch((error) => {
                 console.log('Error updating checked field : ', error)
             })
+
+        
     }
 
     sendToDatabaseBuyer = () => {
@@ -107,7 +110,7 @@ export default class PostMyQuoteScreen2 extends Component {
         })
             .then(() => console.log("doc added successfully to buyer database", this.state.quoteId))
             .catch(function (error) {
-                console.log("error adding ", error);
+                console.error("error adding ", error);
             });
     }
 

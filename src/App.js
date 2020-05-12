@@ -21,7 +21,7 @@ import SendRequirementToScreen from './screens/SendRequirementToScreen'
 import RequestsBuyer from './screens/ActiveRequestsBuyer'
 import PastRequestsBuyer from './screens/PastRequestsBuyer'
 import ViewQuotesBuyer from './screens/ViewQuotesBuyer'
-import AcceptConfirm from './screens/AcceptConfirm'
+import AcceptConfirm from './screens/OrderSummaryBuyer'
 import QualitySpecs from './screens/QualitySpecs'
 import Choice from './screens/Choice'
 import SellerHomeScreen from './screens/SellerHomeScreen'
@@ -38,7 +38,7 @@ import SearchProfiles from './screens/SearchProfiles'
 import AddToFavorites from './screens/AddToFavorites'
 import PostMyQuoteScreen1 from './screens/PostMyQuoteScreen1'
 import PostMyQuoteClothSpecifications from './screens/PostMyQuoteClothSpecifications'
-
+import OrderSummarySeller from './screens/OrderSummarySeller'
 
 
 
@@ -164,6 +164,7 @@ const RequestNavigatorSeller = createMaterialTopTabNavigator({
 
 const RequestsStackSeller = createStackNavigator({
   RequestNavigatorSeller: RequestNavigatorSeller,
+  OrderSummarySeller: OrderSummarySeller,
   PostMyQuoteScreen1: PostMyQuoteScreen1,
   PostMyQuoteScreen2: PostMyQuoteScreen2,
   PostMyQuoteClothSpecifications: PostMyQuoteClothSpecifications

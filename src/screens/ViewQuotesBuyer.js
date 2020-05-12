@@ -148,11 +148,12 @@ export default class ViewQuotesBuyer extends React.Component {
             firestore().collection('Seller').doc(quoteBy).collection('RequestToSeller').doc(this.state.id).update({
                 accepted: true
             })
-            .then(console.log(' Quote of quote id ', id, ' accepted.' ))
-            .then(this.handleRefresh())
+            .then(this.handleRefresh,console.log(' Quote of quote id ', id, ' accepted.' , ))
+            .then(this.props.navigation.navigate('AcceptConfirm',{reqID: this.state.id,quoteId: id, rate: item.rate, deliveryDays: item.deliveryDays, email: this.state.email}))
             .catch((error) => {
                 console.log('nested error occured updating accepted field : ', error)
             })
+
         )
         .catch((error) => {
             console.log('error occured updating accepted field : ', error)
@@ -338,7 +339,7 @@ export default class ViewQuotesBuyer extends React.Component {
                                     <TouchableOpacity
 
                                         style={styles.button3}
-                                        onPress={() => this.props.navigation.navigate('AcceptConfirm')}
+                                        //onPress={() => this.props.navigation.navigate('AcceptConfirm')}
 
 
                                     >

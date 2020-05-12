@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 const deviceHeight = Dimensions.get("window").height;
 
 
+
 export default class PostMyRequirement2 extends Component {
 
     state = {

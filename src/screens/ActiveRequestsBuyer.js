@@ -4,7 +4,7 @@ import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
 //import * as firebase from 'firebase/app'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
+import moment from 'moment';
 import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
@@ -34,6 +34,7 @@ export default class ActiveRequestsBuyer extends React.Component {
             combedCarded: '',
             clothSpecificationsFilled: false,
             id: '',
+            displayData: [],
 
             //db: firebase.firestore(),
 
@@ -70,6 +71,35 @@ export default class ActiveRequestsBuyer extends React.Component {
         this.retrieveData(user.email)
     }
 
+    sortData = () => {
+        let data = []
+        let rn = moment().format()
+        let doc = this.state.documentData
+        for(let i=0; i<doc.length; i++){
+            if(moment(rn).isBefore(doc[i].close_day))
+                data.push(doc[i])
+        }
+       // console.log(data)
+        this.setState({ documentData: data})
+           
+        
+    }
+
+    handleRefresh = () => {
+        try {
+          this.setState({refreshing:true})
+          this.retrieveData(this.state.email).then
+          //this.handleChange('')
+          (this.setState({
+              
+              refreshing:false
+          }))
+      }
+      catch (error) {
+        console.log(error);
+      }
+      }
+
 
 
     retrieveData = async (email) => {
@@ -95,12 +125,13 @@ export default class ActiveRequestsBuyer extends React.Component {
             // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
             //let lastVisible = documentData[documentData.length - 1].id;
             // Set State
-            console.log(documentData)
+            //console.log(documentData)
             this.setState({
                 documentData: documentData,
                 //lastVisible: lastVisible,
                 loading: false,
             });
+            this.sortData()
         }
         catch (error) {
             console.log('error isss : ', error);
@@ -272,13 +303,14 @@ export default class ActiveRequestsBuyer extends React.Component {
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
                     // Header (Title)
-                    ListHeaderComponent={this.renderHeader}
+                    //ListHeaderComponent={this.renderHeader}
                     // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
+                    //ListFooterComponent={this.renderFooter}
                     // On End Reached (Takes a function)
-                    onEndReached={this.retrieveMore}
+                    //onEndReached={this.retrieveMore}
                     // How Close To The End Of List Until Next Data Request Is Made
                     onEndReachedThreshold={0}
+                    onRefresh={this.handleRefresh}
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
                 /> : <View

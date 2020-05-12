@@ -2,8 +2,10 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox, TextInput } from 'react-native'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
+import moment from 'moment';
 import colors from '../../assets/colors'
+
+
 
 //var db = firebase.firestore()
 export default class RequestsSeller extends React.Component {
@@ -36,7 +38,7 @@ export default class RequestsSeller extends React.Component {
 
 
             ],*/
-            limit: 9,
+            //limit: 9,
             lastVisible: null,
             loading: false,
             refreshing: false,
@@ -44,8 +46,8 @@ export default class RequestsSeller extends React.Component {
             direct: false,
             visible: false,
             item: [],
-            direct: true
-            // displayData: []
+            direct: true,
+            displayData: []
 
         }
     }
@@ -108,7 +110,7 @@ export default class RequestsSeller extends React.Component {
              let initialQuery = await firestore().collection('Seller').doc(email).collection('RequestToSeller')
               
  
-             .limit(this.state.limit)
+             //.limit(this.state.limit)
  
              firestore.setLogLevel('debug')
              firestore()
@@ -125,6 +127,7 @@ export default class RequestsSeller extends React.Component {
                  //lastVisible: lastVisible,
                  loading: false,
              });
+             this.sortData()
          }
          catch (error) {
              console.log('error isss : ',error);
@@ -157,6 +160,7 @@ export default class RequestsSeller extends React.Component {
                  lastVisible: lastVisible,
                  refreshing: false,
              });
+             this.sortData()
          }
          catch (error) {
              console.log("error retrieving more is :" ,error);
@@ -179,6 +183,20 @@ export default class RequestsSeller extends React.Component {
             console.log(error);
         }
     };
+
+    sortData = () => {
+        let data = []
+        let rn = moment().format()
+        let doc = this.state.documentData
+        for(let i=0; i<doc.length; i++){
+            if(moment(rn).isBefore(doc[i].close_day))
+                data.push(doc[i])
+        }
+        console.log(data)
+        this.setState({ documentData: data})
+           
+        
+    }
 
     /*showEvent = (item) => {
         console.log(item.event_name)
@@ -322,7 +340,10 @@ export default class RequestsSeller extends React.Component {
 
                                 </View>:<TouchableOpacity
                                     style={styles.button3}
-                                    onPress={() => {}}
+                                    onPress={() => 
+                                        this.props.navigation.navigate('OrderSummarySeller',
+                                        {quantity: item.quantity, qualityType: item.qualityType, reqID: item.id, email: this.state.email, quoteId: item.quoteId}
+                                        )}
                                 >
                                     <Text style={styles.boxText}>VIEW ORDER SUMMARY</Text>
                                 </TouchableOpacity>)
@@ -355,42 +376,7 @@ export default class RequestsSeller extends React.Component {
         );
     }
 
-    /*render() {
-        return(
-            <SafeAreaView style = {styles.container}>
-                
-                <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: 'space-evenly'}}>
-                    <TouchableOpacity style = {styles.button2} >
-                        <Text style = {{color: 'white'}}>SORT BY</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style = {styles.button2}>
-                        <Text style = {{color: 'white'}}>FILTER</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style = {styles.box}>
-                    <Text style = {styles.boxText2, {marginStart:10,marginTop:10}}>REQUEST ID: 1234</Text>
-                    <View style = {{flexDirection: 'row'}}>
-                        <Text style = {styles.boxText2}>DATE: 29/3/20</Text>
-                        <Text style = {styles.boxText2,{paddingLeft:75}}>REQUEST CLOSES AT : 12:30 pm</Text>
-                    </View>
-                    <Text style = {styles.boxText2}>QUALITY TYPE: 52 X 52</Text>
-                    <Text style = {styles.boxText2}>QUANTITY: 100 TAKA</Text>
-                    <Text style = {styles.boxText2, {marginBottom:8,marginStart:10}}>SEND REQUIREMENT TO: ALL SELLERS</Text>
-                    <TouchableOpacity 
-                        style = {styles.button2}
-                        onPress = {() => this.props.navigation.navigate('ViewQuotes')}
-                    >
-                        <Text style = {styles.boxText}>VIEW QUOTES</Text>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                style = {styles.button}
-                 onPress = {() => this.props.navigation.navigate('HomeScreenRoute')}>
-                    <Text style = {{color: "white", fontSize : 14}}>BACK</Text>
-                </TouchableOpacity>
-            </SafeAreaView>
-        )
-    }*/
+
 }
 
 const styles = StyleSheet.create({

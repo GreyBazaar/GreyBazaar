@@ -4,7 +4,7 @@ import { Container, Button, H3, Header, Left, Right, Body } from "native-base";
 //import * as firebase from 'firebase/app'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
+import moment from 'moment';
 import colors from '../../assets/colors'
 import { Title } from 'react-native-paper'
 
@@ -26,15 +26,7 @@ export default class PastRequestsSeller extends React.Component {
 
             //db: firebase.firestore(),
 
-            documentData: [
-                
-                {
-                    id: 1132, date: '23/4/20', qualityType: '100x100', quantity: '200 TAKA', request_close_at: '10:00 pm', delivery_days: 8,
-                    rate: 21.00, remarks: ''
-                },
-
-
-            ],
+            documentData: [],
             limit: 9,
             lastVisible: null,
             loading: false,
@@ -43,7 +35,7 @@ export default class PastRequestsSeller extends React.Component {
             direct: false,
             visible: false,
             item: [],
-            // displayData: []
+             displayData: []
 
         }
     }
@@ -53,77 +45,49 @@ export default class PastRequestsSeller extends React.Component {
         this.setState({ email: user.email })
         console.log("success kinda")
         console.log(user.email)
-        //this.retrieveData(user.email)
+        this.retrieveData(user.email)
     }
 
+ 
+    retrieveData = async (email) => {
+        try {
+            // Set State: Loading
+            this.setState({
+                loading: true,
+                direct: false
+            });
+            console.log('Retrieving past requestsData for seller ', email);
+            // Cloud Firestore: Query
+            let initialQuery = await firestore().collection('Seller').doc(email).collection('RequestToSeller')
 
 
-    /* retrieveData = async (email) => {
-         try {
-             // Set State: Loading
-             this.setState({
-                 loading: true,
-                 direct: false
-             });
-             console.log('Retrieving Data for ', email);
-             // Cloud Firestore: Query
-             let initialQuery = await firebase.firestore().collection('BuyerRequests').doc(email).collection('MyRequests')
-              
- 
-             .limit(this.state.limit)
- 
-             firebase.firestore.setLogLevel('debug')
-             firebase.firestore()
-             // Cloud Firestore: Query Snapshot
-             let documentSnapshots = await initialQuery.get();
-             // Cloud Firestore: Document Data
-             let documentData = documentSnapshots.docs.map(document => document.data());
-             // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
-             //let lastVisible = documentData[documentData.length - 1].id;
-             // Set State
-             console.log(documentData)
-             this.setState({
-                 documentData: documentData,
-                 //lastVisible: lastVisible,
-                 loading: false,
-             });
-         }
-         catch (error) {
-             console.log('error isss : ',error);
-             this.setState({ loading: false, direct: true })
- 
-         }
-     };
-     // Retrieve More
-     retrieveMore = async () => {
-         try {
-             // Set State: Refreshing
-             this.setState({
-                 refreshing: true,
-             });
-             console.log('Retrieving additional Data');
-             // Cloud Firestore: Query (Additional Query)
-             let additionalQuery = await firebase.firestore().collection('BuyerRequests').doc(this.state.email).collection('MyRequests')
-                 .startAfter(this.state.lastVisible)
-                 .limit(this.state.limit)
- 
-             // Cloud Firestore: Query Snapshot
-             let documentSnapshots = await additionalQuery.get();
-             // Cloud Firestore: Document Data
-             let documentData = documentSnapshots.docs.map(document => document.data());
-             // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
-             let lastVisible = documentData[documentData.length - 1].id;
-             // Set State
-             this.setState({
-                 documentData: [...this.state.documentData, ...documentData],
-                 lastVisible: lastVisible,
-                 refreshing: false,
-             });
-         }
-         catch (error) {
-             console.log("error is :" ,error);
-         }
-     };*/
+                .limit(this.state.limit)
+
+            firestore.setLogLevel('debug')
+            firestore()
+            // Cloud Firestore: Query Snapshot
+            let documentSnapshots = await initialQuery.get();
+            // Cloud Firestore: Document Data
+            let documentData = documentSnapshots.docs.map(document => document.data());
+            // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+            //let lastVisible = documentData[documentData.length - 1].id;
+            // Set State
+            //console.log(documentData)
+            this.setState({
+                documentData: documentData,
+                //lastVisible: lastVisible,
+                loading: false,
+            });
+            this.sortData()
+        }
+        catch (error) {
+            console.log('error isss : ', error);
+            this.setState({ loading: false, direct: true })
+
+        }
+    };
+
+
 
     renderFooter = () => {
         try {
@@ -142,75 +106,37 @@ export default class PastRequestsSeller extends React.Component {
         }
     };
 
-    /*showEvent = (item) => {
-        console.log(item.event_name)
-        this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date })
-
-    }
-
-    goEdit = (item) => {
-        console.log(item.event_name)
-        this.props.navigation.navigate('EditEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date, day: item.day })
-
-    }
-
-
-    deleteEvent = () => {
-        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.item.event_name).delete().then(function () {
-
-            console.log("Document successfully deleted from CreatedEvent!");
-            //alert('Event deleted')
-
-        }).then(this.onFocusFunction(this.state.email),
-            this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
-
-                console.log("Document successfully deleted from AllEvents!");
-
-
-            })
-        )
-
-
-
-            .catch(function (error) {
-                console.error("Error removing document: ", error);
-            });
-            
-    }
-
-    deletEvent = (event) => {
-        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(event).delete().then(function () {
-
-            console.log("Document successfully deleted from CreatedEvent!");
-            //alert('Event deleted')
-
-        }).then(this.onFocusFunction(this.state.email),
-            this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
-
-                console.log("Document successfully deleted from AllEvents!");
-
-
-            })
-        )
-
-
-
-            .catch(function (error) {
-                console.error("Error removing document: ", error);
-            });
-            
-    }
-//{(today.isSameOrAfter(item.moment)?this.deleteEvent():console.log('ello'))}
-
-    checkDate = (data,event) => {
-        const rn = moment(right_now).format('YYYY-MM-DD')
-        console.log(moment(right_now).format('YYYY-MM-DD')),
+    sortData = () => {
+        let data = []
+        let rn = moment().format()
+        let doc = this.state.documentData
+        for (let i = 0; i < doc.length; i++) {
+            if (moment(rn).isAfter(doc[i].close_day))
+                data.push(doc[i])
+        }
         console.log(data)
-        console.log(moment(rn).isAfter(data))
-        if(moment(rn).isAfter(data))
-             this.deletEvent(event)
-       
-    }*/
+        this.setState({ documentData: data })
+
+
+    }
+
+
+    handleRefresh = () => {
+        try {
+          this.setState({refreshing:true})
+          this.retrieveData(this.state.email).then
+          //this.handleChange('')
+          (this.setState({
+              
+              refreshing:false
+          }))
+      }
+      catch (error) {
+        console.log(error);
+      }
+      }
+
+
 
     render() {
         // <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
@@ -231,39 +157,32 @@ export default class PastRequestsSeller extends React.Component {
 
                         //this.checkDate(item.day,item.event_name),
                         <View style={styles.box}>
-                            <View style={{ flexDirection: 'row' , justifyContent: 'space-between'}}>
-                                <Text style={styles.boxText2, { marginStart: 10, marginTop: 10 }}>REQUEST ID: {item.id}</Text>
-                                <Text style={styles.boxText2, { marginEnd: 10, marginTop: 10 }}>DATE: {item.date} , {item.request_close_at}</Text>
-                            </View>
-                            <Text style={styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
-                            <View style={{ flexDirection: 'row' ,justifyContent: 'space-between'}}>
-                                <Text style={styles.boxText2}>QUANTITY: {item.quantity}</Text>
-                                <Text style={styles.boxText2, {marginEnd:10}}>DELIVERY DAYS : {item.delivery_days}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' ,justifyContent: 'space-between'}}>
-                                <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>RATE: {item.rate}</Text>
-                                <Text style={styles.boxText2, {marginEnd:10}}>REMARKS : {item.remarks}</Text>
-                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                            <TouchableOpacity
-                                style={styles.button2}
-                                onPress={() => { }}
-                            >
-                                <Text style={styles.boxText}>SEND QUOTE</Text>
-                            </TouchableOpacity>
+                                <View syle={{ flexDirection: 'column' }}>
+                                    <Text style={styles.boxText2, { marginStart: 10, marginTop: 10 }}>REQUEST ID: {item.id}</Text>
+                                    <Text style={styles.boxText2}>QUALITY TYPE: {item.qualityType}</Text>
+                                    <Text style={styles.boxText2}>QUANTITY: {item.quantity}</Text>
+                                    <Text style={styles.boxText2, { marginBottom: 8, marginStart: 10 }}>EXPECTED RATE: {item.expectedRate}</Text>
+                                </View>
+
+
+                                <View syle={{ flexDirection: 'column' }}>
+                                    <Text style={styles.boxText2, { marginEnd: 10, marginTop: 10 }}>DATE: {item.close_time}</Text>
+                                    <Text style={styles.boxText2, { marginEnd: 10 }}>EXPECTED DELIVERY DAYS : </Text>
+                                    <Text style={styles.boxText2, { marginEnd: 10 }}>{item.selectedExpectedDelivery}</Text>
+                                    <Text style={styles.boxText2, { marginEnd: 10, width: 200 }}>REMARKS : {item.remarks}</Text>
+                                </View>
+                            </View>
                         </View>
 
                     )}
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
                     // Header (Title)
-                    ListHeaderComponent={this.renderHeader}
-                    // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
-                    // On End Reached (Takes a function)
-                    onEndReached={this.retrieveMore}
-                    // How Close To The End Of List Until Next Data Request Is Made
+
                     onEndReachedThreshold={0}
+                    onRefresh={this.handleRefresh}
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
                 /> : <View

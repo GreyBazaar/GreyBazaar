@@ -62,16 +62,18 @@ export default class ClothSpecificationScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ weight: text })}
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.setState({ weight: parseFloat(text) })}
                         />
                     </View>
 
                     <View style={styles.eachRow}>
-                        <Text style={styles.label}> PANNA </Text>
+                        <Text style={styles.label}> PANNA (inch) </Text>
                         <TextInput
                             style={styles.inputBox}
+                            keyboardType='numeric'
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ panna: text })}
+                            onChangeText={(text) => this.setState({ panna: parseFloat(text) })}
                         />
                     </View>
 
@@ -80,7 +82,8 @@ export default class ClothSpecificationScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ reed: text })}
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.setState({ reed: parseFloat(text) })}
                         />
                     </View>
 
@@ -89,7 +92,8 @@ export default class ClothSpecificationScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ peak: text })}
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.setState({ peak: parseFloat(text) })}
                         />
                     </View>
 
@@ -98,7 +102,8 @@ export default class ClothSpecificationScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ warp: text })}
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.setState({ warp: parseFloat(text) })}
                         />
                     </View>
 
@@ -107,7 +112,8 @@ export default class ClothSpecificationScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
-                            onChangeText={(text) => this.setState({ weft: text })}
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.setState({ weft: parseFloat(text) })}
                         />
                     </View>
 

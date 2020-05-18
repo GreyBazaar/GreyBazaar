@@ -14,8 +14,9 @@ export default class PostMyQuoteScreen2 extends Component {
         // current user email (seller)
         email: '',
 
-        //today's date
+        //today's date and time of submit quote
         date: '',
+        time: '',
 
         //from this screen
         remarks: '',
@@ -119,8 +120,12 @@ export default class PostMyQuoteScreen2 extends Component {
             //seller email
             quoteGivenBy: this.state.email,
 
-            //current date
+            //current date and time
             date: this.state.date,
+            time: this.state.time,
+
+            //whether accepted by buyer
+            accepted: false,
         })
             .then(() => console.log("doc added successfully to buyer database", this.state.quoteId))
             .catch(function (error) {
@@ -148,8 +153,8 @@ export default class PostMyQuoteScreen2 extends Component {
             combedCarded: this.state.combedCarded,
             clothSpecificationsFilled: this.state.clothSpecificationsFilled,
 
-             //fetched from buyer request
-             qualityType: this.state.qualityType,
+            //fetched from buyer request
+            qualityType: this.state.qualityType,
 
             //primary key of quote
             id: this.state.quoteId,
@@ -157,8 +162,12 @@ export default class PostMyQuoteScreen2 extends Component {
             //seller email
             requestBy: this.state.from,
 
-            //current date
+            //current date and time
             date: this.state.date,
+            time: this.state.time,
+
+            //whether accepted by buyer
+            accepted: false,
 
         })
             .then(() => console.log("doc added successfully to seller database", this.state.quoteId))
@@ -171,6 +180,7 @@ export default class PostMyQuoteScreen2 extends Component {
     submitPressed = () => {
         //make a quoteId
         const quoteId = moment().format('HmDDDSS')
+        const time = moment().format('LTS')
 
         // retrieve filled data from post my quote screen 1
         const rate = this.props.navigation.getParam('rate', 'None')
@@ -192,6 +202,8 @@ export default class PostMyQuoteScreen2 extends Component {
 
             rate,
             deliveryDays,
+
+            time,
 
             weight,
             panna,
@@ -224,10 +236,10 @@ export default class PostMyQuoteScreen2 extends Component {
 
                 <Body style={styles.container}>
                     <ScrollView>
-                        <Text style={styles.label}> CLOTH SPECIFICATIONS: </Text>
+
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('PostMyQuoteClothSpecifications')}
                             style={styles.clothspecsBox}>
-
+                            <Text style={[styles.label, { color: colors.colorBlack, textAlignVertical: 'center' }]}> CLOTH SPECIFICATIONS </Text>
                         </TouchableOpacity>
 
                         <Text style={styles.label}> REMARKS </Text>
@@ -252,6 +264,7 @@ export default class PostMyQuoteScreen2 extends Component {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
+        marginTop: 20,
     },
     label: {
         color: colors.colorWhite,
@@ -269,7 +282,13 @@ const styles = StyleSheet.create({
     clothspecsBox: {
         height: 50,
         width: 300,
+        paddingBottom: 18,
         backgroundColor: colors.colorShadow,
+        borderRadius: 10,
+        justifyContent: 'center',
+        // textAlignVertical:'center',
+        alignItems: 'center',
+        flex: 1,
     },
     submitFont: {
         color: colors.colorBlack,

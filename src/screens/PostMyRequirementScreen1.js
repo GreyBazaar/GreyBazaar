@@ -11,7 +11,8 @@ export default class PostMyRequirement1 extends Component {
         this.state = {
             qualityType: '',
             quantity: '',
-            email: '',
+            deliveryProcess: '',
+            deliveryProcessInputBoxHeight: 26,
         }
     }
 
@@ -19,8 +20,8 @@ export default class PostMyRequirement1 extends Component {
     }
 
     checkAllFilled = () => {
-        if (this.state.qualityType && this.state.quantity) {
-            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType, quantity: this.state.quantity })
+        if (this.state.qualityType && this.state.quantity && this.state.deliveryProcess) {
+            this.props.navigation.navigate('PostMyRequirementRoute2', { qualityType: this.state.qualityType, quantity: this.state.quantity, deliveryProcess: this.state.deliveryProcess })
         } else if (!this.state.qualityType) {
 
             Alert.alert('Please enter Quality Type',
@@ -39,6 +40,15 @@ export default class PostMyRequirement1 extends Component {
                 ],
                 { cancelable: false },
             )
+        } else if (!this.state.deliveryProcess) {
+
+            Alert.alert('Please enter Delivery Address',
+                '',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false },
+            )
         }
 
     }
@@ -50,13 +60,13 @@ export default class PostMyRequirement1 extends Component {
     static navigationOptions = {
         title: 'Post My Requirement',
         headerStyle: {
-          backgroundColor: colors.colorWhite,
+            backgroundColor: colors.colorWhite,
         },
         headerTintColor: colors.colorBlack,
         headerTitleStyle: {
-          fontWeight: 'bold',
+            fontWeight: 'bold',
         },
-      };
+    };
 
     render() {
         return (
@@ -81,7 +91,18 @@ export default class PostMyRequirement1 extends Component {
                         placeholder="100"
                         keyboardType='numeric'
                         placeholderTextColor='rgba(0,0,0,0.4)'
-                        onChangeText={(text) => this.setState({ quantity: text })}
+                        onChangeText={(text) => this.setState({ quantity: parseFloat(text) })}
+                    />
+
+                    <Text style={styles.label}> DELIVERY PROCESS: </Text>
+                    <TextInput
+                        style={[styles.inputBox, { height: this.state.deliveryProcessInputBoxHeight }]}
+                        underLineColorAndroid='#000000'
+                        placeholderTextColor='rgba(0,0,0,0.4)'
+                        placeholder="enter delivery address"
+                        multiline
+                        onContentSizeChange={(e) => this.setState({ deliveryProcessInputBoxHeight: e.nativeEvent.contentSize.height })}
+                        onChangeText={(text) => this.setState({ deliveryProcess: text, })}
                     />
 
                     <View style={{ flexDirection: 'row' }}>

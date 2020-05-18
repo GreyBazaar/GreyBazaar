@@ -4,6 +4,16 @@ import { Container, Button, H3, Text, Header, Left, Right, Body, Title, } from "
 import colors from '../../assets/colors'
 import { ScrollView } from "react-native-gesture-handler";
 const deviceHeight = Dimensions.get("window").height;
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'react-native-fetch-blob'
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage'
+
+// Prepare Blob support
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
 
 
 
@@ -14,11 +24,13 @@ export default class PostMyRequirement2 extends Component {
         expectedRate: '',
         selectedExpectedDelivery: '',
         selectedCloseRequest: '8',
+        image: '',
         remarks: '',
 
         //from post my requirement1 screen
         quantity: '',
         qualityType: '',
+        deliveryProcess: '',
 
         //from clothspecification screen
         weight: '',
@@ -31,10 +43,11 @@ export default class PostMyRequirement2 extends Component {
         clothSpecificationsFilled: false,
     }
 
-    skipPressed = () => {
+    nextPressed = () => {
         // retrieve filled data from post my requirement screen 1
         const qualityType = this.props.navigation.getParam('qualityType', 'None')
         const quantity = this.props.navigation.getParam('quantity', 'None')
+        const deliveryProcess = this.props.navigation.getParam('deliveryProcess', 'None')
 
         // retrieve filled data from post my requirement cloth specs
         const weight = this.props.navigation.getParam('weight', 'None')
@@ -50,6 +63,7 @@ export default class PostMyRequirement2 extends Component {
         this.setState({
             qualityType,
             quantity,
+            deliveryProcess,
 
             weight,
             panna,
@@ -63,21 +77,76 @@ export default class PostMyRequirement2 extends Component {
             () => this.props.navigation.navigate('SendRequirementToRoute', { allRequirementsData: this.state }))
     }
 
+
+    uploadImage = (uri, mime = 'application/octet-stream') => {
+        return (dispatch) => {
+            return new Promise((resolve, reject) => {
+                const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
+                const sessionId = new Date().getTime()
+                let uploadBlob = null
+
+                const imageRef = storage().ref('gs://greybazaar-99830.appspot.com/uploads').child('file', Date.now())
+
+                forScaleFromCenterAndroid.readFile(uploadUri, 'base64')
+                    .then((data) => {
+                        return Blob.build(data, { type: `${mime};BASE64` })
+                    })
+
+                    .then((blob) => {
+                        uploadBlob = blob
+                        return imageRef.put(blob, { contentType: mime })
+                    })
+
+                    .then((url) => {
+                        resolve(url)
+                        this.storeReference(url, sessionId)
+                    })
+                    .catch((err) => {
+                        reject(error)
+                    })
+            })
+        }
+    }
+
+    // storeReference = (downloadUrl, sessionid) => {
+    //     let imageRef = storage().ref('gs://greybazaar-99830.appspot.com/uploads').child('file')
+    //     let currentUser = auth().currentUser
+    //     let image = {
+    //         type: 'image',
+    //         createdAt: sessionId,
+    //         user: {
+    //             id: currentUser.uid,
+    //             email: currentUser.email,
+    //         }
+    //     }
+    //     console.log('image final is', image);
+    //     this.setState({ image: imageRef })
+    // }
+
     static navigationOptions = {
         title: 'Post My Requirement',
         headerStyle: {
-          backgroundColor: colors.colorWhite,
+            backgroundColor: colors.colorWhite,
         },
         headerTintColor: colors.colorBlack,
         headerTitleStyle: {
-          fontWeight: 'bold',
+            fontWeight: 'bold',
         },
-      };
+    };
 
+    attachImage = () => {
+        ImagePicker.showImagePicker((response) => {
+            // console.log('Response = ', response);
+
+            if (!response.didCancel) {
+                this.uploadImage(response.uri)
+            }
+        });
+    }
 
 
     render() {
-        
+
         return (
             <Container style={{ flex: 1, backgroundColor: colors.colorBlue }}>
 
@@ -90,27 +159,33 @@ export default class PostMyRequirement2 extends Component {
 
                 <Body style={styles.container}>
                     <ScrollView>
-                        <Text style={styles.label}> CLOTH SPECIFICATIONS: </Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ClothSpecificationsRoute', {
                             weight: this.state.weight,
                             panna: this.state.panna,
                             reed: this.state.reed,
-                            peak:this.state.peak,
+                            peak: this.state.peak,
                             warp: this.state.warp,
                             weft: this.state.weft,
                             combedCarded: this.state.combedCarded,
                         })}
                             style={styles.clothspecsBox}>
-
+                            <Text style={[styles.label, { color: colors.colorBlack, textAlignVertical: 'center' }]}> CLOTH SPECIFICATIONS </Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => this.attachImage()}
+                            style={styles.clothspecsBox}>
+                            <Text style={[styles.label, { color: colors.colorBlack, textAlignVertical: 'center' }]}> ATTACH IMAGE </Text>
+                        </TouchableOpacity>
+
 
                         <Text style={styles.label}> EXPECTED RATE </Text>
                         <TextInput
                             style={styles.inputBox}
                             underLineColorAndroid='#000000'
                             placeholder="16"
+                            keyboardType='numeric'
                             placeholderTextColor='rgba(0,0,0,0.4)'
-                            onChangeText={(text) => this.setState({ expectedRate: text })}
+                            onChangeText={(text) => this.setState({ expectedRate: parseFloat(text) })}
                         />
 
                         <Text style={styles.label}> EXPECTED DELIVERY DAYS: </Text>
@@ -121,9 +196,10 @@ export default class PostMyRequirement2 extends Component {
                             onValueChange={(itemValue) => this.setState({ selectedExpectedDelivery: itemValue })}
                         >
                             <Picker.Item label="Select" value="None" />
-                            <Picker.Item label="Within 2 days" value="within2days" />
-                            <Picker.Item label="Within 4 days" value="within4days" />
-                            <Picker.Item label="Within 7 days" value="within7days" />
+                            <Picker.Item label="Ready" value="ready" />
+                            <Picker.Item label="2 - 4 days" value="2to4days" />
+                            <Picker.Item label="4 - 8 days" value="4to8days" />
+                            <Picker.Item label="over 8 days" value="over8days" />
                         </Picker>
 
                         <Text style={styles.label}> CLOSE REQUEST IN </Text>
@@ -136,7 +212,7 @@ export default class PostMyRequirement2 extends Component {
                             <Picker.Item label="Select" value="48" />
                             <Picker.Item label="8 hours" value="8" />
                             <Picker.Item label="16 hours" value="16" />
-                            <Picker.Item label="1 day" value="24" />
+                            <Picker.Item label="24 hours" value="24" />
                         </Picker>
 
                         <Text style={styles.label}> REMARKS </Text>
@@ -147,7 +223,7 @@ export default class PostMyRequirement2 extends Component {
                         />
                         <Button
                             style={styles.button}
-                            onPress={this.skipPressed}
+                            onPress={this.nextPressed}
                         >
                             <Text style={styles.skipFont}>NEXT</Text>
                         </Button>
@@ -178,7 +254,14 @@ const styles = StyleSheet.create({
     clothspecsBox: {
         height: 50,
         width: 300,
+        paddingBottom: 18,
         backgroundColor: colors.colorShadow,
+        borderRadius: 10,
+        marginTop: 20,
+        justifyContent: 'center',
+        // textAlignVertical:'center',
+        alignItems: 'center',
+        flex: 1,
     },
     skipFont: {
         color: colors.colorBlack,

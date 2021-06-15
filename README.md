@@ -1,6 +1,1 @@
-# Contribution Guidelines
-  1. Fork this repo
-  2. Clone your forked repo git clone
-  3. git remote add upstream https://github.com/GreyBazaar/GreyBazaar.git
-  4. Make your changes and push to your (forked) repo. Dont forget to pull upstream prod before pushing
-  5. Create a pull request from github to main repo.
+This app acts as a social platform for buyers and sellers in the Textile Industry. Orders can be placed for buying and selling materials, with their attributes and cost displayed publicly and anonymously, with functionality for bargaining. Since the process is digitized, the waiting time as well as need for brokers, is considerably minimized. The app has been developed using the React Native framework and firebase as the database.
